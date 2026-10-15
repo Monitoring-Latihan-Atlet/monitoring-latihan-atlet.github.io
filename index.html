@@ -1347,7 +1347,7 @@ function renderAtlet(){
   </div>
   <div class="xgrid">
     <div class="xpanel"><h3>Skala intensitas latihan (RPE)</h3><div class="rpeleg">${[...RPE_BAND].reverse().map(b=>`<div><span class="rn" style="background:${b[3]}">${b[0]} - ${b[1]}</span><span class="rl">${b[2]}</span><span class="re">${RPE_EMO[b[1]]}</span></div>`).join("")}</div>
-      <p class="note">Beban harian = TSS per jam menurut RPE × durasi. RPE 1→20, 2→30, 3→40, 4→50, 5→60, 6→70, 7→80, 8→100, 9→120, 10→140 TSS/jam.</p></div>
+</div>
     <div class="xpanel"><h3>Zona denyut jantung latihan${age!=null?" · HRmax ≈ "+Math.round(208-0.7*age)+" bpm":""}</h3><div class="hrz">${[["Z5",90,100,"Meningkatkan kecepatan sprint maksimal","#ff3b30"],["Z4",80,90,"Meningkatkan kapasitas performa maksimal","#ff8c3a"],["Z3",70,80,"Meningkatkan kebugaran aerobik","#7ed957"],["Z2",60,70,"Meningkatkan daya tahan dasar","#12c0e0"],["Z1",50,60,"Membantu pemulihan","#d9d9d9"]].map(([z,a,b,m,c])=>{const hr=age!=null?208-0.7*age:null;return `<div><span class="zc" style="background:${c}">${z}</span><span class="zt" style="border-color:${c}"><b>${a}–${b}% HRmax${hr?` · ${Math.round(hr*a/100)}–${Math.round(hr*b/100)} bpm`:""}</b><small>${m}</small></span></div>`}).join("")}</div>
       <p class="note">HRmax diestimasi dengan rumus Tanaka (208 − 0,7 × usia). Hasil tes HRmax langsung lebih akurat.</p></div>
   </div>`;
