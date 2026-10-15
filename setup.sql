@@ -1,6 +1,7 @@
 -- =====================================================================
 -- Monitoring Latihan Atlet — skema database
--- Jalankan sekali di Supabase: SQL Editor → New query → tempel → Run.
+-- Jalankan di Supabase: SQL Editor → New query → tempel → Run.
+-- Aman dijalankan ulang; jalankan lagi setiap kali aplikasi diperbarui.
 -- =====================================================================
 
 create extension if not exists pgcrypto;
@@ -81,6 +82,24 @@ create table if not exists public.entri (
   dibuat timestamptz default now()
 );
 create index if not exists entri_tanggal_idx on public.entri (tanggal);
+-- Kolom tambahan (aman dijalankan ulang pada database versi lama)
+alter table public.entri add column if not exists jenis text;          -- jenis latihan
+alter table public.entri add column if not exists hr_istirahat int;    -- denyut nadi istirahat pagi (bpm)
+alter table public.entri add column if not exists hrv numeric;         -- HRV pagi (ms, RMSSD)
+
+-- ---------- Rencana latihan (kalender) ----------
+create table if not exists public.rencana (
+  id uuid primary key default gen_random_uuid(),
+  siswa_id uuid not null references public.siswa(id) on delete cascade,
+  tanggal date not null,
+  jenis text,
+  judul text not null,
+  deskripsi text,
+  durasi int,                                -- menit
+  rpe int,                                   -- target RPE 0–10
+  dibuat timestamptz default now()
+);
+create index if not exists rencana_tanggal_idx on public.rencana (tanggal);
 
 -- ---------- Tes kondisi fisik ----------
 create table if not exists public.tes (
@@ -100,6 +119,7 @@ alter table public.profil enable row level security;
 alter table public.siswa  enable row level security;
 alter table public.entri  enable row level security;
 alter table public.tes    enable row level security;
+alter table public.rencana enable row level security;
 
 drop policy if exists profil_baca on public.profil;
 create policy profil_baca on public.profil for select
@@ -143,12 +163,22 @@ create policy tes_ubah on public.tes for update using (public.boleh_ubah_siswa(s
 drop policy if exists tes_hapus on public.tes;
 create policy tes_hapus on public.tes for delete using (public.peran_saya() = 'admin');
 
+drop policy if exists rencana_baca on public.rencana;
+create policy rencana_baca on public.rencana for select using (public.boleh_lihat_siswa(siswa_id));
+drop policy if exists rencana_tulis on public.rencana;
+create policy rencana_tulis on public.rencana for insert with check (public.boleh_ubah_siswa(siswa_id));
+drop policy if exists rencana_ubah on public.rencana;
+create policy rencana_ubah on public.rencana for update using (public.boleh_ubah_siswa(siswa_id)) with check (public.boleh_ubah_siswa(siswa_id));
+drop policy if exists rencana_hapus on public.rencana;
+create policy rencana_hapus on public.rencana for delete using (public.boleh_ubah_siswa(siswa_id));
+
 -- ---------- Pembaruan langsung antar-perangkat ----------
 do $$ begin
   begin alter publication supabase_realtime add table public.siswa;  exception when others then null; end;
   begin alter publication supabase_realtime add table public.entri;  exception when others then null; end;
   begin alter publication supabase_realtime add table public.tes;    exception when others then null; end;
   begin alter publication supabase_realtime add table public.profil; exception when others then null; end;
+  begin alter publication supabase_realtime add table public.rencana; exception when others then null; end;
 end $$;
 
 -- =====================================================================

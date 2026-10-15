@@ -138,6 +138,73 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
 .sumrow b{font-variant-numeric:tabular-nums}
 .msg{font-size:14px;min-height:1.2em;margin:0}.msg.err{color:var(--red)}.msg.ok{color:var(--green)}
 .search{width:100%}
+/* kalender latihan */
+.kalbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.kalbar .r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.kalbar h2{text-transform:capitalize;min-width:150px}
+.kalbar select{min-width:220px}
+.kal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) minmax(140px,1.1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.kal .kh{background:var(--surface2);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 10px}
+.kd{background:var(--surface);min-height:124px;padding:6px;display:flex;flex-direction:column;gap:5px;cursor:pointer;min-width:0}
+.kd:hover{background:var(--surface2)}
+.kd:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.kd.kx{background:#060607}.kd.kx .kn{opacity:.45}
+.kd.today{box-shadow:inset 0 0 0 2px var(--accent)}
+.kd.drop{background:var(--accent-soft)}
+.kn{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.kd.today .kn b{background:var(--accent);color:#000;border-radius:999px;padding:0 7px}
+.kdow{display:none}
+.wdot{width:9px;height:9px;border-radius:50%;display:inline-block;outline:0}
+.wdot.c1{background:var(--red)}.wdot.c2{background:var(--amber)}.wdot.c3,.wdot.c4{background:var(--green)}
+.wo{border-radius:6px;background:var(--surface2);border-left:4px solid var(--jc,var(--accent2));padding:4px 6px;font-size:12px;line-height:1.3;min-width:0}
+.wo[data-cp]{background:color-mix(in srgb,var(--cc) 26%,var(--surface))}
+.wo b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wo small{display:block;color:var(--muted);font-variant-numeric:tabular-nums;font-size:11.5px}
+.wo[draggable="true"]{cursor:grab}
+.wo.done{background:transparent;border:1px dashed var(--cc,var(--accent2));border-left:4px solid var(--cc,var(--accent2))}
+.wo.big{padding:8px 10px;font-size:14px}.wo.big small{font-size:13px}.wo.big p{margin:6px 0 0;color:var(--ink);font-size:13px;white-space:pre-wrap}
+.wo .acts{display:flex;gap:6px;margin-top:8px}
+.kw{background:var(--surface2);padding:8px 10px;display:flex;flex-direction:column;gap:5px;font-size:12px;min-width:0}
+.kw .kwh{font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.kw div{display:flex;justify-content:space-between;gap:6px}
+.kw span{color:var(--muted)}
+.kw b{font-variant-numeric:tabular-nums;text-align:right}
+.kw b small{color:var(--muted);font-weight:400}
+.kw .proj{color:var(--muted);font-style:italic}
+.lnk{border:0;background:none;padding:0;color:var(--accent);font-weight:600;font-size:12px;cursor:pointer;text-align:left}
+.planhint{background:var(--accent-soft);border:1px solid var(--accent);border-radius:9px;padding:10px 12px;font-size:14px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between}
+.planhint b{color:var(--accent)}
+.ck{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.ck input{width:18px;height:18px;accent-color:var(--accent)}
+textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
+textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.dlg{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:0;width:min(580px,calc(100vw - 24px));max-height:calc(100vh - 24px)}
+.dlg::backdrop{background:rgba(0,0,0,.65)}
+.dlg-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:16px 18px 12px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+.dlg-h h2{text-transform:capitalize}
+.dlg-b{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px}
+.x{border:1px solid var(--line);background:var(--surface2);border-radius:8px;width:34px;height:34px;font-size:20px;line-height:1;cursor:pointer;flex:none}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:6px}
+.mini .m .v{font-size:19px}
+/* strip ringkasan beban atlet */
+.xstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.xs{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--sc,var(--accent));border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.xs b{font-family:var(--display);font-size:26px;line-height:1.05;font-variant-numeric:tabular-nums;color:var(--sc,var(--ink))}
+.xs span{font-size:12px;color:var(--muted)}
+.xs small{font-size:11.5px;color:var(--muted)}
+@media (max-width:1000px){.xstrip{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){
+  .kal{grid-template-columns:minmax(0,1fr)}
+  .kal .kh{display:none}
+  .kd{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:flex-start}
+  .kd .kn{width:100%}
+  .kd .wo{flex:1 1 140px}
+  .kd.blank{display:none}
+  .kdow{display:inline}
+  .kw{border-bottom:6px solid var(--bg)}
+  .kalbar select{min-width:0;flex:1}
+  .xstrip{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 /* home & login */
 /* Halaman depan: tema terang & berwarna. Variabel didefinisikan ulang hanya di dalam .home, jadi dashboard tetap gelap. */
 .home{--bg:#fffaf3;--surface:#ffffff;--surface2:#f6f3ee;--ink:#161a2b;--muted:#5e6475;--line:#e5e0d8;--accent:#ff5b0a;--accent-soft:#ffe9dc;
@@ -200,7 +267,7 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
 .hsec-h{display:flex;flex-direction:column;gap:6px}
 .hsec-h p{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#c2410c;font-weight:700}
 .hsec-h h2{font-size:clamp(28px,4vw,40px);color:var(--ink)}
-.fgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .fcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 24px rgba(22,26,43,.05);transition:transform .2s,box-shadow .2s}
 .fcard:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(22,26,43,.10)}
 .fcard .ic{width:46px;height:46px;border-radius:13px;background:color-mix(in srgb,var(--d) 14%,#fff);color:var(--d);display:grid;place-items:center}
@@ -342,7 +409,7 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
   <header class="hnav">
     <div class="hnav-in">
       <div class="logo"><span class="mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span><span class="wm"><b>Monitoring <span>Latihan Atlet</span></b><small>Sport science · Atlet pelajar</small></span></div>
-      <div class="hbadge"><span style="--d:#0fb5ae">Beban latihan</span><span style="--d:#7a5af8">Wellness</span><span style="--d:#22b35e">Tes fisik</span></div>
+      <div class="hbadge"><span style="--d:#2f80ed">Kalender</span><span style="--d:#0fb5ae">Beban latihan</span><span style="--d:#7a5af8">Wellness</span><span style="--d:#22b35e">Tes fisik</span></div>
     </div>
   </header>
 
@@ -380,7 +447,9 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
     <div class="hsec-h"><p>Fitur utama</p><h2 id="fiturH">Semua yang dibutuhkan pelatih dan sport scientist</h2></div>
     <div class="fgrid">
       <article class="fcard" style="--d:#ff5b0a"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><h3>Beban latihan</h3><p>Beban TSS, ACWR, dan monotony dihitung otomatis dari RPE dan durasi setiap sesi.</p></article>
-      <article class="fcard" style="--d:#ef4136"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><h3>Wellness harian</h3><p>Tidur, energi, otot, stres, dan mood dibandingkan dengan baseline tiap siswa.</p></article>
+      <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg></span><h3>Kalender &amp; rencana latihan</h3><p>Pelatih menyusun sesi di kalender, atlet mencatat realisasinya, dan kepatuhan terhadap rencana terlihat per hari.</p></article>
+      <article class="fcard" style="--d:#f5b301"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><path d="M3 21h18"/><path d="M12 8V3"/></svg></span><h3>Fitness, fatigue &amp; form</h3><p>Model CTL/ATL/TSB, ramp rate, dan proyeksi form dari rencana minggu-minggu ke depan.</p></article>
+      <article class="fcard" style="--d:#ef4136"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><h3>Wellness harian</h3><p>Tidur, energi, otot, stres, mood, nadi istirahat, dan HRV dibandingkan dengan baseline tiap siswa.</p></article>
       <article class="fcard" style="--d:#7a5af8"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg></span><h3>Tes kondisi fisik</h3><p>9 tes per semester, T-score per jenis kelamin, dan progres antar-sesi.</p></article>
       <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Akses berbasis peran</h3><p>Pengelola, pelatih, dan guru melihat data sesuai haknya, dijaga langsung di database.</p></article>
     </div>
@@ -410,6 +479,7 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
     </div>
     <div class="tabs" role="tablist">
       <button role="tab" aria-selected="true" data-tab="atlet" id="tab-atlet">Dashboard atlet</button>
+      <button role="tab" aria-selected="false" data-tab="kal" id="tab-kal">Kalender latihan</button>
       <button role="tab" aria-selected="false" data-tab="dash" id="tab-dash">Ringkasan kelas</button>
       <button role="tab" aria-selected="false" data-tab="input" id="tab-input">Input harian</button>
       <button role="tab" aria-selected="false" data-tab="tes" id="tab-tes">Tes fisik</button>
@@ -427,6 +497,46 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
     <div class="atbar"><h2>Dashboard atlet</h2><select id="atPick" aria-label="Pilih atlet"></select></div>
     <div id="atletBody" style="display:flex;flex-direction:column;gap:12px"></div>
   </section>
+
+  <!-- KALENDER -->
+  <section id="v-kal" hidden style="display:flex;flex-direction:column;gap:12px">
+    <div class="kalbar">
+      <div class="r"><h2 id="kalTitle">Kalender</h2>
+        <div class="seg"><button type="button" id="kalPrev" aria-label="Bulan sebelumnya">‹</button><button type="button" id="kalNow">Hari ini</button><button type="button" id="kalNext" aria-label="Bulan berikutnya">›</button></div></div>
+      <div class="r"><select id="kalPick" aria-label="Pilih atlet"></select><button type="button" class="btn sm" id="kalAdd">+ Rencana latihan</button></div>
+    </div>
+    <p class="msg" id="kalMsg" role="status"></p>
+    <div id="kalBody"></div>
+    <div class="legend" id="kalLeg"></div>
+    <p class="rules"><b>Cara membaca.</b> Kartu berwarna di kiri = rencana latihan dari pelatih (warna garis = jenis latihan). Kartu bergaris = latihan yang benar-benar dicatat lewat Input harian. Warna isi rencana menunjukkan kepatuhan: TSS aktual dibanding TSS rencana. Fitness, form, dan ramp rate di kolom ringkasan memakai proyeksi rencana untuk hari-hari ke depan. Pelatih bisa menyeret kartu rencana ke hari lain.</p>
+  </section>
+
+  <dialog id="kalDlg" class="dlg" aria-labelledby="dlgTitle">
+    <div class="dlg-h"><div><h2 id="dlgTitle">Hari</h2><p class="sub" id="dlgWho"></p></div><button type="button" class="x" id="dlgClose" aria-label="Tutup">×</button></div>
+    <div class="dlg-b">
+      <h3>Latihan tercatat</h3>
+      <div id="dlgAct"></div>
+      <h3>Rencana</h3>
+      <div id="dlgPlans" style="display:flex;flex-direction:column;gap:8px"></div>
+      <form id="planForm" novalidate style="display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:12px">
+        <h3 id="pfTitle">Tambah rencana</h3>
+        <div class="two" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+          <label class="fl">Tanggal<input type="date" id="pTgl"></label>
+          <label class="fl">Jenis latihan<select id="pJenis"></select></label>
+        </div>
+        <label class="fl">Judul sesi<input type="text" id="pJudul" placeholder="mis. Interval lari 6 × 400 m" autocomplete="off"></label>
+        <div class="two" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+          <label class="fl">Durasi (menit)<input type="number" id="pDur" min="0" max="400" inputmode="numeric"></label>
+          <label class="fl">Target RPE<select id="pRpe"></select></label>
+        </div>
+        <label class="fl">Deskripsi / isi sesi (opsional)<textarea id="pDesk" rows="3" placeholder="Pemanasan 15 mnt, inti 6 × 400 m (istirahat 90 dtk), pendinginan 10 mnt"></textarea></label>
+        <label class="ck" id="pAllBox"><input type="checkbox" id="pAll"> <span id="pAllLbl">Terapkan juga ke semua atlet di cabor ini</span></label>
+        <div class="sumrow"><span>Rencana TSS</span><b id="pTss">–</b></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit" id="pSave">Simpan rencana</button><button class="btn ghost" type="button" id="pCancel" hidden>Batal ubah</button></div>
+        <p class="msg" id="pMsg" role="status"></p>
+      </form>
+    </div>
+  </dialog>
 
   <!-- DASHBOARD -->
   <section id="v-dash" hidden style="display:flex;flex-direction:column;gap:16px">
@@ -499,6 +609,10 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
           <div class="step" id="st2"><b>2</b><h2>Kondisi pagi ini</h2></div>
           <p class="note">Pilih angka yang paling menggambarkan kondisimu. 1 = paling buruk, 5 = paling baik.</p>
           <div id="wellBox"></div>
+          <div class="two">
+            <label class="fl"><span>Denyut nadi istirahat pagi (bpm) <small class="note">opsional</small></span><input type="number" id="inHr" min="30" max="120" inputmode="numeric" placeholder="mis. 58"></label>
+            <label class="fl"><span>HRV pagi (ms) <small class="note">opsional, dari aplikasi/jam</small></span><input type="number" id="inHrv" min="5" max="250" inputmode="numeric" placeholder="mis. 72"></label>
+          </div>
         </div>
 
         <div class="card">
@@ -516,6 +630,11 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
 
         <div class="card">
           <div class="step" id="st4"><b>4</b><h2>Latihan hari ini</h2></div>
+          <div class="planhint" id="planHint" hidden></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span class="note">Jenis latihan (opsional)</span>
+            <div class="chips" id="inJenis" role="group" aria-label="Jenis latihan"></div>
+          </div>
           <div class="two">
             <div style="display:flex;flex-direction:column;gap:8px">
               <span class="note">Seberapa berat latihan secara keseluruhan? (skala CR-10)</span>
@@ -667,6 +786,18 @@ const RPE_EMO=["","😄","😊","😌","😔","😐","😬","😧","🥴","😵�
 const TSS_JAM=[0,20,30,40,50,60,70,80,100,120,140];
 const RPE_BAND=[[1,2,"Intensitas sangat ringan","#8c8c8c"],[3,4,"Intensitas ringan","#2e9fd8"],[5,6,"Intensitas sedang","#3d9a4a"],[7,8,"Intensitas berat","#e0a800"],[9,10,"Intensitas maksimal","#c8323a"]];
 const rpeColor=v=>{const b=RPE_BAND.find(x=>v>=x[0]&&v<=x[1]);return b?b[3]:"#555"};
+/* Jenis latihan (warna kartu kalender) dan pustaka sesi siap pakai untuk rencana. */
+const JENIS=[["Teknik","#2f80ed"],["Taktik","#7a5af8"],["Fisik","#ff5b0a"],["Kekuatan","#e5393a"],["Daya tahan","#0fb5ae"],["Pertandingan","#f5b301"],["Pemulihan","#9a9a9a"]];
+const jColor=j=>(JENIS.find(x=>x[0]===j)||[0,"#5e6475"])[1];
+const LIB=[["Fisik","Interval lari 6 × 400 m",70,7,"Pemanasan 15 mnt · 6 × 400 m (istirahat 90 dtk) · pendinginan 10 mnt"],["Fisik","Sprint & kelincahan",60,8,"Sprint 6 × 30 m · drill T-test · ladder · istirahat penuh antar-set"],["Daya tahan","Lari kontinu 30 menit",60,5,"Zona 2 (60–70% HRmax) · mobilitas 15 mnt"],["Kekuatan","Sirkuit kekuatan",60,6,"Squat, push-up, lunge, plank · 3 putaran · 40 dtk kerja / 20 dtk istirahat"],["Teknik","Teknik dasar & drill",90,5,""],["Taktik","Taktik & game situasi",90,6,""],["Pertandingan","Uji coba / pertandingan",100,8,""],["Pemulihan","Recovery & mobilitas",45,3,"Jogging ringan, peregangan, foam roller"]];
+const planTss=p=>Math.round((TSS_JAM[+p.rpe]||0)*(+p.durasi||0)/60);
+/* Kepatuhan ala TrainingPeaks: TSS aktual ÷ TSS rencana pada hari yang sama. */
+const CPL={hijau:["#3fb950","Sesuai (80–120%)"],kuning:["#e8b400","Menyimpang (50–79% / 121–150%)"],oranye:["#ff7a1a","Jauh menyimpang (<50% / >150%)"],merah:["#ff4b42","Tidak dilakukan"]};
+function complianceOf(plan,act,t){
+  if(!plan||t>TODAY)return null;
+  if(!act)return act==null&&t===TODAY?null:"merah";
+  const r=act/plan;return r>=.8&&r<=1.2?"hijau":r>=.5&&r<=1.5?"kuning":"oranye";
+}
 /* Norma 1–5 dari lembar "Tes Pengukuran". cut = batas skala 5,4,3,2.
    dir -1: lebih kecil lebih baik (v<c5 → 5, v≤c4 → 4, v≤c3 → 3, v≤c2 → 2, selain itu 1)
    dir +1: lebih besar lebih baik (v>c5 → 5, v≥c4 → 4, v≥c3 → 3, v≥c2 → 2, selain itu 1)
@@ -711,7 +842,7 @@ $("#today").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",da
 
 const ME={state:"checking",role:null,cabor:[],id:null,name:"",email:null,avatar:"",isOwner:false};
 const TS={sub:"analisis",jk:"",cabor:"",test:"sprint30",sel:null};
-const S={db:null,dl:null,live:{siswa:[],entri:[],tes:[]},demo:null,mode:"loading",filter:"semua",cabor:"",sel:null,tab:"atlet",charts:{}};
+const S={db:null,dl:null,live:{siswa:[],entri:[],tes:[],rencana:[]},demo:null,mode:"loading",filter:"semua",cabor:"",sel:null,tab:"atlet",charts:{}};
 
 /* ---------- data contoh ---------- */
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -720,15 +851,20 @@ function makeDemo(){
   const nm=[["Raka Pratama","Sepak bola","X"],["Alya Putri","Bola voli","X"],["Dimas Saputra","Atletik","X"],["Nadia Rahma","Bulu tangkis","X"],["Bagas Wicaksono","Pencak silat","X"],["Salsa Aulia","Renang","X"],["Fikri Hidayat","Sepak bola","XI"],["Galih Ramadhan","Bola voli","XI"],["Citra Lestari","Atletik","XI"],["Rizky Ananda","Sepak bola","XI"],["Intan Permata","Bulu tangkis","XI"],["Yoga Firmansyah","Pencak silat","XI"],["Dewi Anggraini","Renang","XII"],["Arif Kurniawan","Bola voli","XII"]];
   const PUTRI=["Alya","Nadia","Salsa","Citra","Intan","Dewi"];
   const siswa=nm.map((x,i)=>({id:"demo"+i,nama:x[0]+" (contoh)",cabor:x[1],kelas:x[2]+"-KKO",jk:PUTRI.includes(x[0].split(" ")[0])?"P":"L"}));
-  const entri=[];
+  const entri=[];const r3=mulberry(47);
+  const REF="2024-01-01";/* Senin acuan untuk pola mingguan */
+  const planFor=t=>{const dow=parse(t).getDay();if(dow===0)return null;const wk=Math.floor(diffDays(t,REF)/7);
+    const L=dow===1?LIB[0]:dow===2?LIB[4]:dow===3?LIB[3]:dow===4?LIB[5]:dow===5?LIB[7]:wk%2?LIB[6]:LIB[2];return{jenis:L[0],judul:L[1],durasi:L[2],rpe:L[3],deskripsi:L[4]}};
   siswa.forEach((s,i)=>{
-    const h0=156+Math.round(r()*16);const skip=r()<.25?.12:.04;
+    const h0=156+Math.round(r()*16);const skip=r()<.25?.12:.04;const hr0=54+Math.round(r3()*12),hrv0=62+Math.round(r3()*26);
     for(let k=89;k>=0;k--){
       const t=addDays(TODAY,-k);const dow=parse(t).getDay();
       if(k===0&&(i===4||i===10||i===13))continue;
       if(k>0&&r()<skip)continue;
       const rest=dow===0;const taper=k>=14&&k<21?.85:1;
+      const pf=planFor(t);
       let rpe=rest?0:Math.round((4+r()*2.4)*taper),dur=rest?0:Math.round((65+r()*35)*taper);
+      if(pf&&!rest){rpe=Math.max(1,Math.min(10,pf.rpe+Math.round(r()*2-1.2)));dur=Math.round(pf.durasi*(.8+r()*.35)*taper)}
       let w=WELL.map(()=>Math.min(5,Math.max(2,Math.round(3.4+r()*1.3-.4))));
       let nyeri=Math.round(r()*1.8),area=[];
       if(i===0&&k<7&&!rest){rpe=8;dur=125+Math.round(r()*20)}
@@ -739,6 +875,8 @@ function makeDemo(){
       if(i===12&&k<10&&!rest){rpe=Math.max(2,rpe-3);dur=40}
       const e={id:s.id+"_"+t,siswaId:s.id,tanggal:t,rpe,durasi:dur,nyeri,area};
       WELL.forEach((x,j)=>e[x[0]]=w[j]);
+      if(dur>0)e.jenis=pf?pf.jenis:"Teknik";
+      const wl=mean(w);if(r3()<.85){e.hrIstirahat=Math.round(hr0+(3.6-wl)*3+(r3()-.5)*4);e.hrv=Math.round(hrv0-(3.6-wl)*9+(r3()-.5)*12)}
       if(k===59||k===0||k===30)e.tinggi=+(h0+(i===7?(59-k)*0.0285:(59-k)*0.006)).toFixed(1);
       entri.push(e);
     }
@@ -769,7 +907,9 @@ function makeDemo(){
       tes.push(t);
     });
   });
-  return{siswa,entri,tes};
+  const rencana=[];const p0=addDays(TODAY,-34-((parse(TODAY).getDay()+6)%7));
+  siswa.forEach(s=>{for(let t=p0;t<=addDays(TODAY,27);t=addDays(t,1)){const pf=planFor(t);if(pf)rencana.push({id:"pl_"+s.id+"_"+t,siswaId:s.id,tanggal:t,...pf})}});
+  return{siswa,entri,tes,rencana};
 }
 
 /* ---------- analisis ---------- */
@@ -817,7 +957,7 @@ function rawData(){return S.mode==="live"&&S.live.siswa.length?S.live:(S.demo||(
 function scope(D){
   if(ME.role!=="pelatih"||!ME.cabor.length)return D;
   const siswa=D.siswa.filter(s=>ME.cabor.includes(s.cabor));const ids=new Set(siswa.map(s=>s.id));
-  return{siswa,entri:D.entri.filter(e=>ids.has(e.siswaId)),tes:(D.tes||[]).filter(t=>ids.has(t.siswaId))};
+  return{siswa,entri:D.entri.filter(e=>ids.has(e.siswaId)),tes:(D.tes||[]).filter(t=>ids.has(t.siswaId)),rencana:(D.rencana||[]).filter(p=>ids.has(p.siswaId))};
 }
 function data(){return scope(rawData())}
 function inputData(){return scope(S.mode==="live"?S.live:rawData())}
@@ -850,6 +990,7 @@ function banner(){
   if(S.mode==="loading"){b.hidden=false;b.textContent="Memuat data…";return}
   if(S.mode==="demo"){b.hidden=false;b.textContent="Mode contoh: aplikasi belum terhubung ke database, jadi yang tampil adalah 14 siswa contoh. Entri baru hanya bertahan sampai halaman ditutup.";return}
   if(!S.live.siswa.length){b.hidden=false;b.textContent="Belum ada siswa terdaftar, jadi dashboard menampilkan data contoh. Begitu siswa pertama ditambahkan di tab Data siswa, semua grafik memakai data asli.";return}
+  if(S.noRencana){b.hidden=false;b.textContent="Kalender latihan belum aktif: tabel rencana belum ada di database. Jalankan ulang setup.sql di Supabase (aman untuk data yang sudah ada).";return}
   b.hidden=true;
 }
 function computeRows(){
@@ -1143,13 +1284,19 @@ $("#btnCsvTes").addEventListener("click",async()=>{
 /* ---------- dashboard atlet (model fitness–fatigue) ---------- */
 const AT={sel:null};
 function ageOf(s){if(!s.tglLahir)return null;const b=parse(s.tglLahir),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n.getMonth()<b.getMonth()||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))a--;return a}
-function pmc(list){
-  const by={};list.forEach(e=>{by[e.tanggal]=(by[e.tanggal]||0)+(TSS_JAM[+e.rpe]||0)*(+e.durasi||0)/60});
+/* Fitness (CTL, 42 hari), fatigue (ATL, 7 hari), form = CTL − ATL.
+   Sampai hari ini memakai beban aktual; setelah hari ini (sampai `until`) memakai TSS rencana sebagai proyeksi. */
+function pmc(list,plans,until){
+  const by={},pl={};list.forEach(e=>{if(e.tanggal<=TODAY)by[e.tanggal]=(by[e.tanggal]||0)+(TSS_JAM[+e.rpe]||0)*(+e.durasi||0)/60});
+  (plans||[]).forEach(p=>{if(p.tanggal>TODAY)pl[p.tanggal]=(pl[p.tanggal]||0)+planTss(p)});
   const dates=Object.keys(by).sort();if(!dates.length)return[];
+  const end=until&&until>TODAY?until:TODAY;
   const lc=Math.exp(-1/42),la=Math.exp(-1/7);let ctl=0,atl=0;const out=[];
-  for(let t=dates[0];t<=TODAY;t=addDays(t,1)){const tss=by[t]||0;ctl=lc*ctl+(1-lc)*tss;atl=la*atl+(1-la)*tss;out.push({t,tss:+tss.toFixed(1),ctl:+ctl.toFixed(1),atl:+atl.toFixed(1),form:+(ctl-atl).toFixed(1),has:by[t]!=null})}
+  for(let t=dates[0];t<=end;t=addDays(t,1)){const proj=t>TODAY;const tss=proj?(pl[t]||0):(by[t]||0);ctl=lc*ctl+(1-lc)*tss;atl=la*atl+(1-la)*tss;out.push({t,tss:+tss.toFixed(1),ctl:+ctl.toFixed(1),atl:+atl.toFixed(1),form:+(ctl-atl).toFixed(1),has:!proj&&by[t]!=null,proj})}
   return out;
 }
+const projEnd=plans=>{const f=plans.filter(p=>p.tanggal>TODAY).map(p=>p.tanggal).sort();return f.length?[addDays(f[f.length-1],7),addDays(TODAY,28)].sort()[0]:TODAY};
+const monday=t=>addDays(t,-((parse(t).getDay()+6)%7));
 const FORMZ=[[-60,-30,"High risk","#e0252b"],[-30,-10,"Optimal","#1fa34a"],[-10,5,"Grey zone","#cfcfcf"],[5,40,"Fresh","#1592d0"]];
 const formZone=f=>FORMZ.find(z=>f>=z[0]&&f<z[1])||(f<-30?FORMZ[0]:FORMZ[3]);
 function renderAtlet(){
@@ -1164,8 +1311,16 @@ function renderAtlet(){
   const sameJk=D.siswa.filter(x=>x.jk===s.jk).map(x=>rowOf(x,M[x.id]||{}));
   const jkAvg=sameJk.map(x=>x.pct).filter(v=>v!=null);
   const age=ageOf(s);const bmi=s.bb&&s.tb?s.bb/(s.tb*s.tb):null;
-  const p=pmc(D.entri.filter(e=>e.siswaId===s.id));const last=p[p.length-1];
+  const ent=D.entri.filter(e=>e.siswaId===s.id),pl=(D.rencana||[]).filter(x=>x.siswaId===s.id);
+  const eBy={};ent.forEach(e=>eBy[e.tanggal]=e);const plBy={};pl.forEach(x=>(plBy[x.tanggal]=plBy[x.tanggal]||[]).push(x));
+  const p=pmc(ent,pl,projEnd(pl));const ti=p.findIndex(d=>d.t===TODAY);const last=ti>=0?p[ti]:null;
   const fz=last?formZone(last.form):null;
+  const ramp=last&&ti>=7?last.ctl-p[ti-7].ctl:null;
+  const tss7=ti>=0?Math.round(p.slice(Math.max(0,ti-6),ti+1).reduce((x,d)=>x+d.tss,0)):null;
+  let cpN=0,cpOk=0;for(let k=0;k<28;k++){const t=addDays(TODAY,-k);const pt=(plBy[t]||[]).reduce((x,y)=>x+planTss(y),0);const c=complianceOf(pt,eBy[t]?loadOf(eBy[t]):null,t);if(c){cpN++;if(c==="hijau")cpOk++}}
+  const fut=p.filter(d=>d.proj);const pk=fut.length?fut[fut.length-1]:null;
+  const sx=(v,l,sub,c)=>`<div class="xs" style="--sc:${c||"var(--accent)"}"><span>${l}</span><b>${v}</b><small>${sub}</small></div>`;
+  const strip=`<div class="xstrip">${sx(last?Math.round(last.ctl):"–","Fitness (CTL)","rata-rata beban 42 hari","#ffd400")}${sx(last?Math.round(last.atl):"–","Fatigue (ATL)","rata-rata beban 7 hari","#ff2a2a")}${sx(last?(last.form>0?"+":"")+Math.round(last.form):"–","Form (TSB)",fz?fz[2]:"–",fz?fz[3]:null)}${sx(ramp!=null?(ramp>0?"+":"")+dec(ramp,1):"–","Ramp rate","perubahan fitness 7 hari",ramp==null?null:ramp>7?"var(--red)":ramp>5?"var(--amber)":"var(--green)")}${sx(tss7!=null?tss7:"–","TSS 7 hari",pk?"proyeksi form "+fmtD(pk.t)+": "+(pk.form>0?"+":"")+Math.round(pk.form):"belum ada rencana ke depan","#5aa9ff")}${sx(cpN?Math.round(cpOk/cpN*100)+"%":"–","Kepatuhan rencana",cpN?cpOk+" dari "+cpN+" sesi sesuai (28 hari)":"belum ada rencana","#3fb950")}</div>`;
   const fld=(l,v,u)=>`<div class="xf"><span class="xl">${l}</span><span class="xc">:</span><span class="xv${v?"":" req"}">${v?esc(v):"Wajib diisi"}</span>${u?`<span class="xu">${u}</span>`:""}</div>`;
   box.innerHTML=`
   <div class="xhead">
@@ -1178,12 +1333,17 @@ function renderAtlet(){
       <div class="xtile" style="--tc:${fz?fz[3]:"#555"}"><b>${last?(last.form>0?"+":"")+Math.round(last.form):"–"}</b><span>Form · ${fz?fz[2]:"belum ada data"}</span></div>
     </div>
   </div>
+  ${strip}
   <div class="xgrid">
     <div class="xpanel"><h3>Performa fisik per tes · ${esc(s.nama.replace(" (contoh)",""))}</h3><div class="cv"><canvas id="atPerf" aria-label="Persentase performa per tes"></canvas></div></div>
     <div class="xpanel"><h3>Training Stress Score · Fitness · Fatigue</h3><div class="cv"><canvas id="atPmc" aria-label="TSS, fitness dan fatigue"></canvas></div></div>
     <div class="xpanel"><h3>Rata-rata kelas per tes · ${s.jk==="P"?"putri":"putra"}</h3><div class="cv"><canvas id="atAvg" aria-label="Rata-rata kelas per tes"></canvas></div></div>
     <div class="xpanel"><h3>Form (fitness − fatigue)</h3><div class="cv"><canvas id="atForm" aria-label="Form dan zona risiko"></canvas></div>
       <div class="legend">${FORMZ.map(z=>`<span><i style="background:${z[3]}"></i>${z[2]} (${z[0]<=-60?"< "+z[1]:z[1]>=40?"> "+z[0]:z[0]+" s/d "+z[1]})</span>`).join("")}</div></div>
+  </div>
+  <div class="xgrid">
+    <div class="xpanel"><h3>Beban mingguan per jenis latihan</h3><div class="cv"><canvas id="atWeek" aria-label="TSS mingguan per jenis latihan"></canvas></div><p class="note">12 minggu terakhir dan 4 minggu ke depan. Batang transparan = rencana.</p></div>
+    <div class="xpanel"><h3>Wellness · nadi istirahat · HRV (60 hari)</h3><div class="cv"><canvas id="atHrv" aria-label="Tren wellness, denyut nadi istirahat dan HRV"></canvas></div><p class="note">Nadi istirahat naik dan HRV turun beberapa hari berturut-turut sering menandakan kelelahan atau sakit.</p></div>
   </div>
   <div class="xgrid">
     <div class="xpanel"><h3>Skala intensitas latihan (RPE)</h3><div class="rpeleg">${[...RPE_BAND].reverse().map(b=>`<div><span class="rn" style="background:${b[3]}">${b[0]} - ${b[1]}</span><span class="rl">${b[2]}</span><span class="re">${RPE_EMO[b[1]]}</span></div>`).join("")}</div>
@@ -1197,14 +1357,181 @@ function renderAtlet(){
   cyl("atPerf",perfData(r),TESTS.map(t=>r.sk[t.key]?T.cat[r.sk[t.key]-1]:T.accent2));
   const avg=TESTS.map(t=>{const v=sameJk.map(x=>x.sk[t.key]).filter(x=>x!=null);return v.length?+(mean(v)*20).toFixed(0):null});
   cyl("atAvg",avg,TESTS.map(()=>s.jk==="P"?"#ff6b8a":"#5aa9ff"));
-  const win=p.slice(-90);const labels=win.map(d=>fmtD(d.t));
-  mkChart("atPmc",{type:"bar",data:{labels,datasets:[{type:"bar",label:"Training Stress Score",data:win.map(d=>d.tss),backgroundColor:"rgba(190,225,255,.85)",borderRadius:2,order:3},{type:"line",label:"Fitness",data:win.map(d=>d.ctl),borderColor:"#ffd400",borderWidth:2,pointRadius:0,tension:.25,order:1},{type:"line",label:"Fatigue",data:win.map(d=>d.atl),borderColor:"#ff2a2a",borderWidth:2,pointRadius:0,tension:.25,order:2}]},
-    options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{beginAtZero:true,ticks:{maxTicksLimit:6,color:T.muted}})},plugins:{legend:{display:true,position:"top",labels:{boxWidth:12,boxHeight:3,color:T.ink}}}}});
-  mkChart("atForm",{type:"line",data:{labels,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#000",borderWidth:2.5,pointRadius:0,tension:.25}]},
+  const w0=Math.max(0,ti-89);const win=p.slice(w0);const labels=win.map(d=>fmtD(d.t));
+  const dash={borderDash:c=>win[c.p1DataIndex]&&win[c.p1DataIndex].proj?[5,4]:undefined};
+  const today=ti>=0?{axis:"x",value:ti-w0,color:"#bdbdbd",label:"Hari ini"}:undefined;
+  const projT=it=>win[it[0].dataIndex]&&win[it[0].dataIndex].proj?it[0].label+" · proyeksi rencana":it[0].label;
+  mkChart("atPmc",{type:"bar",data:{labels,datasets:[{type:"bar",label:"Training Stress Score",data:win.map(d=>d.tss),backgroundColor:win.map(d=>d.proj?"rgba(190,225,255,.3)":"rgba(190,225,255,.85)"),borderRadius:2,order:3},{type:"line",label:"Fitness",data:win.map(d=>d.ctl),borderColor:"#ffd400",borderWidth:2,pointRadius:0,tension:.25,order:1,segment:dash},{type:"line",label:"Fatigue",data:win.map(d=>d.atl),borderColor:"#ff2a2a",borderWidth:2,pointRadius:0,tension:.25,order:2,segment:dash}]},
+    options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{beginAtZero:true,ticks:{maxTicksLimit:6,color:T.muted}})},plugins:{refLine:today,legend:{display:true,position:"top",labels:{boxWidth:12,boxHeight:3,color:T.ink}},tooltip:{callbacks:{title:projT}}}}});
+  mkChart("atForm",{type:"line",data:{labels,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#000",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash}]},
     options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{min:-50,max:30,grid:{display:false},ticks:{stepSize:10,color:T.muted}})},
-      plugins:{zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]})),tooltip:{callbacks:{label:it=>{const z=formZone(it.raw);return"Form "+(it.raw>0?"+":"")+it.raw+" · "+z[2]}}}}}});
+      plugins:{refLine:today?{...today,color:"#000"}:undefined,zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]})),tooltip:{callbacks:{title:projT,label:it=>{const z=formZone(it.raw);return"Form "+(it.raw>0?"+":"")+it.raw+" · "+z[2]}}}}}});
+  /* beban mingguan per jenis: aktual (≤ hari ini) dan rencana (> hari ini) */
+  const wk0=addDays(monday(TODAY),-77);const NW=16;const weeks=[...Array(NW)].map((_,i)=>addDays(wk0,i*7));
+  const aggA={},aggP={};const put=(g,j,i,v)=>{(g[j]=g[j]||weeks.map(()=>0))[i]+=v};
+  ent.forEach(e=>{if(e.tanggal>TODAY||e.tanggal<wk0||!(+e.durasi>0))return;const i=Math.floor(diffDays(e.tanggal,wk0)/7);if(i<NW)put(aggA,e.jenis||(plBy[e.tanggal]&&plBy[e.tanggal][0].jenis)||"Tidak dicatat",i,loadOf(e))});
+  pl.forEach(x=>{if(x.tanggal<=TODAY)return;const i=Math.floor(diffDays(x.tanggal,wk0)/7);if(i<NW)put(aggP,x.jenis||"Tidak dicatat",i,planTss(x))});
+  const jOrder=[...JENIS.map(j=>j[0]),"Tidak dicatat"];
+  const wds=[...jOrder.filter(j=>aggA[j]).map(j=>({label:j,data:aggA[j],backgroundColor:jColor(j),stack:"s",borderRadius:2})),...jOrder.filter(j=>aggP[j]).map(j=>({label:j+" (rencana)",data:aggP[j],backgroundColor:jColor(j)+"55",stack:"s",borderRadius:2}))];
+  mkChart("atWeek",{type:"bar",data:{labels:weeks.map(fmtD),datasets:wds},options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:8,color:T.muted}}),y:axis(T,{stacked:true,beginAtZero:true,ticks:{maxTicksLimit:6,color:T.muted}})},
+    plugins:{refLine:{axis:"x",value:11,color:"#bdbdbd",label:"Minggu ini"},legend:{display:true,position:"top",labels:{boxWidth:10,boxHeight:10,color:T.ink,filter:it=>!/\(rencana\)$/.test(it.text)}},tooltip:{filter:it=>it.raw>0,callbacks:{title:it=>"Minggu "+it[0].label,label:it=>it.dataset.label+": "+it.raw+" TSS",footer:it=>"Total "+it.reduce((x,y)=>x+y.raw,0)+" TSS"}}}}});
+  const wd=[...Array(60)].map((_,k)=>{const t=addDays(TODAY,k-59);const e=eBy[t];return{t,w:e?wellTotal(e):null,hr:e&&e.hrIstirahat?+e.hrIstirahat:null,hrv:e&&e.hrv?+e.hrv:null}});
+  const hasHr=wd.some(d=>d.hr!=null||d.hrv!=null);
+  mkChart("atHrv",{type:"line",data:{labels:wd.map(d=>fmtD(d.t)),datasets:[{label:"Wellness (5–25)",data:wd.map(d=>d.w),borderColor:"#7cc94f",backgroundColor:"#7cc94f",borderWidth:2,pointRadius:0,tension:.3,spanGaps:true,yAxisID:"y"},...(hasHr?[{label:"Nadi istirahat (bpm)",data:wd.map(d=>d.hr),borderColor:"#ff4b42",backgroundColor:"#ff4b42",borderWidth:2,pointRadius:0,tension:.3,spanGaps:true,yAxisID:"y1"},{label:"HRV (ms)",data:wd.map(d=>d.hrv),borderColor:"#5aa9ff",backgroundColor:"#5aa9ff",borderWidth:2,pointRadius:0,tension:.3,spanGaps:true,yAxisID:"y1"}]:[])]},
+    options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{min:5,max:25,ticks:{stepSize:5,color:T.muted},title:{display:true,text:"Wellness",color:T.muted}}),y1:axis(T,{display:hasHr,position:"right",grid:{display:false},ticks:{maxTicksLimit:6,color:T.muted},title:{display:true,text:"bpm / ms",color:T.muted}})},plugins:{legend:{display:true,position:"top",labels:{boxWidth:12,boxHeight:3,color:T.ink}}}}});
 }
 $("#atPick").addEventListener("change",e=>{AT.sel=e.target.value;renderAtlet()});
+/* ---------- kalender latihan & rencana ---------- */
+const KAL={m:TODAY.slice(0,8)+"01",day:TODAY,edit:null,drag:null};
+const DOWS=["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+const canPlan=()=>ME.role==="admin"||ME.role==="pelatih";
+const fmtLong=t=>parse(t).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const fmtDur=m=>m>=60?Math.floor(m/60)+" j "+pad(m%60)+" m":m+" m";
+const sgn=(v,d)=>v==null?"–":(v>0?"+":"")+(d?dec(v,d):Math.round(v));
+const uid=()=>{try{if(crypto.randomUUID)return crypto.randomUUID()}catch(_){}const b=crypto.getRandomValues(new Uint8Array(16));b[6]=b[6]&15|64;b[8]=b[8]&63|128;const h=[...b].map(x=>x.toString(16).padStart(2,"0")).join("");return h.slice(0,8)+"-"+h.slice(8,12)+"-"+h.slice(12,16)+"-"+h.slice(16,20)+"-"+h.slice(20)};
+const athletes=D=>[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama));
+const athleteOpts=list=>{const g={};list.forEach(s=>(g[s.cabor]=g[s.cabor]||[]).push(s));return Object.keys(g).map(c=>`<optgroup label="${esc(c)}">${g[c].map(s=>`<option value="${s.id}" ${s.id===AT.sel?"selected":""}>${esc(s.nama)}</option>`).join("")}</optgroup>`).join("")};
+const curAthlete=()=>data().siswa.find(s=>s.id===AT.sel);
+const liveWrite=()=>S.mode==="live"&&S.db&&S.live.siswa.length>0;
+const PL={
+  async add(rows){if(liveWrite())await DB.insertMany("rencana",rows);else rawData().rencana.push(...rows)},
+  async upd(id,doc){if(liveWrite())await DB.update("rencana",id,doc);else Object.assign(rawData().rencana.find(p=>p.id===id)||{},doc)},
+  async del(id){if(liveWrite())await DB.remove("rencana",id);else{const R=rawData();R.rencana=R.rencana.filter(p=>p.id!==id)}}
+};
+const plErr=err=>err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin mengubah rencana atlet ini.":err&&/rencana|relation|schema cache/i.test(err.message||"")?"Tabel rencana belum ada. Jalankan ulang setup.sql di Supabase.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.";
+function renderKal(){
+  const D=data();const list=athletes(D);const box=$("#kalBody");
+  $("#kalAdd").hidden=!canPlan()||!list.length;
+  const md=parse(KAL.m);$("#kalTitle").textContent=md.toLocaleDateString("id-ID",{month:"long",year:"numeric"});
+  if(!list.length){box.innerHTML='<div class="empty">Belum ada siswa. Tambahkan di tab Data siswa.</div>';$("#kalPick").innerHTML="";return}
+  if(!list.some(s=>s.id===AT.sel))AT.sel=list[0].id;
+  $("#kalPick").innerHTML=athleteOpts(list);
+  const s=list.find(x=>x.id===AT.sel);
+  const ent=D.entri.filter(e=>e.siswaId===s.id),pl=(D.rencana||[]).filter(p=>p.siswaId===s.id);
+  const eBy={};ent.forEach(e=>eBy[e.tanggal]=e);const pBy={};pl.forEach(p=>(pBy[p.tanggal]=pBy[p.tanggal]||[]).push(p));
+  const start=monday(KAL.m);const mEnd=iso(new Date(md.getFullYear(),md.getMonth()+1,0));const end=addDays(monday(mEnd),6);
+  const P=pmc(ent,pl,end>TODAY?end:TODAY);const pd={};P.forEach(d=>pd[d.t]=d);
+  const edit=canPlan();
+  let h=DOWS.map(d=>`<div class="kh">${d}</div>`).join("")+'<div class="kh">Ringkasan minggu</div>';
+  for(let w=start;w<=end;w=addDays(w,7)){
+    let aT=0,pT=0,aMin=0,n=0,nPl=0;
+    for(let i=0;i<7;i++){
+      const t=addDays(w,i);const e=eBy[t];const ps=pBy[t]||[];
+      const act=e?loadOf(e):null;const pt=ps.reduce((x,p)=>x+planTss(p),0);const cp=complianceOf(pt,act,t);
+      if(e&&+e.durasi>0){aT+=act;aMin+=+e.durasi;n++}pT+=pt;nPl+=ps.length;
+      const blank=!e&&!ps.length&&t!==TODAY;
+      h+=`<div class="kd${t.slice(0,7)!==KAL.m.slice(0,7)?" kx":""}${t===TODAY?" today":""}${blank?" blank":""}" data-t="${t}" role="button" tabindex="0" aria-label="${fmtLong(t)}${ps.length?", "+ps.length+" rencana":""}${e?", latihan tercatat":""}">`
+        +`<div class="kn"><span><span class="kdow">${DOWS[i]} </span><b>${parse(t).getDate()}</b></span>${e?`<i class="wdot ${cls(wellTotal(e))}" title="Wellness ${wellTotal(e)}/25"></i>`:""}</div>`
+        +ps.map(p=>`<div class="wo" data-id="${p.id}" style="--jc:${jColor(p.jenis)}${cp?";--cc:"+CPL[cp][0]:""}"${cp?` data-cp="${cp}" title="${CPL[cp][1]}"`:""}${edit?' draggable="true"':""}><b>${esc(p.judul)}</b><small>${p.durasi?p.durasi+" mnt · ":""}RPE ${p.rpe??"–"} · ${planTss(p)} TSS</small></div>`).join("")
+        +(e?(+e.durasi>0?`<div class="wo done" style="--jc:${jColor(e.jenis)};--cc:${cp?CPL[cp][0]:jColor(e.jenis)}"><b>✓ ${esc(e.jenis||"Latihan")}</b><small>${e.durasi} mnt · RPE ${e.rpe} · ${act} TSS</small></div>`:`<div class="wo done" style="--cc:var(--accent2)"><b>Libur</b><small>Wellness ${wellTotal(e)}/25</small></div>`):"")
+        +`</div>`;
+    }
+    const pe=pd[addDays(w,6)]||(addDays(w,6)>TODAY&&w<=TODAY?pd[TODAY]:null),pb=pd[addDays(w,-1)];
+    const ramp=pe&&pb?pe.ctl-pb.ctl:null;
+    h+=`<div class="kw"><div class="kwh">Minggu ${fmtD(w)}</div>`
+      +`<div><span>TSS</span><b>${aT}${pT?` <small>/ ${pT}</small>`:""}</b></div>`
+      +`<div><span>Durasi · sesi</span><b>${fmtDur(aMin)} · ${n}</b></div>`
+      +`<div><span>Fitness</span><b>${pe?Math.round(pe.ctl):"–"}</b></div>`
+      +`<div><span>Form</span><b style="color:${pe?formZone(pe.form)[3]:"inherit"}">${pe?sgn(pe.form):"–"}</b></div>`
+      +`<div><span>Ramp rate</span><b>${sgn(ramp,1)}</b></div>`
+      +(pe&&pe.proj?'<span class="proj">termasuk proyeksi rencana</span>':"")
+      +(edit&&nPl?`<button type="button" class="lnk" data-copy="${w}">Salin rencana ke minggu depan</button>`:"")
+      +`</div>`;
+  }
+  box.innerHTML=`<div class="kal">${h}</div>`;
+  $("#kalLeg").innerHTML=JENIS.map(([j,c])=>`<span><i style="background:${c}"></i>${j}</span>`).join("")+`<span style="width:100%;height:0"></span>`+Object.values(CPL).map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join("");
+  if($("#kalDlg").open)fillDlgLists();
+}
+function openDay(t,editId){
+  if(!curAthlete())return;
+  KAL.day=t;$("#kalMsg").textContent="";fillDlgLists();
+  const p=editId?(data().rencana||[]).find(x=>x.id===editId):null;resetPlanForm(p&&canPlan()?p:null);
+  const d=$("#kalDlg");if(!d.open){if(d.showModal)d.showModal();else d.setAttribute("open","")}
+}
+function fillDlgLists(){
+  const D=data();const s=curAthlete();if(!s)return;const t=KAL.day;
+  const e=D.entri.find(x=>x.siswaId===s.id&&x.tanggal===t);
+  const ps=(D.rencana||[]).filter(p=>p.siswaId===s.id&&p.tanggal===t);
+  $("#dlgTitle").textContent=fmtLong(t);$("#dlgWho").textContent=s.nama+" · "+s.cabor;
+  const pt=ps.reduce((x,p)=>x+planTss(p),0);const cp=complianceOf(pt,e?loadOf(e):null,t);
+  const m=(k,v)=>`<div class="m"><div class="v">${v}</div><div class="k">${k}</div></div>`;
+  $("#dlgAct").innerHTML=e?`<div class="mini">${m("Jenis",esc(e.jenis||"–"))}${m("Durasi",(e.durasi||0)+" mnt")}${m("RPE",e.rpe??"–")}${m("TSS",loadOf(e))}${m("Wellness",wellTotal(e)+"/25")}${m("Nyeri",(e.nyeri||0)+"/10")}${e.hrIstirahat?m("Nadi istirahat",e.hrIstirahat+" bpm"):""}${e.hrv?m("HRV",e.hrv+" ms"):""}</div>${cp?`<p class="note" style="margin:0">Kepatuhan: <b style="color:${CPL[cp][0]}">${CPL[cp][1]}</b> · ${Math.round(loadOf(e)/pt*100)}% dari TSS rencana</p>`:""}`
+    :`<p class="note" style="margin:0">${t>TODAY?"Hari ini belum tiba.":cp==="merah"?'<b style="color:var(--red)">Rencana tidak dilakukan / belum dicatat.</b> ':""}${t<=TODAY?"Belum ada entri. Isi lewat tab Input harian.":""}</p>`;
+  $("#dlgPlans").innerHTML=ps.length?ps.map(p=>`<div class="wo big" style="--jc:${jColor(p.jenis)}"><b>${esc(p.judul)}</b><small>${esc(p.jenis||"–")} · ${p.durasi||0} mnt · RPE ${p.rpe??"–"} (${RPE[+p.rpe]||"–"}) · ${planTss(p)} TSS</small>${p.deskripsi?`<p>${esc(p.deskripsi)}</p>`:""}${canPlan()?`<div class="acts"><button type="button" class="btn ghost sm" data-pe="${p.id}">Ubah</button><button type="button" class="btn ghost sm" data-pd="${p.id}">Hapus</button></div>`:""}</div>`).join(""):'<p class="note" style="margin:0">Belum ada rencana untuk hari ini.</p>';
+}
+function resetPlanForm(p){
+  const s=curAthlete();$("#planForm").hidden=!canPlan();if(!s)return;
+  KAL.edit=p?p.id:null;
+  $("#pfTitle").textContent=p?"Ubah rencana":"Tambah rencana";
+  $("#pTgl").value=p?p.tanggal:KAL.day;$("#pJenis").value=p&&p.jenis?p.jenis:JENIS[0][0];
+  $("#pJudul").value=p?p.judul:"";$("#pDur").value=p&&p.durasi!=null?p.durasi:"";$("#pRpe").value=p&&p.rpe!=null?p.rpe:5;$("#pDesk").value=p?p.deskripsi||"":"";
+  const nC=data().siswa.filter(x=>x.cabor===s.cabor).length;
+  $("#pAll").checked=false;$("#pAllBox").hidden=!!p||nC<2;$("#pAllLbl").textContent=`Terapkan juga ke semua atlet ${s.cabor} (${nC} atlet)`;
+  $("#pCancel").hidden=!p;$("#pSave").textContent=p?"Simpan perubahan":"Simpan rencana";$("#pMsg").textContent="";updPTss();
+}
+function updPTss(){const d=$("#pDur").value;$("#pTss").textContent=d===""?"–":planTss({rpe:$("#pRpe").value,durasi:d})+" TSS"}
+async function movePlan(id,t){
+  const p=(data().rencana||[]).find(x=>x.id===id);if(!p||p.tanggal===t)return;
+  try{await PL.upd(id,{tanggal:t});msg("#kalMsg",`"${p.judul}" dipindah ke ${fmtLong(t)}.`,true)}catch(err){msg("#kalMsg",plErr(err))}
+  renderKal();
+}
+async function copyWeek(w){
+  const ps=(data().rencana||[]).filter(p=>p.siswaId===AT.sel&&p.tanggal>=w&&p.tanggal<=addDays(w,6));if(!ps.length)return;
+  const rows=ps.map(p=>({id:uid(),siswaId:p.siswaId,tanggal:addDays(p.tanggal,7),jenis:p.jenis,judul:p.judul,deskripsi:p.deskripsi||null,durasi:p.durasi,rpe:p.rpe}));
+  try{await PL.add(rows);msg("#kalMsg",ps.length+" rencana disalin ke minggu "+fmtD(addDays(w,7))+".",true)}catch(err){msg("#kalMsg",plErr(err))}
+  renderKal();
+}
+$("#pJenis").innerHTML=JENIS.map(([j])=>`<option>${j}</option>`).join("");
+$("#pRpe").innerHTML=RPE.map((t,i)=>`<option value="${i}">${i} · ${t} (${TSS_JAM[i]} TSS/jam)</option>`).join("");
+$("#pfTitle").insertAdjacentHTML("afterend",'<div style="display:flex;flex-direction:column;gap:6px"><span class="note">Templat cepat</span><div class="chips" id="pLib">'+LIB.map((l,i)=>`<button type="button" class="chip small" data-lib="${i}" style="border-left:4px solid ${jColor(l[0])}">${esc(l[1])}</button>`).join("")+"</div></div>");
+$("#pLib").addEventListener("click",e=>{const b=e.target.closest("[data-lib]");if(!b)return;const l=LIB[+b.dataset.lib];$("#pJenis").value=l[0];$("#pJudul").value=l[1];$("#pDur").value=l[2];$("#pRpe").value=l[3];$("#pDesk").value=l[4];updPTss()});
+["#pDur","#pRpe"].forEach(x=>$(x).addEventListener("input",updPTss));
+$("#pCancel").addEventListener("click",()=>resetPlanForm(null));
+$("#dlgClose").addEventListener("click",()=>$("#kalDlg").close?$("#kalDlg").close():$("#kalDlg").removeAttribute("open"));
+$("#kalDlg").addEventListener("click",async e=>{
+  if(e.target===e.currentTarget){e.currentTarget.close();return}
+  const pe=e.target.closest("[data-pe]"),pdl=e.target.closest("[data-pd]");
+  if(pe){resetPlanForm((data().rencana||[]).find(x=>x.id===pe.dataset.pe));$("#pJudul").focus()}
+  if(pdl){const p=(data().rencana||[]).find(x=>x.id===pdl.dataset.pd);if(!p||!confirm(`Hapus rencana "${p.judul}"?`))return;
+    try{await PL.del(p.id);msg("#pMsg","Rencana dihapus.",true);if(KAL.edit===p.id)resetPlanForm(null)}catch(err){msg("#pMsg",plErr(err))}
+    fillDlgLists();renderKal()}
+});
+$("#planForm").addEventListener("submit",async e=>{
+  e.preventDefault();if(!canPlan())return;
+  const s=curAthlete();if(!s)return;
+  const tanggal=$("#pTgl").value,judul=$("#pJudul").value.trim(),dur=$("#pDur").value,rpe=+$("#pRpe").value;
+  if(!tanggal)return msg("#pMsg","Isi tanggal.");
+  if(judul.length<2)return msg("#pMsg","Isi judul sesi, misalnya \"Interval lari 6 × 400 m\".");
+  if(dur===""||+dur<0||+dur>400)return msg("#pMsg","Isi durasi 0–400 menit.");
+  const doc={tanggal,jenis:$("#pJenis").value,judul,deskripsi:$("#pDesk").value.trim()||null,durasi:Math.round(+dur),rpe};
+  const editing=KAL.edit;
+  try{
+    if(editing){await PL.upd(editing,doc);msg("#pMsg","Perubahan tersimpan.",true)}
+    else{const tg=$("#pAll").checked?data().siswa.filter(x=>x.cabor===s.cabor):[s];
+      await PL.add(tg.map(x=>({id:uid(),siswaId:x.id,...doc,dibuat:new Date().toISOString()})));
+      msg("#pMsg",tg.length>1?`Rencana ditambahkan untuk ${tg.length} atlet ${s.cabor}.`:"Rencana ditambahkan.",true)}
+  }catch(err){return msg("#pMsg",plErr(err))}
+  const m=$("#pMsg").textContent;KAL.day=tanggal;if(tanggal.slice(0,7)!==KAL.m.slice(0,7))KAL.m=tanggal.slice(0,8)+"01";
+  resetPlanForm(null);msg("#pMsg",m,true);fillDlgLists();renderKal();
+});
+$("#kalPick").addEventListener("change",e=>{AT.sel=e.target.value;renderKal()});
+const shiftMonth=n=>{const d=parse(KAL.m);KAL.m=iso(new Date(d.getFullYear(),d.getMonth()+n,1));renderKal()};
+$("#kalPrev").addEventListener("click",()=>shiftMonth(-1));
+$("#kalNext").addEventListener("click",()=>shiftMonth(1));
+$("#kalNow").addEventListener("click",()=>{KAL.m=TODAY.slice(0,8)+"01";renderKal()});
+$("#kalAdd").addEventListener("click",()=>openDay(KAL.m.slice(0,7)===TODAY.slice(0,7)?TODAY:KAL.m));
+const kb=$("#kalBody");
+kb.addEventListener("click",e=>{
+  const c=e.target.closest("[data-copy]");if(c){copyWeek(c.dataset.copy);return}
+  const d=e.target.closest(".kd");if(!d)return;const w=e.target.closest(".wo[data-id]");openDay(d.dataset.t,w&&w.dataset.id);
+});
+kb.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList.contains("kd")){e.preventDefault();openDay(e.target.dataset.t)}});
+kb.addEventListener("dragstart",e=>{const w=e.target.closest(".wo[data-id]");if(!w)return;KAL.drag=w.dataset.id;e.dataTransfer.effectAllowed="move";try{e.dataTransfer.setData("text/plain",w.dataset.id)}catch(_){}});
+kb.addEventListener("dragover",e=>{const d=e.target.closest(".kd");if(!d||!KAL.drag)return;e.preventDefault();kb.querySelectorAll(".kd.drop").forEach(x=>x!==d&&x.classList.remove("drop"));d.classList.add("drop")});
+kb.addEventListener("dragleave",e=>{const d=e.target.closest(".kd");if(d&&!d.contains(e.relatedTarget))d.classList.remove("drop")});
+kb.addEventListener("drop",e=>{const d=e.target.closest(".kd");if(!d||!KAL.drag)return;e.preventDefault();const id=KAL.drag;KAL.drag=null;d.classList.remove("drop");movePlan(id,d.dataset.t)});
+kb.addEventListener("dragend",()=>{KAL.drag=null;kb.querySelectorAll(".kd.drop").forEach(x=>x.classList.remove("drop"))});
+
 
 /* ---------- siswa ---------- */
 const SE={edit:null};
@@ -1223,10 +1550,11 @@ function resetSiswaForm(){SE.edit=null;["#sNama","#sKelas","#sJk","#sPelatih","#
 $("#siswaCancel").addEventListener("click",()=>{resetSiswaForm();$("#msgSiswa").textContent=""});
 
 /* ---------- input ---------- */
-const F={sid:"",cabor:"",w:{},nyeri:0,area:[],rpe:null};
+const F={sid:"",cabor:"",w:{},nyeri:0,area:[],rpe:null,jenis:null};
 function buildInput(){
   $("#wellBox").innerHTML=WELL.map(([k,l,sub,d])=>`<div class="wrow"><div class="q">${l}<small>${sub}</small></div><div class="five" role="group" aria-label="${l}">${d.map((t,i)=>`<button type="button" data-k="${k}" data-v="${i+1}" aria-pressed="false"><span class="v">${i+1}</span><span class="d">${t}</span></button>`).join("")}</div></div>`).join("");
   $("#inRpe").innerHTML=RPE.map((t,i)=>`<button type="button" data-v="${i}" style="--rc:${i?rpeColor(i):"#444"}" aria-pressed="false"><b>${i}</b><span>${RPE_EMO[i]} ${t}${i?` <small style="opacity:.75">· ${TSS_JAM[i]} TSS/jam</small>`:""}</span></button>`).join("");
+  $("#inJenis").innerHTML=JENIS.map(([j,c])=>`<button type="button" class="chip small" data-j="${j}" aria-pressed="false" style="border-left:4px solid ${c}">${j}</button>`).join("");
   $("#inArea").innerHTML=AREAS.map(a=>`<button type="button" class="chip small" data-a="${a}" aria-pressed="false">${a}</button>`).join("");
   $("#durQuick").innerHTML=[0,45,60,90,120].map(v=>`<button type="button" class="chip small" data-q="${v}">${v===0?"Libur":v+" mnt"}</button>`).join("");
   $("#inTgl").value=TODAY;$("#inTgl").max=TODAY;
@@ -1261,12 +1589,23 @@ function updateSummary(){
   ["st1","st2","st3","st4"].forEach((id,i)=>$("#"+id).classList.toggle("done",done[i]&&(i!==2||nW===5)));
   let f="";if(wt!=null&&wt<=10)f='<span class="pill p-merah">Wellness rendah, pelatih akan diberi tahu</span>';else if((wt!=null&&wt<=13)||F.nyeri>=3)f='<span class="pill p-kuning">Perlu perhatian pelatih</span>';else if(wt!=null)f='<span class="pill p-hijau">Kondisi baik</span>';
   $("#sumFlag").innerHTML=f;
+  planHint();
 }
+function planHint(){
+  const t=$("#inTgl").value;const ps=F.sid&&t?(inputData().rencana||[]).filter(p=>p.siswaId===F.sid&&p.tanggal===t):[];
+  const box=$("#planHint");box.hidden=!ps.length;if(!ps.length)return;
+  box.innerHTML=`<span>Rencana pelatih: ${ps.map(p=>`<b>${esc(p.judul)}</b> (${esc(p.jenis||"–")} · ${p.durasi||0} mnt · RPE ${p.rpe})`).join(" + ")}</span><button type="button" class="btn ghost sm" data-plan="1">Isi sesuai rencana</button>`;
+}
+function setJenis(j){F.jenis=j;$("#inJenis").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.j===j))}
 function painColor(){const T=tok();const v=F.nyeri;$("#inNyeri").style.setProperty("--pc",v>=6?T.red:v>=3?T.amber:T.accent);$("#nyeriVal").style.color=v>=6?"var(--red)":v>=3?"var(--amber)":"var(--ink)";$("#areaBox").hidden=v===0}
 
 $("#v-input").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   if(b.dataset.k){F.w[b.dataset.k]=+b.dataset.v;b.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b))}
+  else if(b.dataset.j){setJenis(F.jenis===b.dataset.j?null:b.dataset.j)}
+  else if(b.dataset.plan){const ps=(inputData().rencana||[]).filter(p=>p.siswaId===F.sid&&p.tanggal===$("#inTgl").value);if(!ps.length)return;
+    const dur=ps.reduce((x,p)=>x+(+p.durasi||0),0);const rpe=dur?Math.round(ps.reduce((x,p)=>x+(+p.rpe||0)*(+p.durasi||0),0)/dur):+ps[0].rpe||0;
+    $("#inDur").value=dur;F.rpe=rpe;$("#inRpe").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.v===rpe));setJenis(ps[0].jenis||null)}
   else if(b.dataset.s!==undefined){F.sid=b.dataset.s;renderPicker()}
   else if(b.dataset.c!==undefined){F.cabor=b.dataset.c;renderPicker()}
   else if(b.dataset.a){const a=b.dataset.a;F.area=F.area.includes(a)?F.area.filter(x=>x!==a):F.area.concat(a);b.setAttribute("aria-pressed",F.area.includes(a))}
@@ -1291,14 +1630,18 @@ $("#formEntri").addEventListener("submit",async e=>{
   const dur=$("#inDur").value;if(dur===""||+dur<0||+dur>400)return msg("#msgEntri","Isi durasi 0–400 menit.");
   const ent={siswaId:F.sid,tanggal:tgl,rpe:F.rpe,durasi:+dur,nyeri:F.nyeri,area:F.nyeri>0?F.area:[],...F.w,dibuat:new Date().toISOString()};
   const ti=$("#inTinggi").value;if(ti!==""){if(+ti<100||+ti>230)return msg("#msgEntri","Tinggi badan di luar rentang 100–230 cm.");ent.tinggi=+(+ti).toFixed(1)}
+  if(F.jenis&&+dur>0)ent.jenis=F.jenis;
+  const hr=$("#inHr").value,hrv=$("#inHrv").value;
+  if(hr!==""){if(+hr<30||+hr>120)return msg("#msgEntri","Denyut nadi istirahat di luar rentang 30–120 bpm.");ent.hrIstirahat=Math.round(+hr)}
+  if(hrv!==""){if(+hrv<5||+hrv>250)return msg("#msgEntri","HRV di luar rentang 5–250 ms.");ent.hrv=Math.round(+hrv)}
   const id=F.sid+"_"+tgl;
   if(S.mode==="live"&&S.db){
     try{await DB.upsert("entri",{id,...ent});msg("#msgEntri","Tersimpan. Mengisi ulang tanggal yang sama akan mengganti entri ini.",true)}
-    catch(err){msg("#msgEntri",err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin menyimpan data ini. Hubungi pengelola program.":err&&err.code==="quota_exceeded"?"Penyimpanan penuh. Hubungi pengelola untuk menghapus data lama.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.");return}
+    catch(err){msg("#msgEntri",err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin menyimpan data ini. Hubungi pengelola program.":err&&/column|schema cache/i.test(err.message||"")?"Database perlu diperbarui: jalankan ulang setup.sql di Supabase.":err&&err.code==="quota_exceeded"?"Penyimpanan penuh. Hubungi pengelola untuk menghapus data lama.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.");return}
   }else{const D=rawData();D.entri=D.entri.filter(x=>x.id!==id);D.entri.push({id,...ent});msg("#msgEntri","Tersimpan di mode contoh (tidak permanen).",true)}
-  F.w={};F.rpe=null;F.nyeri=0;F.area=[];
-  document.querySelectorAll("#wellBox button,#inRpe button,#inArea button").forEach(b=>b.setAttribute("aria-pressed","false"));
-  $("#inNyeri").value=0;$("#nyeriVal").textContent="0";$("#inDur").value="";$("#inTinggi").value="";painColor();updateSummary();renderDash();
+  F.w={};F.rpe=null;F.nyeri=0;F.area=[];F.jenis=null;
+  document.querySelectorAll("#wellBox button,#inRpe button,#inArea button,#inJenis button").forEach(b=>b.setAttribute("aria-pressed","false"));
+  $("#inNyeri").value=0;$("#nyeriVal").textContent="0";$("#inDur").value="";$("#inTinggi").value="";$("#inHr").value="";$("#inHrv").value="";painColor();updateSummary();renderDash();
 });
 
 /* ---------- tambah siswa ---------- */
@@ -1325,9 +1668,9 @@ $("#formSiswa").addEventListener("submit",async e=>{
 /* ---------- CSV ---------- */
 $("#btnCsv").addEventListener("click",async()=>{
   const D=data();const nm={};D.siswa.forEach(s=>nm[s.id]=s);
-  const head=["tanggal","nama","cabor","kelas",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","rpe","durasi_menit","beban_tss","tinggi_cm"];
+  const head=["tanggal","nama","cabor","kelas",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","rpe","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
   const q=v=>{const s=String(v??"");return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-  const rows=[...D.entri].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,s.nama,s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellTotal(e),e.nyeri,(e.area||[]).join(" / "),e.rpe,e.durasi,loadOf(e),e.tinggi??""].map(q).join(",")});
+  const rows=[...D.entri].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,s.nama,s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellTotal(e),e.nyeri,(e.area||[]).join(" / "),e.rpe,e.durasi,loadOf(e),e.jenis??"",e.hrIstirahat??"",e.hrv??"",e.tinggi??""].map(q).join(",")});
   downloadText("monitoring-latihan-atlet-"+TODAY+".csv","﻿"+head.join(",")+"\n"+rows.join("\n"))
 });
 
@@ -1335,8 +1678,9 @@ $("#btnCsv").addEventListener("click",async()=>{
 document.querySelector(".tabs").addEventListener("click",e=>{
   const b=e.target.closest("button[data-tab]");if(!b)return;S.tab=b.dataset.tab;
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
-  ["atlet","dash","input","tes","siswa","akses"].forEach(t=>$("#v-"+t).hidden=t!==S.tab);
+  ["atlet","kal","dash","input","tes","siswa","akses"].forEach(t=>$("#v-"+t).hidden=t!==S.tab);
   if(S.tab==="atlet")renderAtlet();
+  if(S.tab==="kal")renderKal();
   if(S.tab==="dash")renderDash();
   if(S.tab==="tes")renderTes();
   if(S.tab==="akses"){renderAkses();loadProfil()}
@@ -1346,10 +1690,10 @@ $("#kpis").addEventListener("click",e=>{const b=e.target.closest(".kpi");if(!b)r
 $("#fCabor").addEventListener("change",e=>{S.cabor=e.target.value;renderDash()});
 $("#list").addEventListener("click",e=>{const r=e.target.closest(".row[data-id]");if(!r)return;S.sel=S.sel===r.dataset.id?null:r.dataset.id;renderDash();if(S.sel)scrollDetail()});
 
-function renderAll(){if(!S.entered)return;banner();if(S.tab==="atlet")renderAtlet();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();if(S.tab==="akses")renderAkses();renderPicker();renderSiswa();updateSummary()}
+function renderAll(){if(!S.entered)return;banner();if(S.tab==="atlet")renderAtlet();if(S.tab==="kal")renderKal();else if($("#kalDlg").open)fillDlgLists();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();if(S.tab==="akses")renderAkses();renderPicker();renderSiswa();updateSummary()}
 /* ---------- penyimpanan (Supabase) ---------- */
 const CFG=window.MONITOR_CONFIG||{};
-const SB_MAP={siswa:{tglLahir:"tgl_lahir"},entri:{siswaId:"siswa_id"},tes:{siswaId:"siswa_id"}};
+const SB_MAP={siswa:{tglLahir:"tgl_lahir"},entri:{siswaId:"siswa_id",hrIstirahat:"hr_istirahat"},tes:{siswaId:"siswa_id"},rencana:{siswaId:"siswa_id"}};
 function toRow(table,o){const m=SB_MAP[table]||{};const r={};for(const k in o){if(o[k]===undefined)continue;r[m[k]||k]=o[k]}return r}
 function fromRow(table,r){const m=SB_MAP[table]||{};const inv={};for(const k in m)inv[m[k]]=k;const o={};for(const k in r){if(r[k]===null)continue;o[inv[k]||k]=r[k]}return o}
 function dbErr(e){const err=new Error(e&&e.message||"Gagal");err.code=(e&&(e.code==="42501"||/row-level security|permission denied/i.test(e.message||"")))?"invalid_argument":"unavailable";return err}
@@ -1360,6 +1704,8 @@ const DB={
   },
   async upsert(table,o){const{error}=await S.db.from(table).upsert(toRow(table,o));if(error)throw dbErr(error);DB.refresh(table)},
   async insert(table,o){const{error}=await S.db.from(table).insert(toRow(table,o));if(error)throw dbErr(error);DB.refresh(table)},
+  async insertMany(table,arr){const{error}=await S.db.from(table).insert(arr.map(o=>toRow(table,o)));if(error)throw dbErr(error);DB.refresh(table)},
+  async remove(table,id){const{error}=await S.db.from(table).delete().eq("id",id);if(error)throw dbErr(error);DB.refresh(table)},
   async update(table,id,o){const{error}=await S.db.from(table).update(toRow(table,o)).eq("id",id);if(error)throw dbErr(error);DB.refresh(table)},
   timers:{},
   refresh(table,delay){clearTimeout(DB.timers[table]);DB.timers[table]=setTimeout(()=>DB.fetch(table),delay||150)},
@@ -1368,6 +1714,7 @@ const DB={
       if(table==="siswa")S.live.siswa=await DB.loadAll("siswa");
       else if(table==="entri")S.live.entri=await DB.loadAll("entri",q=>q.gte("tanggal",addDays(TODAY,-120)));
       else if(table==="tes")S.live.tes=await DB.loadAll("tes");
+      else if(table==="rencana"){try{S.live.rencana=await DB.loadAll("rencana",q=>q.gte("tanggal",addDays(TODAY,-120)))}catch(_){S.live.rencana=[];S.noRencana=true}}
       else if(table==="profil"){await loadProfil();return}
       if(S.entered)renderAll();
     }catch(e){const b=$("#banner");b.hidden=false;b.textContent="Gagal memuat data. Periksa koneksi internet lalu muat ulang halaman."}
@@ -1463,14 +1810,14 @@ async function loadMe(){
 }
 async function afterSignIn(autoEnter){
   await loadMe();
-  if(ME.state==="ok"){await Promise.all(["siswa","entri","tes"].map(DB.fetch));startRealtime();if(autoEnter){enterApp();return}}
+  if(ME.state==="ok"){await Promise.all(["siswa","entri","tes","rencana"].map(DB.fetch));startRealtime();if(autoEnter){enterApp();return}}
   renderLogin();
 }
-async function signOut(){try{await S.db.auth.signOut()}catch(_){}S.entered=false;ME.state="signedout";ME.role=null;ME.id=null;LG.mode="masuk";LG.info="";S.live={siswa:[],entri:[],tes:[]};$("#app").hidden=true;$("#home").hidden=false;renderLogin()}
+async function signOut(){try{await S.db.auth.signOut()}catch(_){}S.entered=false;ME.state="signedout";ME.role=null;ME.id=null;LG.mode="masuk";LG.info="";S.live={siswa:[],entri:[],tes:[],rencana:[]};$("#app").hidden=true;$("#home").hidden=false;renderLogin()}
 let rtStarted=false;
 function startRealtime(){
   if(rtStarted||!S.db.channel)return;rtStarted=true;
-  try{S.db.channel("monitor").on("postgres_changes",{event:"*",schema:"public"},p=>{if(["siswa","entri","tes","profil"].includes(p.table))DB.refresh(p.table,600)}).subscribe()}catch(_){}
+  try{S.db.channel("monitor").on("postgres_changes",{event:"*",schema:"public"},p=>{if(["siswa","entri","tes","rencana","profil"].includes(p.table))DB.refresh(p.table,600)}).subscribe()}catch(_){}
 }
 function applyRoleUI(){
   const ro=ME.role==="guru",admin=ME.role==="admin";
@@ -1482,7 +1829,7 @@ function applyRoleUI(){
   const u=$("#uchip");u.innerHTML="";const av=document.createElement("span");av.className="avatar";av.style.cssText="width:26px;height:26px;font-size:12px";av.textContent=initials(ME.name||ME.email||"?");u.appendChild(av);
   const t=document.createElement("span");t.textContent=(ME.name||"Anda")+" ";const sm=document.createElement("small");sm.textContent="· "+ROLE_LABEL[ME.role]+(ME.role==="pelatih"&&ME.cabor.length?" "+ME.cabor.join(", "):"");t.appendChild(sm);u.appendChild(t);
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===S.tab));
-  ["atlet","dash","input","tes","siswa","akses"].forEach(t=>$("#v-"+t).hidden=t!==S.tab);
+  ["atlet","kal","dash","input","tes","siswa","akses"].forEach(t=>$("#v-"+t).hidden=t!==S.tab);
 }
 function enterApp(){
   if(ME.state!=="ok")return;
@@ -1534,10 +1881,10 @@ function renderAkses(){
   });
 }
 
-const rethemer=()=>{if(!S.entered)return;if(S.tab==="atlet")renderAtlet();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();updateSummary();painColor()};
+const rethemer=()=>{if(!S.entered)return;if(S.tab==="atlet")renderAtlet();if(S.tab==="kal")renderKal();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();updateSummary();painColor()};
 
 buildInput();
-try{const t=localStorage.getItem("tab");if(t&&["atlet","dash","input","tes","siswa","akses"].includes(t))S.tab=t}catch(_){}
+try{const t=localStorage.getItem("tab");if(t&&["atlet","kal","dash","input","tes","siswa","akses"].includes(t))S.tab=t}catch(_){}
 $("#btnCsv").hidden=false;$("#btnCsvTes").hidden=false;
 renderLogin();
 

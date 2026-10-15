@@ -87,6 +87,23 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
   - Ubah juga isi email di **Authentication → Email Templates** ke Bahasa Indonesia.
 - **Nama web.** Nama dan teks web bisa diubah langsung di `index.html`, misalnya judul *Monitoring Latihan Atlet*.
 
+## 8. Fitur ala TrainingPeaks / intervals.icu
+
+- **Kalender latihan.** Tab *Kalender latihan* menampilkan satu bulan per atlet, dengan kolom *Ringkasan minggu* (TSS aktual / rencana, durasi, fitness, form, ramp rate).
+  - Pelatih dan pengelola klik sebuah hari untuk menambah rencana sesi: jenis, judul, durasi, target RPE, dan deskripsi. Bisa juga memakai *Templat cepat*.
+  - Centang **Terapkan juga ke semua atlet …** untuk memberi sesi yang sama ke satu cabor sekaligus.
+  - Kartu rencana bisa **diseret** ke hari lain. Tombol **Salin rencana ke minggu depan** menyalin satu minggu.
+  - Guru hanya bisa melihat.
+- **Kepatuhan rencana.** Warna kartu rencana dihitung dari TSS aktual ÷ TSS rencana: hijau 80–120%, kuning 50–79% atau 121–150%, oranye di luar itu, merah jika tidak dilakukan.
+- **Input harian** menampilkan rencana pelatih untuk hari itu. Tombol **Isi sesuai rencana** mengisi durasi, RPE, dan jenis latihan. Ada juga kolom opsional *denyut nadi istirahat* dan *HRV* pagi.
+- **Dashboard atlet** kini menampilkan:
+  - Fitness (CTL), fatigue (ATL), form (TSB), ramp rate, TSS 7 hari, dan persentase kepatuhan.
+  - Proyeksi fitness/form dari rencana ke depan (garis putus-putus).
+  - Beban mingguan per jenis latihan.
+  - Tren wellness, nadi istirahat, dan HRV.
+
+**Memperbarui database lama:** jika sebelumnya sudah memasang versi lama, jalankan ulang seluruh `setup.sql` di SQL Editor. Skrip ini aman dijalankan ulang karena tidak menghapus data, hanya menambah tabel `rencana` dan kolom baru di `entri`.
+
 ## Hal penting lain
 
 - **Proyek gratis bisa dijeda.** Di paket gratis Supabase, proyek yang tidak dipakai beberapa hari bisa dijeda otomatis. Cukup buka dashboard Supabase dan klik *Restore*. Kalau web dipakai setiap hari, ini jarang terjadi.
