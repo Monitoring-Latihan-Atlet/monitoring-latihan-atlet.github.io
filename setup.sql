@@ -54,6 +54,10 @@ create table if not exists public.siswa (
   dibuat timestamptz not null default now()
 );
 
+-- Kode rahasia untuk tautan pribadi atlet (atlet.html?k=<kode>)
+alter table public.siswa add column if not exists kode uuid not null default gen_random_uuid();
+create unique index if not exists siswa_kode_idx on public.siswa (kode);
+
 create or replace function public.boleh_lihat_siswa(sid uuid) returns boolean
 language sql stable security definer set search_path = public as $$
   select case public.peran_saya()
@@ -86,6 +90,7 @@ create index if not exists entri_tanggal_idx on public.entri (tanggal);
 alter table public.entri add column if not exists jenis text;          -- jenis latihan
 alter table public.entri add column if not exists hr_istirahat int;    -- denyut nadi istirahat pagi (bpm)
 alter table public.entri add column if not exists hrv numeric;         -- HRV pagi (ms, RMSSD)
+alter table public.entri add column if not exists sesi jsonb;          -- daftar sesi latihan hari itu [{id,jenis,rpe,durasi}]
 
 -- ---------- Rencana latihan (kalender) ----------
 create table if not exists public.rencana (
@@ -171,6 +176,74 @@ drop policy if exists rencana_ubah on public.rencana;
 create policy rencana_ubah on public.rencana for update using (public.boleh_ubah_siswa(siswa_id)) with check (public.boleh_ubah_siswa(siswa_id));
 drop policy if exists rencana_hapus on public.rencana;
 create policy rencana_hapus on public.rencana for delete using (public.boleh_ubah_siswa(siswa_id));
+
+-- ---------- Halaman atlet (tanpa login, memakai kode tautan) ----------
+-- Atlet hanya bisa membaca & menulis data dirinya sendiri lewat dua fungsi ini.
+create or replace function public.atlet_data(p_kode uuid)
+returns jsonb language sql stable security definer set search_path = public as $$
+  select jsonb_build_object(
+    'nama', s.nama, 'cabor', s.cabor, 'jk', s.jk,
+    'entri', coalesce((select jsonb_agg(to_jsonb(e) - 'siswa_id' order by e.tanggal)
+                       from public.entri e where e.siswa_id = s.id and e.tanggal >= current_date - 42), '[]'::jsonb),
+    'rencana', coalesce((select jsonb_agg(jsonb_build_object('tanggal', r.tanggal, 'jenis', r.jenis, 'judul', r.judul,
+                         'deskripsi', r.deskripsi, 'durasi', r.durasi, 'rpe', r.rpe) order by r.tanggal)
+                       from public.rencana r where r.siswa_id = s.id and r.tanggal between current_date - 7 and current_date + 14), '[]'::jsonb))
+  from public.siswa s where s.kode = p_kode
+$$;
+
+create or replace function public.atlet_simpan(p_kode uuid, p_tanggal date, p_data jsonb)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  sid uuid; rid text; cur public.entri%rowtype; ss jsonb;
+  w jsonb := p_data->'wellness'; ns jsonb := p_data->'sesi'; hapus text := p_data->>'hapus_sesi'; k text;
+begin
+  select id into sid from public.siswa where kode = p_kode;
+  if sid is null then raise exception 'Tautan atlet tidak dikenal'; end if;
+  if p_tanggal > current_date + 1 or p_tanggal < current_date - 7 then raise exception 'Tanggal di luar rentang'; end if;
+  rid := sid::text || '_' || p_tanggal::text;
+  insert into public.entri (id, siswa_id, tanggal) values (rid, sid, p_tanggal) on conflict (id) do nothing;
+  select * into cur from public.entri where id = rid for update;
+  ss := coalesce(cur.sesi, case when coalesce(cur.durasi, 0) > 0
+          then jsonb_build_array(jsonb_build_object('id', 'lama', 'jenis', cur.jenis, 'rpe', cur.rpe, 'durasi', cur.durasi))
+          else '[]'::jsonb end);
+  if w is not null then
+    foreach k in array array['tidur','lelah','otot','stres','mood'] loop
+      if coalesce((w->>k)::int, 0) not between 1 and 5 then raise exception 'Nilai % harus 1–5', k; end if;
+    end loop;
+    if coalesce((w->>'nyeri')::int, 0) not between 0 and 10 then raise exception 'Nyeri harus 0–10'; end if;
+    update public.entri set
+      tidur = (w->>'tidur')::int, lelah = (w->>'lelah')::int, otot = (w->>'otot')::int,
+      stres = (w->>'stres')::int, mood = (w->>'mood')::int, nyeri = coalesce((w->>'nyeri')::int, 0),
+      area = array(select jsonb_array_elements_text(coalesce(w->'area', '[]'::jsonb))),
+      hr_istirahat = case when (w->>'hr') ~ '^[0-9]+$' and (w->>'hr')::int between 30 and 120 then (w->>'hr')::int end,
+      hrv = case when (w->>'hrv') ~ '^[0-9.]+$' and (w->>'hrv')::numeric between 5 and 250 then (w->>'hrv')::numeric end
+    where id = rid;
+  end if;
+  if ns is not null then
+    if coalesce((ns->>'rpe')::int, 0) not between 1 and 10 then raise exception 'RPE harus 1–10'; end if;
+    if coalesce((ns->>'durasi')::int, 0) not between 1 and 400 then raise exception 'Durasi harus 1–400 menit'; end if;
+    if not exists (select 1 from jsonb_array_elements(ss) x where x->>'id' = ns->>'id') then
+      ss := ss || jsonb_build_array(jsonb_build_object('id', coalesce(ns->>'id', gen_random_uuid()::text),
+              'jenis', ns->>'jenis', 'rpe', (ns->>'rpe')::int, 'durasi', (ns->>'durasi')::int));
+    end if;
+  end if;
+  if hapus is not null then
+    ss := coalesce((select jsonb_agg(x) from jsonb_array_elements(ss) x where x->>'id' is distinct from hapus), '[]'::jsonb);
+  end if;
+  update public.entri set sesi = ss,
+    durasi = (select coalesce(sum((x->>'durasi')::int), 0) from jsonb_array_elements(ss) x),
+    rpe = (select case when coalesce(sum((x->>'durasi')::int), 0) > 0
+                  then round(sum((x->>'rpe')::int * (x->>'durasi')::int)::numeric / sum((x->>'durasi')::int)) else 0 end
+           from jsonb_array_elements(ss) x),
+    jenis = ss->0->>'jenis'
+  where id = rid;
+  return (select to_jsonb(e) - 'siswa_id' from public.entri e where e.id = rid);
+end $$;
+
+revoke all on function public.atlet_data(uuid) from public;
+revoke all on function public.atlet_simpan(uuid, date, jsonb) from public;
+grant execute on function public.atlet_data(uuid) to anon, authenticated;
+grant execute on function public.atlet_simpan(uuid, date, jsonb) to anon, authenticated;
 
 -- ---------- Pembaruan langsung antar-perangkat ----------
 do $$ begin
