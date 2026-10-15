@@ -182,12 +182,15 @@ create policy rencana_hapus on public.rencana for delete using (public.boleh_uba
 create or replace function public.atlet_data(p_kode uuid)
 returns jsonb language sql stable security definer set search_path = public as $$
   select jsonb_build_object(
-    'nama', s.nama, 'cabor', s.cabor, 'jk', s.jk,
+    'nama', s.nama, 'cabor', s.cabor, 'jk', s.jk, 'kelas', s.kelas, 'pelatih', s.pelatih,
+    'tgl_lahir', s.tgl_lahir, 'bb', s.bb, 'tb', s.tb,
     'entri', coalesce((select jsonb_agg(to_jsonb(e) - 'siswa_id' order by e.tanggal)
-                       from public.entri e where e.siswa_id = s.id and e.tanggal >= current_date - 42), '[]'::jsonb),
+                       from public.entri e where e.siswa_id = s.id and e.tanggal >= current_date - 150), '[]'::jsonb),
+    'tes', coalesce((select jsonb_agg(to_jsonb(t) - 'siswa_id' order by t.tanggal)
+                       from public.tes t where t.siswa_id = s.id), '[]'::jsonb),
     'rencana', coalesce((select jsonb_agg(jsonb_build_object('tanggal', r.tanggal, 'jenis', r.jenis, 'judul', r.judul,
                          'deskripsi', r.deskripsi, 'durasi', r.durasi, 'rpe', r.rpe) order by r.tanggal)
-                       from public.rencana r where r.siswa_id = s.id and r.tanggal between current_date - 7 and current_date + 14), '[]'::jsonb))
+                       from public.rencana r where r.siswa_id = s.id and r.tanggal between current_date - 42 and current_date + 35), '[]'::jsonb))
   from public.siswa s where s.kode = p_kode
 $$;
 
