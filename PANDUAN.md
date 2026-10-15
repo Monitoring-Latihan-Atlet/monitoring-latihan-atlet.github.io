@@ -5,6 +5,7 @@ Isi folder:
 - `index.html` — aplikasi pelatih / pengelola.
 - `atlet.html` — halaman isian harian untuk atlet (dibuka lewat tautan pribadi).
 - `config.js` — alamat dan kunci database.
+- `norma.js` — norma tes kondisi fisik (dipakai halaman pelatih dan atlet).
 - `sw.js`, `manifest*.json`, `icon-*.png` — agar web bisa dipasang seperti aplikasi.
 - `setup.sql` — skema database dan aturan akses.
 - `PANDUAN.md` — panduan ini.
@@ -114,6 +115,14 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
   - Atlet mengisi **kondisi pagi** dan **sesi latihan**, melihat rencana pelatih, dan melihat beban 7 hari terakhir.
   - Tautan hanya bisa membaca dan mengisi data atlet itu sendiri. Jika tautan tersebar, tekan **Buat tautan baru**; tautan lama langsung tidak berlaku.
   - **Salin semua tautan atlet di cabor ini** memudahkan pembagian ke satu tim.
+- **Dashboard atlet.** Di halaman atlet ada dua tab: **Isi hari ini** dan **Dashboard**. Dashboard menampilkan:
+  - kesiapan hari ini (siap latihan / waspada / perlu pemulihan),
+  - fitness, fatigue, form, ramp rate, beban 7 hari, dan persentase sesuai rencana,
+  - grafik fitness & kelelahan serta form, termasuk perkiraan dari rencana pelatih,
+  - beban mingguan per jenis latihan, tren kondisi pagi, nadi istirahat, dan HRV,
+  - hasil tes fisik terakhir dengan skala norma dan perubahan dari tes sebelumnya,
+  - profil (usia, BB, TB, BMI) dan zona denyut jantung.
+  Atlet hanya melihat datanya sendiri.
 - **Pasang seperti aplikasi.** Di Android (Chrome), ketuk **Pasang aplikasi** atau menu ⋮ → *Tambahkan ke layar utama*. Di iPhone (Safari), ketuk *Bagikan* → *Tambahkan ke Layar Utama*. Atlet memasang dari tautan pribadinya; setelah itu ikon *Latihan Saya* langsung membuka halamannya.
 - **Saat sinyal lemah.** Halaman atlet tetap terbuka dan isian disimpan di HP, lalu terkirim otomatis saat online. Aplikasi pelatih juga tetap terbuka, tetapi butuh internet untuk memuat dan menyimpan data.
 - **Beberapa sesi per hari.** Kondisi pagi diisi sekali sehari, sedangkan sesi latihan bisa ditambahkan berkali-kali (misalnya pagi dan sore). Beban harian, ACWR, fitness, dan kalender menjumlahkan semua sesi. Entri lama otomatis terbaca sebagai satu sesi.
