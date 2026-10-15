@@ -1,6 +1,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monitoring Latihan Atlet</title>
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Monitoring">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none'><rect width='64' height='64' rx='14' fill='%23fff'/><g stroke-width='7' stroke-linecap='round'><path d='M10 38A22 22 0 0 1 15.15 23.86' stroke='%232f80ed'/><path d='M16.72 22.17A22 22 0 0 1 35.82 16.33' stroke='%2322b35e'/><path d='M38.06 16.85A22 22 0 0 1 48.35 23.28' stroke='%23f5b301'/><path d='M49.8 25.07A22 22 0 0 1 54 38' stroke='%23ef4136'/></g><path d='M6 46h12l4-7 5 12 6-27 5 22h20' stroke='%23161a2b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/><circle cx='33' cy='24' r='3.6' fill='%23ff5b0a' stroke='%23fff' stroke-width='1.6'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
@@ -43,6 +48,7 @@ select,input[type=text],input[type=number],input[type=date],input[type=search]{f
 .btn{font-weight:700;font-size:15px;background:var(--accent);color:#000;border:0;border-radius:9px;padding:10px 18px;cursor:pointer}
 .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
 .btn.sm{font-size:14px;padding:8px 12px}
+a.btn{text-decoration:none;display:inline-block}
 /* KPI */
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 12px;display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer;position:relative;overflow:hidden}
@@ -409,6 +415,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <header class="hnav">
     <div class="hnav-in">
       <div class="logo"><span class="mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span><span class="wm"><b>Monitoring <span>Latihan Atlet</span></b><small>Sport science · Atlet pelajar</small></span></div>
+      <button type="button" class="btn sm btn-install" hidden>Pasang aplikasi</button>
       <div class="hbadge"><span style="--d:#2f80ed">Kalender</span><span style="--d:#0fb5ae">Beban latihan</span><span style="--d:#7a5af8">Wellness</span><span style="--d:#22b35e">Tes fisik</span></div>
     </div>
   </header>
@@ -451,7 +458,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <article class="fcard" style="--d:#f5b301"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><path d="M3 21h18"/><path d="M12 8V3"/></svg></span><h3>Fitness, fatigue &amp; form</h3><p>Model CTL/ATL/TSB, ramp rate, dan proyeksi form dari rencana minggu-minggu ke depan.</p></article>
       <article class="fcard" style="--d:#ef4136"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><h3>Wellness harian</h3><p>Tidur, energi, otot, stres, mood, nadi istirahat, dan HRV dibandingkan dengan baseline tiap siswa.</p></article>
       <article class="fcard" style="--d:#7a5af8"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg></span><h3>Tes kondisi fisik</h3><p>9 tes per semester, T-score per jenis kelamin, dan progres antar-sesi.</p></article>
-      <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Akses berbasis peran</h3><p>Pengelola, pelatih, dan guru melihat data sesuai haknya, dijaga langsung di database.</p></article>
+      <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Atlet isi sendiri dari HP</h3><p>Tautan pribadi tiap atlet, bisa dipasang seperti aplikasi dan tetap jalan saat sinyal lemah. Pelatih dan guru melihat data sesuai haknya.</p></article>
     </div>
   </section>
 
@@ -475,7 +482,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <p class="eyebrow">Sport science · Atlet pelajar</p>
         <h1>Monitoring Latihan Atlet</h1>
       </div></div>
-      <div class="who-bar"><span class="date" id="today"></span><span class="uchip" id="uchip"></span><button type="button" class="out" id="btnOut">Keluar</button></div>
+      <div class="who-bar"><span class="date" id="today"></span><span class="uchip" id="uchip"></span><button type="button" class="out btn-install" hidden>Pasang aplikasi</button><button type="button" class="out" id="btnOut">Keluar</button></div>
     </div>
     <div class="tabs" role="tablist">
       <button role="tab" aria-selected="true" data-tab="atlet" id="tab-atlet">Dashboard atlet</button>
@@ -535,6 +542,18 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit" id="pSave">Simpan rencana</button><button class="btn ghost" type="button" id="pCancel" hidden>Batal ubah</button></div>
         <p class="msg" id="pMsg" role="status"></p>
       </form>
+    </div>
+  </dialog>
+
+  <dialog id="linkDlg" class="dlg" aria-labelledby="lkTitle">
+    <div class="dlg-h"><div><h2 id="lkTitle">Tautan atlet</h2><p class="sub" id="lkWho"></p></div><button type="button" class="x" id="lkClose" aria-label="Tutup">×</button></div>
+    <div class="dlg-b">
+      <p class="note" style="margin:0">Kirim tautan ini ke atlet. Atlet membukanya di HP untuk mengisi kondisi pagi dan sesi latihannya sendiri, tanpa login, dan bisa memasangnya di layar utama seperti aplikasi.</p>
+      <input type="text" id="lkUrl" readonly aria-label="Tautan atlet">
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn sm" id="lkCopy">Salin tautan</button><a class="btn ghost sm" id="lkWa" target="_blank" rel="noopener">Kirim lewat WhatsApp</a><button type="button" class="btn ghost sm" id="lkNew">Buat tautan baru</button></div>
+      <button type="button" class="lnk" id="lkAll" style="font-size:14px">Salin semua tautan atlet di cabor ini</button>
+      <p class="msg" id="lkMsg" role="status"></p>
+      <p class="rules"><b>Jaga kerahasiaan.</b> Siapa pun yang memegang tautan bisa melihat dan mengisi data atlet ini. Jika tautan tersebar, tekan <b>Buat tautan baru</b>; tautan lama langsung tidak berlaku.</p>
     </div>
   </dialog>
 
@@ -608,6 +627,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <div class="card">
           <div class="step" id="st2"><b>2</b><h2>Kondisi pagi ini</h2></div>
           <p class="note">Pilih angka yang paling menggambarkan kondisimu. 1 = paling buruk, 5 = paling baik.</p>
+          <div class="planhint" id="wellAda" hidden></div>
           <div id="wellBox"></div>
           <div class="two">
             <label class="fl"><span>Denyut nadi istirahat pagi (bpm) <small class="note">opsional</small></span><input type="number" id="inHr" min="30" max="120" inputmode="numeric" placeholder="mis. 58"></label>
@@ -629,7 +649,9 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         </div>
 
         <div class="card">
-          <div class="step" id="st4"><b>4</b><h2>Latihan hari ini</h2></div>
+          <div class="step" id="st4"><b>4</b><h2>Tambah sesi latihan</h2></div>
+          <div id="sesiAda" style="display:flex;flex-direction:column;gap:6px"></div>
+          <p class="note">Latihan lebih dari sekali sehari? Simpan sesi pertama, lalu tambahkan sesi berikutnya. Kosongkan durasi jika hanya mengisi kondisi pagi.</p>
           <div class="planhint" id="planHint" hidden></div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <span class="note">Jenis latihan (opsional)</span>
@@ -764,17 +786,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 </div>
 
-<script>
-/* =====================================================================
-   KONFIGURASI — isi dua nilai di bawah dari Supabase:
-   Project Settings → API → "Project URL" dan "anon public key".
-   Selama dibiarkan kosong, aplikasi berjalan dalam mode contoh.
-   ===================================================================== */
-window.MONITOR_CONFIG={
-  supabaseUrl:"https://lzfdflwbatsacpyehkey.supabase.co",
-  supabaseAnonKey:"sb_publishable_WDzq6-SKJsIxShSqQN4IAQ_9ETPVsBP"
-};
-</script>
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
@@ -916,30 +928,39 @@ function makeDemo(){
 const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
 const sd=a=>{const m=mean(a);return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/Math.max(1,a.length-1))};
 const wellTotal=e=>WELL.reduce((s,x)=>s+(+e[x[0]]||0),0);
-const loadOf=e=>Math.round((TSS_JAM[+e.rpe]||0)*(+e.durasi||0)/60);
+/* Wellness dihitung hanya bila kelima butir terisi (entri bisa berisi sesi saja). */
+const hasW=e=>!!e&&WELL.every(([k])=>e[k]!=null&&e[k]!=="");
+const wellOf=e=>hasW(e)?wellTotal(e):null;
+/* Satu hari bisa berisi beberapa sesi. Entri lama (tanpa `sesi`) dibaca sebagai satu sesi. */
+const sesiOf=e=>Array.isArray(e&&e.sesi)&&e.sesi.length?e.sesi:(e&&+e.durasi>0?[{id:"lama",jenis:e.jenis,rpe:+e.rpe,durasi:+e.durasi}]:[]);
+const sesiTss=x=>(TSS_JAM[+x.rpe]||0)*(+x.durasi||0)/60;
+const loadRaw=e=>sesiOf(e).reduce((t,x)=>t+sesiTss(x),0);
+const loadOf=e=>Math.round(loadRaw(e));
+const aggSesi=ss=>{const d=ss.reduce((x,y)=>x+(+y.durasi||0),0);return{sesi:ss,durasi:d,rpe:d?Math.round(ss.reduce((x,y)=>x+(+y.rpe||0)*(+y.durasi||0),0)/d):0,jenis:ss[0]&&ss[0].jenis||null}};
 function analyze(s,list){
   const es=list.filter(e=>e.tanggal<=TODAY&&diffDays(TODAY,e.tanggal)<60).sort((a,b)=>a.tanggal<b.tanggal?-1:1);
   const byDate={};es.forEach(e=>byDate[e.tanggal]=e);
   const loadAt=t=>byDate[t]?loadOf(byDate[t]):0;
   const acwrAt=t=>{let a=0,c=0,n=0;for(let k=0;k<28;k++){const d=addDays(t,-k);const l=loadAt(d);if(byDate[d])n++;c+=l;if(k<7)a+=l}c/=4;return n>=12&&c>0?a/c:null};
-  const days=[];for(let k=27;k>=0;k--){const t=addDays(TODAY,-k);const e=byDate[t];days.push({t,load:loadAt(t),well:e?wellTotal(e):null,has:!!e,acwr:acwrAt(t)})}
+  const days=[];for(let k=27;k>=0;k--){const t=addDays(TODAY,-k);const e=byDate[t];days.push({t,load:loadAt(t),well:wellOf(e),has:!!e,acwr:acwrAt(t)})}
   const acute=days.slice(-7).reduce((x,d)=>x+d.load,0);
   const acwr=days[27].acwr;
   const l7=days.slice(-7).map(d=>d.load);const sd7=sd(l7);
   const mono=sd7>0?mean(l7)/sd7:null;
   const last=es.length?es[es.length-1]:null;
   const fresh=last&&diffDays(TODAY,last.tanggal)<=3;
-  const recent=es.filter(e=>diffDays(TODAY,e.tanggal)<28);
-  const zOf=e=>{const base=es.filter(b=>b.tanggal<e.tanggal&&diffDays(e.tanggal,b.tanggal)<=28).map(wellTotal);if(base.length<7)return null;return(wellTotal(e)-mean(base))/Math.max(1,sd(base))};
-  let z=null,zs=[],wt=last?wellTotal(last):null;
-  if(last){z=zOf(last);zs=es.slice(-3).map(zOf)}
-  const items=WELL.map(([k])=>({k,last:last?+last[k]:null,avg:recent.length?mean(recent.map(e=>+e[k])):null}));
+  const ws=es.filter(hasW);const lw=ws.length&&diffDays(TODAY,ws[ws.length-1].tanggal)<=3?ws[ws.length-1]:null;
+  const recent=ws.filter(e=>diffDays(TODAY,e.tanggal)<28);
+  const zOf=e=>{const base=ws.filter(b=>b.tanggal<e.tanggal&&diffDays(e.tanggal,b.tanggal)<=28).map(wellTotal);if(base.length<7)return null;return(wellTotal(e)-mean(base))/Math.max(1,sd(base))};
+  let z=null,zs=[],wt=lw?wellTotal(lw):null;
+  if(lw){z=zOf(lw);zs=ws.slice(-3).map(zOf)}
+  const items=WELL.map(([k])=>({k,last:lw?+lw[k]:null,avg:recent.length?mean(recent.map(e=>+e[k])):null}));
   const hs=es.filter(e=>e.tinggi);let gv=null;
   if(hs.length>=2){const a=hs[0],b=hs[hs.length-1];const dd=diffDays(b.tanggal,a.tanggal);if(dd>=28)gv=(b.tinggi-a.tinggi)/(dd/365)}
-  const last3=es.slice(-3);const R=[],Y=[];
+  const last3=ws.slice(-3);const R=[],Y=[];
   const base={acwr,mono,z,wt,gv,acute,days,last,items,byDate,compliance:days.filter(d=>d.has).length/28};
   if(!fresh)return{...base,status:"kosong",reasons:[last?"Tidak ada entri 4 hari terakhir":"Belum ada entri"],todayIn:false};
-  if(last3.length===3&&last3.every(e=>+e.nyeri>=3))R.push("Nyeri ≥3 di 3 entri terakhir"+(last.area&&last.area.length?" ("+last.area.join(", ")+")":""));
+  if(last3.length===3&&last3.every(e=>+e.nyeri>=3))R.push("Nyeri ≥3 di 3 entri terakhir"+(lw&&lw.area&&lw.area.length?" ("+lw.area.join(", ")+")":""));
   if(acwr!=null&&acwr>1.5)R.push("Lonjakan beban (ACWR zona bahaya)");
   if(z!=null){if(z<-2)R.push("Wellness jauh di bawah biasanya (z "+dec(z)+")");else if(zs.length===3&&zs.every(v=>v!=null&&v<-1))R.push("Wellness turun 3 entri berturut-turut")}
   else if(wt!=null&&wt<=10)R.push("Skor wellness rendah ("+wt+"/25)");
@@ -949,7 +970,7 @@ function analyze(s,list){
   if(z==null&&wt!=null&&wt>10&&wt<=13)Y.push("Skor wellness agak rendah ("+wt+"/25)");
   if(mono!=null&&mono>2)Y.push("Latihan monoton (monotony "+dec(mono)+")");
   if(gv!=null&&gv>=7)Y.push("Fase tumbuh cepat ("+dec(gv,1)+" cm/thn)");
-  if(+last.nyeri>=3&&!R.length)Y.push("Nyeri "+last.nyeri+"/10"+(last.area&&last.area.length?" di "+last.area.join(", ").toLowerCase():""));
+  if(lw&&+lw.nyeri>=3&&!R.length)Y.push("Nyeri "+lw.nyeri+"/10"+(lw.area&&lw.area.length?" di "+lw.area.join(", ").toLowerCase():""));
   const status=R.length?"merah":Y.length?"kuning":"hijau";
   return{...base,status,reasons:R.length?R.concat(Y):Y.length?Y:["Dalam batas normal"],todayIn:last.tanggal===TODAY};
 }
@@ -1287,7 +1308,7 @@ function ageOf(s){if(!s.tglLahir)return null;const b=parse(s.tglLahir),n=new Dat
 /* Fitness (CTL, 42 hari), fatigue (ATL, 7 hari), form = CTL − ATL.
    Sampai hari ini memakai beban aktual; setelah hari ini (sampai `until`) memakai TSS rencana sebagai proyeksi. */
 function pmc(list,plans,until){
-  const by={},pl={};list.forEach(e=>{if(e.tanggal<=TODAY)by[e.tanggal]=(by[e.tanggal]||0)+(TSS_JAM[+e.rpe]||0)*(+e.durasi||0)/60});
+  const by={},pl={};list.forEach(e=>{if(e.tanggal<=TODAY)by[e.tanggal]=(by[e.tanggal]||0)+loadRaw(e)});
   (plans||[]).forEach(p=>{if(p.tanggal>TODAY)pl[p.tanggal]=(pl[p.tanggal]||0)+planTss(p)});
   const dates=Object.keys(by).sort();if(!dates.length)return[];
   const end=until&&until>TODAY?until:TODAY;
@@ -1369,13 +1390,13 @@ function renderAtlet(){
   /* beban mingguan per jenis: aktual (≤ hari ini) dan rencana (> hari ini) */
   const wk0=addDays(monday(TODAY),-77);const NW=16;const weeks=[...Array(NW)].map((_,i)=>addDays(wk0,i*7));
   const aggA={},aggP={};const put=(g,j,i,v)=>{(g[j]=g[j]||weeks.map(()=>0))[i]+=v};
-  ent.forEach(e=>{if(e.tanggal>TODAY||e.tanggal<wk0||!(+e.durasi>0))return;const i=Math.floor(diffDays(e.tanggal,wk0)/7);if(i<NW)put(aggA,e.jenis||(plBy[e.tanggal]&&plBy[e.tanggal][0].jenis)||"Tidak dicatat",i,loadOf(e))});
+  ent.forEach(e=>{if(e.tanggal>TODAY||e.tanggal<wk0)return;const i=Math.floor(diffDays(e.tanggal,wk0)/7);if(i<NW)sesiOf(e).forEach(x=>put(aggA,x.jenis||(plBy[e.tanggal]&&plBy[e.tanggal][0].jenis)||"Tidak dicatat",i,Math.round(sesiTss(x))))});
   pl.forEach(x=>{if(x.tanggal<=TODAY)return;const i=Math.floor(diffDays(x.tanggal,wk0)/7);if(i<NW)put(aggP,x.jenis||"Tidak dicatat",i,planTss(x))});
   const jOrder=[...JENIS.map(j=>j[0]),"Tidak dicatat"];
   const wds=[...jOrder.filter(j=>aggA[j]).map(j=>({label:j,data:aggA[j],backgroundColor:jColor(j),stack:"s",borderRadius:2})),...jOrder.filter(j=>aggP[j]).map(j=>({label:j+" (rencana)",data:aggP[j],backgroundColor:jColor(j)+"55",stack:"s",borderRadius:2}))];
   mkChart("atWeek",{type:"bar",data:{labels:weeks.map(fmtD),datasets:wds},options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:8,color:T.muted}}),y:axis(T,{stacked:true,beginAtZero:true,ticks:{maxTicksLimit:6,color:T.muted}})},
     plugins:{refLine:{axis:"x",value:11,color:"#bdbdbd",label:"Minggu ini"},legend:{display:true,position:"top",labels:{boxWidth:10,boxHeight:10,color:T.ink,filter:it=>!/\(rencana\)$/.test(it.text)}},tooltip:{filter:it=>it.raw>0,callbacks:{title:it=>"Minggu "+it[0].label,label:it=>it.dataset.label+": "+it.raw+" TSS",footer:it=>"Total "+it.reduce((x,y)=>x+y.raw,0)+" TSS"}}}}});
-  const wd=[...Array(60)].map((_,k)=>{const t=addDays(TODAY,k-59);const e=eBy[t];return{t,w:e?wellTotal(e):null,hr:e&&e.hrIstirahat?+e.hrIstirahat:null,hrv:e&&e.hrv?+e.hrv:null}});
+  const wd=[...Array(60)].map((_,k)=>{const t=addDays(TODAY,k-59);const e=eBy[t];return{t,w:wellOf(e),hr:e&&e.hrIstirahat?+e.hrIstirahat:null,hrv:e&&e.hrv?+e.hrv:null}});
   const hasHr=wd.some(d=>d.hr!=null||d.hrv!=null);
   mkChart("atHrv",{type:"line",data:{labels:wd.map(d=>fmtD(d.t)),datasets:[{label:"Wellness (5–25)",data:wd.map(d=>d.w),borderColor:"#7cc94f",backgroundColor:"#7cc94f",borderWidth:2,pointRadius:0,tension:.3,spanGaps:true,yAxisID:"y"},...(hasHr?[{label:"Nadi istirahat (bpm)",data:wd.map(d=>d.hr),borderColor:"#ff4b42",backgroundColor:"#ff4b42",borderWidth:2,pointRadius:0,tension:.3,spanGaps:true,yAxisID:"y1"},{label:"HRV (ms)",data:wd.map(d=>d.hrv),borderColor:"#5aa9ff",backgroundColor:"#5aa9ff",borderWidth:2,pointRadius:0,tension:.3,spanGaps:true,yAxisID:"y1"}]:[])]},
     options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{min:5,max:25,ticks:{stepSize:5,color:T.muted},title:{display:true,text:"Wellness",color:T.muted}}),y1:axis(T,{display:hasHr,position:"right",grid:{display:false},ticks:{maxTicksLimit:6,color:T.muted},title:{display:true,text:"bpm / ms",color:T.muted}})},plugins:{legend:{display:true,position:"top",labels:{boxWidth:12,boxHeight:3,color:T.ink}}}}});
@@ -1418,12 +1439,13 @@ function renderKal(){
     for(let i=0;i<7;i++){
       const t=addDays(w,i);const e=eBy[t];const ps=pBy[t]||[];
       const act=e?loadOf(e):null;const pt=ps.reduce((x,p)=>x+planTss(p),0);const cp=complianceOf(pt,act,t);
-      if(e&&+e.durasi>0){aT+=act;aMin+=+e.durasi;n++}pT+=pt;nPl+=ps.length;
+      const ss=e?sesiOf(e):[];if(e){aT+=act;ss.forEach(x=>{aMin+=+x.durasi||0;n++})}pT+=pt;nPl+=ps.length;
       const blank=!e&&!ps.length&&t!==TODAY;
       h+=`<div class="kd${t.slice(0,7)!==KAL.m.slice(0,7)?" kx":""}${t===TODAY?" today":""}${blank?" blank":""}" data-t="${t}" role="button" tabindex="0" aria-label="${fmtLong(t)}${ps.length?", "+ps.length+" rencana":""}${e?", latihan tercatat":""}">`
-        +`<div class="kn"><span><span class="kdow">${DOWS[i]} </span><b>${parse(t).getDate()}</b></span>${e?`<i class="wdot ${cls(wellTotal(e))}" title="Wellness ${wellTotal(e)}/25"></i>`:""}</div>`
+        +`<div class="kn"><span><span class="kdow">${DOWS[i]} </span><b>${parse(t).getDate()}</b></span>${hasW(e)?`<i class="wdot ${cls(wellTotal(e))}" title="Wellness ${wellTotal(e)}/25"></i>`:""}</div>`
         +ps.map(p=>`<div class="wo" data-id="${p.id}" style="--jc:${jColor(p.jenis)}${cp?";--cc:"+CPL[cp][0]:""}"${cp?` data-cp="${cp}" title="${CPL[cp][1]}"`:""}${edit?' draggable="true"':""}><b>${esc(p.judul)}</b><small>${p.durasi?p.durasi+" mnt · ":""}RPE ${p.rpe??"–"} · ${planTss(p)} TSS</small></div>`).join("")
-        +(e?(+e.durasi>0?`<div class="wo done" style="--jc:${jColor(e.jenis)};--cc:${cp?CPL[cp][0]:jColor(e.jenis)}"><b>✓ ${esc(e.jenis||"Latihan")}</b><small>${e.durasi} mnt · RPE ${e.rpe} · ${act} TSS</small></div>`:`<div class="wo done" style="--cc:var(--accent2)"><b>Libur</b><small>Wellness ${wellTotal(e)}/25</small></div>`):"")
+        +ss.map(x=>`<div class="wo done" style="--jc:${jColor(x.jenis)};--cc:${cp?CPL[cp][0]:jColor(x.jenis)}"><b>✓ ${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS</small></div>`).join("")
+        +(e&&!ss.length&&hasW(e)?`<div class="wo done" style="--cc:var(--accent2)"><b>Tanpa latihan</b><small>Wellness ${wellTotal(e)}/25</small></div>`:"")
         +`</div>`;
     }
     const pe=pd[addDays(w,6)]||(addDays(w,6)>TODAY&&w<=TODAY?pd[TODAY]:null),pb=pd[addDays(w,-1)];
@@ -1455,7 +1477,7 @@ function fillDlgLists(){
   $("#dlgTitle").textContent=fmtLong(t);$("#dlgWho").textContent=s.nama+" · "+s.cabor;
   const pt=ps.reduce((x,p)=>x+planTss(p),0);const cp=complianceOf(pt,e?loadOf(e):null,t);
   const m=(k,v)=>`<div class="m"><div class="v">${v}</div><div class="k">${k}</div></div>`;
-  $("#dlgAct").innerHTML=e?`<div class="mini">${m("Jenis",esc(e.jenis||"–"))}${m("Durasi",(e.durasi||0)+" mnt")}${m("RPE",e.rpe??"–")}${m("TSS",loadOf(e))}${m("Wellness",wellTotal(e)+"/25")}${m("Nyeri",(e.nyeri||0)+"/10")}${e.hrIstirahat?m("Nadi istirahat",e.hrIstirahat+" bpm"):""}${e.hrv?m("HRV",e.hrv+" ms"):""}</div>${cp?`<p class="note" style="margin:0">Kepatuhan: <b style="color:${CPL[cp][0]}">${CPL[cp][1]}</b> · ${Math.round(loadOf(e)/pt*100)}% dari TSS rencana</p>`:""}`
+  $("#dlgAct").innerHTML=e?`<div class="mini">${m("Sesi",sesiOf(e).length)}${m("Durasi",sesiOf(e).reduce((x,y)=>x+(+y.durasi||0),0)+" mnt")}${m("TSS",loadOf(e))}${m("Wellness",hasW(e)?wellTotal(e)+"/25":"–")}${m("Nyeri",hasW(e)?(e.nyeri||0)+"/10":"–")}${e.hrIstirahat?m("Nadi istirahat",e.hrIstirahat+" bpm"):""}${e.hrv?m("HRV",e.hrv+" ms"):""}</div>${sesiOf(e).map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS</small></div>`).join("")}${cp?`<p class="note" style="margin:0">Kepatuhan: <b style="color:${CPL[cp][0]}">${CPL[cp][1]}</b> · ${Math.round(loadOf(e)/pt*100)}% dari TSS rencana</p>`:""}`
     :`<p class="note" style="margin:0">${t>TODAY?"Hari ini belum tiba.":cp==="merah"?'<b style="color:var(--red)">Rencana tidak dilakukan / belum dicatat.</b> ':""}${t<=TODAY?"Belum ada entri. Isi lewat tab Input harian.":""}</p>`;
   $("#dlgPlans").innerHTML=ps.length?ps.map(p=>`<div class="wo big" style="--jc:${jColor(p.jenis)}"><b>${esc(p.judul)}</b><small>${esc(p.jenis||"–")} · ${p.durasi||0} mnt · RPE ${p.rpe??"–"} (${RPE[+p.rpe]||"–"}) · ${planTss(p)} TSS</small>${p.deskripsi?`<p>${esc(p.deskripsi)}</p>`:""}${canPlan()?`<div class="acts"><button type="button" class="btn ghost sm" data-pe="${p.id}">Ubah</button><button type="button" class="btn ghost sm" data-pd="${p.id}">Hapus</button></div>`:""}</div>`).join(""):'<p class="note" style="margin:0">Belum ada rencana untuk hari ini.</p>';
 }
@@ -1539,9 +1561,10 @@ function renderSiswa(){
   const D=inputData();
   $("#caborList").innerHTML=["Sepak bola","Bola voli","Bola basket","Atletik","Bulu tangkis","Pencak silat","Renang","Sepak takraw","Futsal","Karate","Taekwondo","Rugby"].map(c=>`<option value="${c}">`).join("");
   const ro=ME.role==="guru";
-  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 80px"><span>Nama</span><span>Cabor</span><span>Kelas · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 80px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span>${ro?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button>`}</span></div>`).join(""):`<div class="empty">Belum ada siswa. Tambahkan lewat formulir di atas.</div>`;
+  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Kelas · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${ro?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada siswa. Tambahkan lewat formulir di atas.</div>`;
 }
 $("#siswaList").addEventListener("click",e=>{
+  const lk=e.target.closest("button[data-link]");if(lk){openLink(lk.dataset.link);return}
   const b=e.target.closest("button[data-edit]");if(!b)return;const s=inputData().siswa.find(x=>x.id===b.dataset.edit);if(!s)return;
   SE.edit=s.id;$("#sNama").value=s.nama;$("#sCabor").value=s.cabor;$("#sKelas").value=s.kelas||"";$("#sJk").value=s.jk||"";$("#sPelatih").value=s.pelatih||"";$("#sLahir").value=s.tglLahir||"";$("#sBb").value=s.bb||"";$("#sTb").value=s.tb||"";
   $("#siswaFormTitle").textContent="Ubah data "+s.nama;$("#siswaSubmit").textContent="Simpan perubahan";$("#siswaCancel").hidden=false;$("#formSiswa").scrollIntoView({block:"start"});
@@ -1556,7 +1579,7 @@ function buildInput(){
   $("#inRpe").innerHTML=RPE.map((t,i)=>`<button type="button" data-v="${i}" style="--rc:${i?rpeColor(i):"#444"}" aria-pressed="false"><b>${i}</b><span>${RPE_EMO[i]} ${t}${i?` <small style="opacity:.75">· ${TSS_JAM[i]} TSS/jam</small>`:""}</span></button>`).join("");
   $("#inJenis").innerHTML=JENIS.map(([j,c])=>`<button type="button" class="chip small" data-j="${j}" aria-pressed="false" style="border-left:4px solid ${c}">${j}</button>`).join("");
   $("#inArea").innerHTML=AREAS.map(a=>`<button type="button" class="chip small" data-a="${a}" aria-pressed="false">${a}</button>`).join("");
-  $("#durQuick").innerHTML=[0,45,60,90,120].map(v=>`<button type="button" class="chip small" data-q="${v}">${v===0?"Libur":v+" mnt"}</button>`).join("");
+  $("#durQuick").innerHTML=[30,45,60,90,120].map(v=>`<button type="button" class="chip small" data-q="${v}">${v} mnt</button>`).join("");
   $("#inTgl").value=TODAY;$("#inTgl").max=TODAY;
 }
 function renderPicker(){
@@ -1581,15 +1604,33 @@ function updateSummary(){
   $("#sumWho").innerHTML=s?`<b style="color:var(--ink)">${esc(s.nama)}</b><br>${esc(s.cabor)} · ${fmtD($("#inTgl").value||TODAY)}`:"Belum memilih siswa";
   const nW=Object.keys(F.w).length;const wt=nW===5?Object.values(F.w).reduce((a,b)=>a+b,0):null;
   gauge(wt);
-  const dur=$("#inDur").value;
-  $("#sumLoad").textContent=F.rpe!=null&&dur!==""?loadOf({rpe:F.rpe,durasi:dur}).toLocaleString("id-ID")+" TSS":"–";
+  const dur=$("#inDur").value;const old=entriHari();
+  const nTss=F.rpe>=1&&+dur>0?loadOf({rpe:F.rpe,durasi:+dur}):0;const tot=(old?loadOf(old):0)+nTss;
+  $("#sumLoad").textContent=tot||nTss||(old&&sesiOf(old).length)?tot.toLocaleString("id-ID")+" TSS"+(old&&sesiOf(old).length?" · "+(sesiOf(old).length+(nTss?1:0))+" sesi":""):"–";
   $("#sumNyeri").textContent=F.nyeri+"/10"+(F.area.length?" · "+F.area.length+" area":"");
-  const done=[!!F.sid,nW===5,true,F.rpe!=null&&dur!==""];
+  const done=[!!F.sid,nW===5||hasW(old),true,(F.rpe>=1&&+dur>0)||(old&&sesiOf(old).length>0)];
   $("#sumDone").textContent=done.filter(Boolean).length+"/4";
   ["st1","st2","st3","st4"].forEach((id,i)=>$("#"+id).classList.toggle("done",done[i]&&(i!==2||nW===5)));
   let f="";if(wt!=null&&wt<=10)f='<span class="pill p-merah">Wellness rendah, pelatih akan diberi tahu</span>';else if((wt!=null&&wt<=13)||F.nyeri>=3)f='<span class="pill p-kuning">Perlu perhatian pelatih</span>';else if(wt!=null)f='<span class="pill p-hijau">Kondisi baik</span>';
   $("#sumFlag").innerHTML=f;
-  planHint();
+  planHint();renderSesiAda(old);
+}
+function entriHari(){const t=$("#inTgl").value;return F.sid&&t?inputData().entri.find(x=>x.siswaId===F.sid&&x.tanggal===t):null}
+function renderSesiAda(old){
+  const w=$("#wellAda");w.hidden=!hasW(old);if(hasW(old))w.innerHTML=`<span>Kondisi pagi tanggal ini sudah diisi: <b>wellness ${wellTotal(old)}/25</b>${+old.nyeri?" · nyeri "+old.nyeri+"/10":""}. Isi lagi hanya jika ingin mengubah.</span>`;
+  const ss=old?sesiOf(old):[];const ro=ME.role==="guru";
+  $("#sesiAda").innerHTML=ss.length?'<span class="note">Sesi yang sudah tercatat:</span>'+ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)};display:flex;justify-content:space-between;align-items:center;gap:8px"><span><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS</small></span>${ro?"":`<button type="button" class="btn ghost sm" data-hs="${esc(x.id||"")}">Hapus</button>`}</div>`).join(""):"";
+}
+async function simpanEntri(row){
+  if(S.mode==="live"&&S.db)await DB.upsert("entri",row);
+  else{const D=rawData();D.entri=D.entri.filter(x=>x.id!==row.id);D.entri.push(row)}
+}
+const entriErr=err=>err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin menyimpan data ini. Hubungi pengelola program.":err&&/column|schema cache/i.test(err.message||"")?"Database perlu diperbarui: jalankan ulang setup.sql di Supabase.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.";
+async function hapusSesi(id){
+  const old=entriHari();if(!old||!confirm("Hapus sesi ini?"))return;
+  const row={...old,...aggSesi(sesiOf(old).filter(x=>String(x.id)!==id))};
+  try{await simpanEntri(row);msg("#msgEntri","Sesi dihapus.",true)}catch(err){return msg("#msgEntri",entriErr(err))}
+  updateSummary();renderDash();
 }
 function planHint(){
   const t=$("#inTgl").value;const ps=F.sid&&t?(inputData().rencana||[]).filter(p=>p.siswaId===F.sid&&p.tanggal===t):[];
@@ -1609,7 +1650,8 @@ $("#v-input").addEventListener("click",e=>{
   else if(b.dataset.s!==undefined){F.sid=b.dataset.s;renderPicker()}
   else if(b.dataset.c!==undefined){F.cabor=b.dataset.c;renderPicker()}
   else if(b.dataset.a){const a=b.dataset.a;F.area=F.area.includes(a)?F.area.filter(x=>x!==a):F.area.concat(a);b.setAttribute("aria-pressed",F.area.includes(a))}
-  else if(b.dataset.q!==undefined){$("#inDur").value=b.dataset.q;if(+b.dataset.q===0){F.rpe=0;$("#inRpe").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v==="0"))}}
+  else if(b.dataset.q!==undefined){$("#inDur").value=b.dataset.q}
+  else if(b.dataset.hs){hapusSesi(b.dataset.hs);return}
   else if(b.dataset.d){const v=Math.max(0,Math.min(400,(+$("#inDur").value||0)+(+b.dataset.d)));$("#inDur").value=v}
   else if(b.closest("#inRpe")){F.rpe=+b.dataset.v;$("#inRpe").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b))}
   else return;
@@ -1625,24 +1667,53 @@ $("#formEntri").addEventListener("submit",async e=>{
   const tgl=$("#inTgl").value;
   if(!F.sid)return msg("#msgEntri","Pilih nama siswa dulu.");
   if(!tgl||tgl>TODAY)return msg("#msgEntri","Tanggal tidak boleh kosong atau di masa depan.");
-  const miss=WELL.filter(([k])=>!F.w[k]);if(miss.length)return msg("#msgEntri","Lengkapi kondisi pagi: "+miss.map(m=>m[1].toLowerCase()).join(", ")+".");
-  if(F.rpe==null)return msg("#msgEntri","Pilih tingkat berat latihan (RPE).");
-  const dur=$("#inDur").value;if(dur===""||+dur<0||+dur>400)return msg("#msgEntri","Isi durasi 0–400 menit.");
-  const ent={siswaId:F.sid,tanggal:tgl,rpe:F.rpe,durasi:+dur,nyeri:F.nyeri,area:F.nyeri>0?F.area:[],...F.w,dibuat:new Date().toISOString()};
-  const ti=$("#inTinggi").value;if(ti!==""){if(+ti<100||+ti>230)return msg("#msgEntri","Tinggi badan di luar rentang 100–230 cm.");ent.tinggi=+(+ti).toFixed(1)}
-  if(F.jenis&&+dur>0)ent.jenis=F.jenis;
-  const hr=$("#inHr").value,hrv=$("#inHrv").value;
-  if(hr!==""){if(+hr<30||+hr>120)return msg("#msgEntri","Denyut nadi istirahat di luar rentang 30–120 bpm.");ent.hrIstirahat=Math.round(+hr)}
-  if(hrv!==""){if(+hrv<5||+hrv>250)return msg("#msgEntri","HRV di luar rentang 5–250 ms.");ent.hrv=Math.round(+hrv)}
-  const id=F.sid+"_"+tgl;
-  if(S.mode==="live"&&S.db){
-    try{await DB.upsert("entri",{id,...ent});msg("#msgEntri","Tersimpan. Mengisi ulang tanggal yang sama akan mengganti entri ini.",true)}
-    catch(err){msg("#msgEntri",err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin menyimpan data ini. Hubungi pengelola program.":err&&/column|schema cache/i.test(err.message||"")?"Database perlu diperbarui: jalankan ulang setup.sql di Supabase.":err&&err.code==="quota_exceeded"?"Penyimpanan penuh. Hubungi pengelola untuk menghapus data lama.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.");return}
-  }else{const D=rawData();D.entri=D.entri.filter(x=>x.id!==id);D.entri.push({id,...ent});msg("#msgEntri","Tersimpan di mode contoh (tidak permanen).",true)}
+  const nW=WELL.filter(([k])=>F.w[k]).length;
+  if(nW>0&&nW<5){const miss=WELL.filter(([k])=>!F.w[k]);return msg("#msgEntri","Lengkapi kondisi pagi: "+miss.map(m=>m[1].toLowerCase()).join(", ")+".")}
+  const dur=$("#inDur").value;if(dur!==""&&(+dur<0||+dur>400))return msg("#msgEntri","Isi durasi 0–400 menit.");
+  const addS=+dur>0;
+  if(addS&&!(F.rpe>=1))return msg("#msgEntri","Pilih tingkat berat sesi ini (RPE 1–10).");
+  const ti=$("#inTinggi").value,hr=$("#inHr").value,hrv=$("#inHrv").value;
+  if(ti!==""&&(+ti<100||+ti>230))return msg("#msgEntri","Tinggi badan di luar rentang 100–230 cm.");
+  if(hr!==""&&(+hr<30||+hr>120))return msg("#msgEntri","Denyut nadi istirahat di luar rentang 30–120 bpm.");
+  if(hrv!==""&&(+hrv<5||+hrv>250))return msg("#msgEntri","HRV di luar rentang 5–250 ms.");
+  if(nW<5&&!addS&&ti===""&&hr===""&&hrv==="")return msg("#msgEntri","Isi kondisi pagi atau tambahkan sesi latihan (durasi dan RPE).");
+  const id=F.sid+"_"+tgl;const old=entriHari();
+  const row={...(old||{}),id,siswaId:F.sid,tanggal:tgl};if(!old)row.dibuat=new Date().toISOString();
+  if(nW===5)Object.assign(row,F.w,{nyeri:F.nyeri,area:F.nyeri>0?F.area:[]});
+  if(ti!=="")row.tinggi=+(+ti).toFixed(1);
+  if(hr!=="")row.hrIstirahat=Math.round(+hr);
+  if(hrv!=="")row.hrv=Math.round(+hrv);
+  let ss=old?sesiOf(old):[];if(addS)ss=ss.concat({id:uid(),jenis:F.jenis||null,rpe:F.rpe,durasi:Math.round(+dur)});
+  Object.assign(row,aggSesi(ss));
+  try{await simpanEntri(row)}catch(err){return msg("#msgEntri",entriErr(err))}
+  msg("#msgEntri",(addS?"Sesi tersimpan"+(ss.length>1?" (sesi ke-"+ss.length+" hari itu)":""):"Tersimpan")+(S.mode==="live"?".":" di mode contoh (tidak permanen)."),true);
   F.w={};F.rpe=null;F.nyeri=0;F.area=[];F.jenis=null;
   document.querySelectorAll("#wellBox button,#inRpe button,#inArea button,#inJenis button").forEach(b=>b.setAttribute("aria-pressed","false"));
   $("#inNyeri").value=0;$("#nyeriVal").textContent="0";$("#inDur").value="";$("#inTinggi").value="";$("#inHr").value="";$("#inHrv").value="";painColor();updateSummary();renderDash();
 });
+
+/* ---------- tautan pribadi atlet ---------- */
+const LK={id:null};
+const atletUrl=s=>new URL("atlet.html?k="+s.kode,location.href).href;
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(_){const x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();let ok=false;try{ok=document.execCommand("copy")}catch(_){}x.remove();return ok}}
+function openLink(id){
+  const s=inputData().siswa.find(x=>x.id===id);if(!s)return;LK.id=id;
+  $("#lkWho").textContent=s.nama+" · "+s.cabor;$("#lkMsg").textContent="";
+  const ok=S.mode==="live"&&s.kode;
+  ["#lkUrl","#lkCopy","#lkWa","#lkNew","#lkAll"].forEach(x=>$(x).hidden=!ok);
+  if(!ok)msg("#lkMsg",S.mode!=="live"?"Tautan atlet aktif setelah aplikasi terhubung ke database.":"Database perlu diperbarui: jalankan ulang setup.sql di Supabase.");
+  else{const u=atletUrl(s);$("#lkUrl").value=u;$("#lkWa").href="https://wa.me/?text="+encodeURIComponent("Halo "+s.nama.split(" ")[0]+", ini tautan untuk mengisi kondisi pagi dan latihanmu setiap hari. Simpan dan jangan dibagikan ke orang lain:\n"+u)}
+  const d=$("#linkDlg");if(!d.open){if(d.showModal)d.showModal();else d.setAttribute("open","")}
+}
+$("#lkClose").addEventListener("click",()=>$("#linkDlg").close());
+$("#linkDlg").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+$("#lkCopy").addEventListener("click",async()=>msg("#lkMsg",await copyText($("#lkUrl").value)?"Tautan disalin.":"Gagal menyalin; tekan lama pada tautan lalu salin.",true));
+$("#lkAll").addEventListener("click",async()=>{const s=inputData().siswa.find(x=>x.id===LK.id);if(!s)return;
+  const t=inputData().siswa.filter(x=>x.cabor===s.cabor&&x.kode).sort((a,b)=>a.nama.localeCompare(b.nama)).map(x=>x.nama+": "+atletUrl(x)).join("\n");
+  msg("#lkMsg",await copyText(t)?"Semua tautan "+s.cabor+" disalin. Kirim satu per satu ke atlet masing-masing.":"Gagal menyalin.",true)});
+$("#lkNew").addEventListener("click",async()=>{const s=inputData().siswa.find(x=>x.id===LK.id);if(!s||!confirm("Buat tautan baru untuk "+s.nama+"? Tautan lama langsung tidak berlaku."))return;
+  const kode=uid();try{await DB.update("siswa",s.id,{kode})}catch(err){return msg("#lkMsg","Gagal membuat tautan baru. Pastikan Anda berhak mengubah data atlet ini.")}
+  s.kode=kode;openLink(s.id);msg("#lkMsg","Tautan baru dibuat. Kirim ulang ke atlet.",true)});
 
 /* ---------- tambah siswa ---------- */
 $("#formSiswa").addEventListener("input",()=>$("#msgSiswa").textContent="");
@@ -1668,9 +1739,9 @@ $("#formSiswa").addEventListener("submit",async e=>{
 /* ---------- CSV ---------- */
 $("#btnCsv").addEventListener("click",async()=>{
   const D=data();const nm={};D.siswa.forEach(s=>nm[s.id]=s);
-  const head=["tanggal","nama","cabor","kelas",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","rpe","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
+  const head=["tanggal","nama","cabor","kelas",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","jumlah_sesi","rpe_rata2","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
   const q=v=>{const s=String(v??"");return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-  const rows=[...D.entri].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,s.nama,s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellTotal(e),e.nyeri,(e.area||[]).join(" / "),e.rpe,e.durasi,loadOf(e),e.jenis??"",e.hrIstirahat??"",e.hrv??"",e.tinggi??""].map(q).join(",")});
+  const rows=[...D.entri].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,s.nama,s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellOf(e)??"",e.nyeri??"",(e.area||[]).join(" / "),sesiOf(e).length,e.rpe??"",e.durasi??"",loadOf(e),e.jenis??"",e.hrIstirahat??"",e.hrv??"",e.tinggi??""].map(q).join(",")});
   downloadText("monitoring-latihan-atlet-"+TODAY+".csv","﻿"+head.join(",")+"\n"+rows.join("\n"))
 });
 
@@ -1902,5 +1973,12 @@ renderLogin();
   if(/type=recovery/.test(location.hash)){LG.mode="reset";ME.state="signedout";renderLogin();return}
   try{await afterSignIn(true)}catch(_){ME.state="signedout";renderLogin()}
 })();
+})();
+/* ---------- aplikasi terpasang (PWA) ---------- */
+if("serviceWorker" in navigator&&location.protocol!=="file:")addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+(function(){let ev=null;const btns=()=>document.querySelectorAll(".btn-install");
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();ev=e;btns().forEach(b=>b.hidden=false)});
+  addEventListener("appinstalled",()=>btns().forEach(b=>b.hidden=true));
+  document.addEventListener("click",async e=>{if(!e.target.closest(".btn-install")||!ev)return;ev.prompt();try{await ev.userChoice}catch(_){}ev=null;btns().forEach(b=>b.hidden=true)});
 })();
 </script>

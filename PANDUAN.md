@@ -2,7 +2,10 @@
 
 Isi folder:
 
-- `index.html` — aplikasi web (satu file).
+- `index.html` — aplikasi pelatih / pengelola.
+- `atlet.html` — halaman isian harian untuk atlet (dibuka lewat tautan pribadi).
+- `config.js` — alamat dan kunci database.
+- `sw.js`, `manifest*.json`, `icon-*.png` — agar web bisa dipasang seperti aplikasi.
 - `setup.sql` — skema database dan aturan akses.
 - `PANDUAN.md` — panduan ini.
 
@@ -22,7 +25,7 @@ Waktu pemasangan sekitar 20–30 menit. Semua layanan di bawah punya paket grati
 
 1. Di Supabase buka **Project Settings → API**.
 2. Salin **Project URL** dan **anon public key**.
-3. Buka `index.html` dengan Notepad atau VS Code, cari bagian `KONFIGURASI`, lalu isi:
+3. Buka `config.js` dengan Notepad atau VS Code, lalu isi:
 
 ```js
 window.MONITOR_CONFIG={
@@ -103,6 +106,19 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
   - Tren wellness, nadi istirahat, dan HRV.
 
 **Memperbarui database lama:** jika sebelumnya sudah memasang versi lama, jalankan ulang seluruh `setup.sql` di SQL Editor. Skrip ini aman dijalankan ulang karena tidak menghapus data, hanya menambah tabel `rencana` dan kolom baru di `entri`.
+
+## 9. Atlet mengisi sendiri, aplikasi di HP, dan beberapa sesi per hari
+
+- **Tautan pribadi atlet.** Di tab *Data siswa*, tekan **Tautan** di baris atlet. Salin atau kirim lewat WhatsApp.
+  - Atlet membuka tautan itu di HP, tanpa daftar dan tanpa kata sandi.
+  - Atlet mengisi **kondisi pagi** dan **sesi latihan**, melihat rencana pelatih, dan melihat beban 7 hari terakhir.
+  - Tautan hanya bisa membaca dan mengisi data atlet itu sendiri. Jika tautan tersebar, tekan **Buat tautan baru**; tautan lama langsung tidak berlaku.
+  - **Salin semua tautan atlet di cabor ini** memudahkan pembagian ke satu tim.
+- **Pasang seperti aplikasi.** Di Android (Chrome), ketuk **Pasang aplikasi** atau menu ⋮ → *Tambahkan ke layar utama*. Di iPhone (Safari), ketuk *Bagikan* → *Tambahkan ke Layar Utama*. Atlet memasang dari tautan pribadinya; setelah itu ikon *Latihan Saya* langsung membuka halamannya.
+- **Saat sinyal lemah.** Halaman atlet tetap terbuka dan isian disimpan di HP, lalu terkirim otomatis saat online. Aplikasi pelatih juga tetap terbuka, tetapi butuh internet untuk memuat dan menyimpan data.
+- **Beberapa sesi per hari.** Kondisi pagi diisi sekali sehari, sedangkan sesi latihan bisa ditambahkan berkali-kali (misalnya pagi dan sore). Beban harian, ACWR, fitness, dan kalender menjumlahkan semua sesi. Entri lama otomatis terbaca sebagai satu sesi.
+
+**Wajib:** setelah memperbarui ke versi ini, jalankan ulang seluruh `setup.sql` di Supabase. Skrip ini menambah kode tautan atlet, kolom `sesi`, dan dua fungsi khusus halaman atlet.
 
 ## Hal penting lain
 
