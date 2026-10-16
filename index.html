@@ -68,6 +68,12 @@ a.btn{text-decoration:none;display:inline-block}
 .atabs button[aria-selected=true]{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
 .atabs button:focus-visible{outline:2px solid var(--accent)}
 .apane[hidden]{display:none}
+.cvempty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-weight:600;color:var(--ink);pointer-events:none;gap:4px}
+.cvempty[hidden]{display:none}.cvempty small{color:var(--muted);font-weight:500}
+.riskmiss details{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.riskmiss summary{cursor:pointer;font-size:13.5px}
+.riskmiss .remind span{padding:4px 12px;flex-direction:column;align-items:flex-start;border-radius:10px;gap:0}
+.riskmiss .remind small{font-size:11.5px}
 details.rules summary{cursor:pointer}
 details.rules p{margin:8px 0 0}
 .why .more{color:var(--muted);font-size:12px;margin-left:4px;white-space:nowrap}
@@ -773,8 +779,9 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
         <button type="button" role="tab" data-an="cabor">Per cabor</button>
       </div>
       <div class="apane" data-pane="risiko">
-        <div class="cv tall"><canvas id="cRisk" aria-label="Matriks risiko ACWR terhadap wellness"></canvas></div>
-        <div class="legend"><span><i style="background:var(--green-bg);outline:1px solid var(--green)"></i>Zona aman: ACWR 0,8–1,3 dan z ≥ −1</span><span><i style="background:var(--red-bg);outline:1px solid var(--red)"></i>Zona bahaya: ACWR &gt; 1,5 atau z &lt; −2</span><span>Tiap titik = satu atlet · klik untuk profil</span></div>
+        <div class="cv tall" style="position:relative"><canvas id="cRisk" aria-label="Matriks risiko ACWR terhadap wellness"></canvas><div class="cvempty" id="riskEmpty" hidden>Belum ada atlet dengan data cukup.<br><small>Lihat daftar di bawah grafik.</small></div></div>
+        <div class="legend"><span><i style="background:var(--green-bg);outline:1px solid var(--green)"></i>Zona aman: ACWR 0,8–1,29 dan z ≥ −1</span><span><i style="background:var(--red-bg);outline:1px solid var(--red)"></i>Zona bahaya: ACWR ≥ 1,5 atau z &lt; −2</span><span>Warna titik = status atlet · klik titik untuk profil</span></div>
+        <div id="riskMiss" class="riskmiss"></div>
       </div>
       <div class="apane" data-pane="acwr">
         <div class="cv" id="acwrBox"><canvas id="cAcwrAll" aria-label="ACWR tiap atlet"></canvas></div>
@@ -1215,6 +1222,9 @@ const refLine={id:"refLine",afterDatasetsDraw(ch){const r=ch.options.plugins.ref
 const hasChart=()=>typeof window.Chart==="function";
 const hlinePlugin={id:"hlines",afterDatasetsDraw(ch){const H=ch.options.plugins.hlines;if(!H)return;const{ctx,chartArea:a,scales}=ch;ctx.save();H.forEach(h=>{const sc=scales[h.axis||"y"];if(!sc)return;const y=sc.getPixelForValue(h.v);if(y<a.top||y>a.bottom)return;ctx.strokeStyle=h.c;ctx.lineWidth=h.w||1.5;ctx.setLineDash(h.dash||[]);ctx.beginPath();ctx.moveTo(a.left,y);ctx.lineTo(a.right,y);ctx.stroke();if(h.label){ctx.setLineDash([]);ctx.fillStyle=h.c;ctx.font="600 10.5px Barlow,sans-serif";ctx.textAlign="right";ctx.fillText(h.label,a.right-4,y-4)}});ctx.restore()}};
 const zonePlugin={id:"zones",beforeDatasetsDraw(ch,_,o){const z=ch.options.plugins.zones;if(!z)return;const{ctx,chartArea:a,scales:{x,y}}=ch;ctx.save();ctx.beginPath();ctx.rect(a.left,a.top,a.width,a.height);ctx.clip();z.forEach(r=>{const x1=r.x?x.getPixelForValue(r.x[0]):a.left,x2=r.x?x.getPixelForValue(r.x[1]):a.right,y1=r.y?y.getPixelForValue(r.y[1]):a.top,y2=r.y?y.getPixelForValue(r.y[0]):a.bottom;ctx.fillStyle=r.c;ctx.fillRect(Math.min(x1,x2),Math.min(y1,y2),Math.abs(x2-x1),Math.abs(y2-y1))});ctx.restore()}};
+/* nama depan di samping titik (matriks risiko) agar terbaca tanpa harus menyentuh titiknya */
+const ptLabelPlugin={id:"ptLabels",afterDatasetsDraw(ch){const o=ch.options.plugins.ptLabels;if(!o)return;const{ctx}=ch;const m=ch.getDatasetMeta(0);ctx.save();ctx.font="600 11px Barlow,sans-serif";ctx.fillStyle=o.color;ctx.textBaseline="middle";
+  m.data.forEach((el,i)=>{const d=ch.data.datasets[0].data[i];if(!d||!d.lb)return;const right=el.x<ch.chartArea.right-70;ctx.textAlign=right?"left":"right";ctx.fillText(d.lb,el.x+(right?10:-10),el.y)});ctx.restore()}};
 function mkChart(id,cfg){
   const el=document.getElementById(id);if(!el)return;
   if(S.charts[id]){S.charts[id].destroy();delete S.charts[id]}
@@ -1226,7 +1236,7 @@ function mkChart(id,cfg){
   cfg.options.animation=matchMedia("(prefers-reduced-motion: reduce)").matches?false:{duration:400};
   cfg.options.plugins=Object.assign({tooltip:{backgroundColor:T.ink,titleColor:T.surface,bodyColor:T.surface,padding:10,cornerRadius:8,displayColors:true,boxPadding:4}},cfg.options.plugins||{});
   if(cfg.options.plugins.legend===undefined)cfg.options.plugins.legend={display:false};
-  S.charts[id]=new Chart(el,{...cfg,plugins:[zonePlugin,refLine,hlinePlugin]});
+  S.charts[id]=new Chart(el,{...cfg,plugins:[zonePlugin,refLine,hlinePlugin,ptLabelPlugin]});
 }
 const axis=(T,extra)=>Object.assign({grid:{color:T.line,drawTicks:false},border:{display:false},ticks:{padding:6,color:T.muted}},extra||{});
 
@@ -1347,12 +1357,23 @@ $("#phGo").onclick=()=>{$("#phDlg").close();PHF.tag="";$("#tab-dash").click();$(
 $("#phDlgList").addEventListener("click",e=>{const b=e.target.closest("[data-pid]");if(!b)return;$("#phDlg").close();S.sel=b.dataset.pid;$("#tab-dash").click();scrollDetail()});
 function renderRisk(pool){
   const T=tok();const col={merah:T.red,kuning:T.amber,hijau:T.green,kosong:T.accent2};
-  const pts=pool.filter(x=>x.a.acwr!=null&&x.a.z!=null).map(x=>({x:+x.a.acwr.toFixed(2),y:+Math.max(-3.4,Math.min(2.4,x.a.z)).toFixed(2),n:x.s.nama.replace(" (contoh)",""),st:x.a.status,id:x.s.id}));
+  const acOf=a=>a.acwr!=null?a.acwr:a.acwrE;
+  const nm=s=>s.nama.replace(" (contoh)","");
+  const ok=pool.filter(x=>acOf(x.a)!=null&&x.a.z!=null);
+  const pts=ok.map(x=>({x:+Math.max(0.42,Math.min(2.18,acOf(x.a))).toFixed(2),ax:acOf(x.a),y:+Math.max(-3.4,Math.min(2.4,x.a.z)).toFixed(2),az:x.a.z,n:nm(x.s),lb:nm(x.s).split(" ")[0],st:x.a.status,id:x.s.id}));
+  /* atlet yang belum tampil + apa yang masih kurang */
+  const miss=pool.filter(x=>!ok.includes(x)).map(x=>{const hari=x.a.days.filter(d=>d.has).length,well=x.a.days.filter(d=>d.well!=null).length;const k=[];
+    if(acOf(x.a)==null)k.push("ACWR: "+Math.min(hari,12)+"/12 hari tercatat");if(x.a.z==null)k.push("wellness: "+Math.min(well,8)+"/8 kondisi pagi");return{x,k}});
+  const box=$("#riskMiss");
+  box.innerHTML=!miss.length?"":`<details${pts.length?"":" open"}><summary>${pts.length?`${pts.length} dari ${pool.length} atlet tampil · <b>${miss.length} belum</b> (data belum cukup)`:`<b>Belum ada atlet yang tampil</b> — semua masih mengumpulkan data`}</summary>
+    <p class="note" style="margin:6px 0">Titik muncul setelah atlet punya <b>≥ 12 hari catatan dalam 4 minggu</b> (untuk ACWR) dan <b>≥ 8 kali isi kondisi pagi</b> (7 sebagai pembanding + hari ini, untuk z-wellness). Sampai saat itu pantau lewat daftar <i>Perlu perhatian</i> di atas.</p>
+    <div class="remind">${miss.map(m=>`<span title="${esc(m.k.join(" · "))}">${esc(nm(m.x.s))} <small class="note">${esc(m.k.join(" · "))}</small></span>`).join("")}</div></details>`;
+  $("#riskEmpty").hidden=!!pts.length;
   mkChart("cRisk",{type:"scatter",data:{datasets:[{data:pts,pointRadius:pts.map(p=>p.id===S.sel?9:6.5),pointHoverRadius:10,pointBackgroundColor:pts.map(p=>col[p.st]),pointBorderColor:T.surface,pointBorderWidth:2}]},
     options:{onClick:(e,els)=>{if(els.length){S.sel=pts[els[0].index].id;renderDash();scrollDetail()}},
-      scales:{x:axis(T,{min:0.4,max:2.2,title:{display:true,text:"ACWR (beban akut ÷ kronis)",color:T.muted},ticks:{stepSize:0.2,color:T.muted,callback:v=>dec(v,1)}}),y:axis(T,{min:-3.5,max:2.5,title:{display:true,text:"z-wellness (vs baseline sendiri)",color:T.muted},ticks:{stepSize:1,color:T.muted}})},
-      plugins:{zones:[{x:[0.8,1.3],y:[-1,2.5],c:T.greenBg},{x:[1.5,2.2],y:[-3.5,2.5],c:T.redBg},{x:[0.4,1.5],y:[-3.5,-2],c:T.redBg}],
-        tooltip:{callbacks:{title:it=>it[0].raw.n,label:it=>["ACWR "+dec(it.raw.x),"z-wellness "+dec(it.raw.y),"Status "+LABEL[it.raw.st]]}}}}});
+      scales:{x:axis(T,{min:0.4,max:2.2,title:{display:true,text:"ACWR (beban akut ÷ kronis)",color:T.muted},ticks:{stepSize:0.2,color:T.muted,callback:v=>dec(v,1)}}),y:axis(T,{min:-3.5,max:2.5,title:{display:true,text:"z-wellness (vs baseline sendiri)",color:T.muted},ticks:{stepSize:1,color:T.muted,callback:v=>dec(v,1)}})},
+      plugins:{zones:[{x:[0.8,1.3],y:[-1,2.5],c:T.greenBg},{x:[1.5,2.2],y:[-3.5,2.5],c:T.redBg},{x:[0.4,1.5],y:[-3.5,-2],c:T.redBg}],ptLabels:pts.length<=30?{color:T.ink}:undefined,
+        tooltip:{callbacks:{title:it=>it[0].raw.n,label:it=>["ACWR "+dec(it.raw.ax),"z-wellness "+dec(it.raw.az),"Status "+LABEL[it.raw.st]]}}}}});
 }
 function renderCabor(all){
   const T=tok();const cabs=[...new Set(all.map(x=>x.s.cabor))].sort();
