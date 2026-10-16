@@ -283,15 +283,27 @@ Sejak Juni 2026, membuat aplikasi API Strava **memerlukan langganan Strava** pad
 
 **Batas dari Strava:** aplikasi Strava yang baru dibuat biasanya hanya boleh dihubungkan oleh **1 atlet** (pemilik aplikasi). Untuk banyak atlet, ajukan penambahan kuota lewat formulir *Developer Program* di halaman https://www.strava.com/settings/api. Sambil menunggu, atlet lain tetap bisa memakai **Impor dari file jam**. Patuhi juga ketentuan API Strava, termasuk meminta persetujuan atlet sebelum datanya dilihat pelatih.
 
-## 15. PDF dashboard dan statistik
+## 15. Ekspor PDF / CSV untuk satu atlet atau banyak atlet
 
-- **Ringkasan tim → tombol "PDF & statistik"**: laporan siap cetak untuk tim atau cabor yang sedang dipilih. Isinya:
-  1. **Ringkasan**: angka segera/pantau/aman, daftar perlu perhatian, dan tabel semua atlet (kesiapan, ACWR, EWMA, form %, monotony, strain, wellness, z, TSS 7 hari, kepatuhan).
-  2. **Statistik deskriptif** (n, rata-rata, SD, min, median, maks) untuk indikator pemantauan, profil atlet (usia, BB, TB, BMI), rekap per cabor, dan tes fisik (hasil terakhir tiap atlet serta sebaran skala 1–5).
-  3. **Grafik**: matriks risiko, ACWR per atlet, kurva beban–cedera, tren beban dan wellness, status per cabor, dan peta wellness.
-- **Dashboard atlet → tombol "PDF dashboard"**: angka utama, semua grafik, **statistik 28 hari** (beban harian, durasi, RPE, wellness dan tiap butirnya, nyeri, nadi istirahat, HRV), serta hasil tes fisik terakhir.
-- Di jendela cetak, pilih **Simpan sebagai PDF** dan centang **Grafik latar belakang** (*Background graphics*) agar warnanya ikut tercetak. Di HP Android: menu ⋮ → Bagikan → Cetak → Simpan sebagai PDF.
-- Untuk olah data lanjutan (SPSS/Excel), gunakan **Unduh CSV** di Ringkasan tim.
+Tombol **Ekspor PDF / CSV** ada di tab **Ringkasan tim** dan **Dashboard atlet**. Tombol **Unduh CSV** juga membuka jendela yang sama.
+
+**1. Pilih atlet.** Ada tiga cara:
+- **Semua** atlet;
+- satu atau beberapa **cabor**: klik chip cabor, klik lagi untuk membatalkan;
+- centang **satu per satu**, dibantu kolom pencarian nama.
+
+**2. Pilih jenis ekspor:**
+
+| Jenis | Isi | Cocok untuk |
+|---|---|---|
+| **PDF laporan + statistik gabungan** | Ringkasan, daftar perlu perhatian, tabel atlet, statistik deskriptif (n, rata-rata, SD, min, median, maks) untuk indikator, profil, per cabor, dan tes fisik (termasuk sebaran skala 1–5), serta semua grafik analisis untuk **atlet terpilih saja** | Laporan ke pimpinan, rapat tim |
+| **PDF dashboard per atlet** | 3 halaman per atlet: angka utama, grafik, statistik 28 hari, dan tes fisik terakhir. Banyak atlet tergabung dalam satu PDF | Arsip per atlet, laporan ke orang tua |
+| **CSV ringkasan per atlet** | 1 baris per atlet: status, kesiapan, ACWR, EWMA, form, fitness, fatigue, monotony, strain, wellness, z, beban, kepatuhan, rata-rata 28 hari, dan hasil serta skala setiap tes fisik | Analisis statistik di Excel / SPSS (perbandingan antar atlet) |
+| **CSV data harian** | 1 baris per atlet per hari, dengan rentang 28 hari, 90 hari, 1 tahun, atau semua data | Analisis tren dan penelitian |
+
+**Menyimpan PDF:** di jendela cetak, pilih **Simpan sebagai PDF** dan centang **Grafik latar belakang** (*Background graphics*). Di HP Android: menu ⋮ → Bagikan → Cetak → Simpan sebagai PDF.
+
+**CSV:** angka memakai titik desimal, cocok untuk SPSS. Di Excel berbahasa Indonesia, gunakan **Data → Dari Teks/CSV** agar kolom terbaca benar.
 
 ## Hal penting lain
 

@@ -124,6 +124,14 @@ details.rules p{margin:8px 0 0}
 .rp .note-box{border:1px solid #e5e0d8;border-radius:8px;padding:10px 12px;min-height:90px;font-size:13px;white-space:pre-wrap;background:repeating-linear-gradient(#fff 0 27px,#eee 27px 28px)}
 .rp .pill2{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;color:#fff}
 .rp .ft{font-size:11px;color:#8a8f9c;display:flex;justify-content:space-between}
+.exj{display:flex;flex-direction:column;gap:6px}
+.exj label{align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.exj label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.exj small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.exlist{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:4px;display:flex;flex-direction:column}
+.exlist label{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;font-size:14px;cursor:pointer}
+.exlist label:hover{background:var(--surface2)}.exlist small{color:var(--muted);margin-left:auto;font-size:12px}
+.exlist .gh{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 8px 2px}
 .rp .r{text-align:right;font-variant-numeric:tabular-nums}
 .rp table.t2{font-size:10.5px}.rp table.t2 th,.rp table.t2 td{padding:4px 3px}
 .rp .blk{display:flex;flex-direction:column;gap:6px;break-inside:avoid}
@@ -683,7 +691,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
 
   <!-- DASHBOARD ATLET -->
   <section id="v-atlet" style="display:flex;flex-direction:column;gap:12px">
-    <div class="atbar"><h2>Dashboard atlet</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost sm" id="btnRep">Laporan mingguan</button><button type="button" class="btn ghost sm" id="btnPdfAt">PDF dashboard</button><select id="atPick" aria-label="Pilih atlet"></select></div></div>
+    <div class="atbar"><h2>Dashboard atlet</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost sm" id="btnRep">Laporan mingguan</button><button type="button" class="btn ghost sm" id="btnPdfAt">Ekspor PDF / CSV</button><select id="atPick" aria-label="Pilih atlet"></select></div></div>
     <div id="atletBody" style="display:flex;flex-direction:column;gap:12px"></div>
   </section>
 
@@ -746,6 +754,25 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
       <p class="note">Daftar ini muncul sekali sehari saat aplikasi dibuka. Selalu bisa dilihat lagi di bagian atas tab Ringkasan tim.</p></div>
   </dialog>
 
+  <dialog id="exDlg" class="dlg" aria-labelledby="exTitle">
+    <div class="dlg-h"><div><h2 id="exTitle">Ekspor data</h2><p class="sub">Pilih jenis laporan dan atlet — satu, satu cabor, atau banyak sekaligus</p></div><button type="button" class="x" id="exClose" aria-label="Tutup">×</button></div>
+    <form class="dlg-b" id="exForm" novalidate>
+      <div class="fl"><span>Jenis</span><div class="exj">
+        <label class="ck"><input type="radio" name="exJenis" value="tim"> <span><b>PDF laporan + statistik gabungan</b><small>Ringkasan, statistik deskriptif (n, rata-rata, SD, min, median, maks), dan grafik untuk atlet terpilih</small></span></label>
+        <label class="ck"><input type="radio" name="exJenis" value="atlet"> <span><b>PDF dashboard per atlet</b><small>3 halaman per atlet: angka utama, grafik, statistik 28 hari, tes fisik</small></span></label>
+        <label class="ck"><input type="radio" name="exJenis" value="csvr"> <span><b>CSV ringkasan per atlet</b><small>1 baris per atlet: indikator terkini, rata-rata 28 hari, hasil tes terakhir — siap untuk Excel / SPSS</small></span></label>
+        <label class="ck"><input type="radio" name="exJenis" value="csvh"> <span><b>CSV data harian</b><small>1 baris per atlet per hari: wellness, nyeri, sesi, RPE, durasi, TSS, nadi, HRV</small></span></label>
+      </div></div>
+      <label class="fl" id="exRangeBox">Rentang data harian<select id="exRange"><option value="28">28 hari terakhir</option><option value="90" selected>90 hari terakhir</option><option value="365">1 tahun terakhir</option><option value="0">Semua data</option></select></label>
+      <div class="fl"><span>Atlet <b id="exCount" style="color:var(--accent)"></b></span>
+        <div class="chips" id="exQuick"></div>
+        <input type="search" id="exCari" class="search" placeholder="Cari nama…" aria-label="Cari nama atlet" autocomplete="off">
+        <div class="exlist" id="exList"></div></div>
+      <button class="btn" type="submit" id="exGo">Buat</button>
+      <p class="msg" id="exMsg" role="status"></p>
+    </form>
+  </dialog>
+
   <dialog id="repDlg" class="dlg" aria-labelledby="repTitle">
     <div class="dlg-h"><div><h2 id="repTitle">Laporan mingguan</h2><p class="sub" id="repWho"></p></div><button type="button" class="x" id="repClose" aria-label="Tutup">×</button></div>
     <form class="dlg-b" id="repForm">
@@ -763,7 +790,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
       <h2 id="scopeTitle">Ringkasan hari ini</h2>
       <div class="r">
         <select id="fCabor" aria-label="Filter cabang olahraga"></select>
-        <button class="btn ghost sm" id="btnPdfTim">PDF &amp; statistik</button>
+        <button class="btn ghost sm" id="btnPdfTim">Ekspor PDF / CSV</button>
         <button class="btn ghost sm" id="btnCsv" hidden>Unduh CSV</button>
       </div>
     </div>
@@ -2128,7 +2155,7 @@ $("#repForm").addEventListener("submit",e=>{
   $("#report").innerHTML=`<div class="rp-bar"><button type="button" class="btn" id="rpPrint">Cetak / simpan PDF</button><button type="button" class="btn ghost" id="rpBack" style="color:#161a2b;background:#fff">Kembali</button><span>Di jendela cetak, pilih printer “Simpan sebagai PDF” untuk membuat file PDF.</span></div>`+list.map(x=>reportPage(x,w0,note,rows.find(r=>r.s.id===x.id))).join("");
   $("#repDlg").close();$("#app").hidden=true;$("#report").hidden=false;window.scrollTo(0,0);
 });
-$("#report").addEventListener("click",e=>{if(e.target.closest("#rpPrint"))window.print();if(e.target.closest("#rpBack")){$("#report").hidden=true;$("#report").innerHTML="";$("#app").hidden=false}});
+$("#report").addEventListener("click",e=>{if(e.target.closest("#rpPrint"))window.print();if(e.target.closest("#rpBack")){$("#report").hidden=true;$("#report").innerHTML="";$("#app").hidden=false;const t=S.balikTab;S.balikTab=null;if(t&&t!==S.tab)$("#tab-"+t).click()}});
 function reportPage(s,w0,note,row){
   const D=data();const ent=D.entri.filter(e=>e.siswaId===s.id).sort((a,b)=>a.tanggal<b.tanggal?-1:1);const pl=(D.rencana||[]).filter(p=>p.siswaId===s.id);
   const P=pmc(ent,pl,TODAY);const pd={};P.forEach(d=>pd[d.t]=d);
@@ -2178,22 +2205,29 @@ function bukaLaporan(html){
 }
 const tglCetak=()=>new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
 const nm0=s=>s.nama.replace(" (contoh)","");
-function pdfTim(){
-  const all=computeRows();const pool=all.filter(x=>!S.cabor||x.s.cabor===S.cabor).sort((a,b)=>b.a.lvl-a.a.lvl||a.s.nama.localeCompare(b.s.nama));
+function judulPilihan(pool,all){
+  if(pool.length===all.length)return"Seluruh tim";if(pool.length===1)return nm0(pool[0].s);
+  const cs=[...new Set(pool.map(x=>x.s.cabor))];if(cs.length===1&&all.filter(x=>x.s.cabor===cs[0]).length===pool.length)return cs[0];
+  return pool.length+" atlet terpilih";
+}
+function pdfTim(ids){
+  const all=computeRows();const set=new Set(ids||all.filter(x=>!S.cabor||x.s.cabor===S.cabor).map(x=>x.s.id));
+  const pool=all.filter(x=>set.has(x.s.id)).sort((a,b)=>b.a.lvl-a.a.lvl||a.s.nama.localeCompare(b.s.nama));
   if(!pool.length)return;
-  /* gambar semua grafik analisis (tab dibuka satu per satu tanpa animasi) */
-  const keep=S.an||"risiko";const g={};S.cetak=true;
-  const ids={risiko:["cRisk"],acwr:["cAcwrAll"],tren:["cLoad","cWell"],cabor:["cCabor"]};
-  try{for(const t of Object.keys(ids)){S.an=t;renderAnalisis();g[t]=ids[t].map(snapCanvas)}
+  const asal=S.tab;if(S.tab!=="dash")$("#tab-dash").click();
+  /* gambar semua grafik analisis untuk atlet terpilih (tab dibuka satu per satu tanpa animasi) */
+  const keep=S.an||"risiko";const g={};S.cetak=true;S.dash={all:pool,pool};
+  const cv={risiko:["cRisk"],acwr:["cAcwrAll"],tren:["cLoad","cWell"],cabor:["cCabor"]};
+  try{for(const t of Object.keys(cv)){S.an=t;renderAnalisis();g[t]=cv[t].map(snapCanvas)}
     S.an="kurva";renderAnalisis();g.kurva=$("#teamCurve").innerHTML;S.an="peta";renderAnalisis();g.peta=$("#heat").parentElement.outerHTML}
-  finally{S.cetak=false;S.an=keep;renderAnalisis()}
+  finally{S.cetak=false;S.an=keep;renderDash()}
   const cnt=l=>pool.filter(x=>x.a.lvl===l).length;const isi=pool.filter(x=>hasW(x.a.byDate[TODAY])).length;
   const box=(v,l,c)=>`<div><b${c?` style="color:${c}"`:""}>${v}</b><span>${l}</span></div>`;
   const ph=pool.filter(x=>x.a.perhatian.length);
   const ac=x=>x.a.acwr;const bmi=s=>s.bb&&s.tb?s.bb/(s.tb*s.tb):null;
   const cabs=[...new Set(pool.map(x=>x.s.cabor))].sort();
   const M=latestMap((data().tes||[]));const tesRows=TESTS.map(T=>({T,v:pool.map(x=>M[x.s.id]&&M[x.s.id][T.key]?M[x.s.id][T.key].v:null),k:pool.map(x=>{const m=M[x.s.id]&&M[x.s.id][T.key];return m?skalaOf(T,m.v,x.s.jk,m.bb||x.s.bb):null})})).filter(r=>r.v.some(v=>v!=null));
-  const judul=S.cabor||"Seluruh tim";
+  const judul=judulPilihan(pool,all);
   const hd=sub=>`<div class="hd"><div><h3>${sub}</h3><h1>${esc(judul)}</h1><small>${pool.length} atlet · data per ${fmtLong(TODAY)}</small></div><div style="text-align:right"><h3>Monitoring Latihan Atlet</h3><small>Dicetak ${tglCetak()}</small></div></div>`;
   const ft=`<div class="ft"><span>Monitoring Latihan Atlet</span><span>Merah = segera ditangani · Kuning = pantau · Hijau = aman</span></div>`;
   bukaLaporan(`<section class="rp">${hd("Laporan ringkasan tim")}
@@ -2223,13 +2257,18 @@ function pdfTim(){
     <div class="blk"><h3>Status per cabor</h3>${g.cabor.join("")}</div>
     <div class="blk"><h3>Peta wellness 14 hari</h3><div class="rp-dark">${g.peta}</div></div>
     ${ft}</section>`);
+  S.balikTab=asal;
 }
-$("#btnPdfTim").addEventListener("click",pdfTim);
-function pdfAtlet(){
-  const D=data();const s=D.siswa.find(x=>x.id===AT.sel);if(!s)return;
-  S.cetak=true;try{renderAtlet()}finally{S.cetak=false}
+function pdfAtlet(ids){
+  const D=data();const list=(ids||[AT.sel]).map(id=>D.siswa.find(x=>x.id===id)).filter(Boolean);if(!list.length)return;
+  const asal=S.tab,keep=AT.sel;if(S.tab!=="atlet")$("#tab-atlet").click();
+  const rows=computeRows();let html="";
+  S.cetak=true;try{for(const s of list){AT.sel=s.id;renderAtlet();html+=atletSections(s,D,rows)}}finally{S.cetak=false;AT.sel=keep;renderAtlet()}
+  bukaLaporan(html);S.balikTab=asal;
+}
+function atletSections(s,D,rows){
   const g=["atDaily","atPmc","atForm","atMono","atWeek","atHrv","atPerf"].reduce((o,id)=>(o[id]=snapCanvas(id),o),{});
-  const row=computeRows().find(x=>x.s.id===s.id);const a=row?row.a:null;
+  const row=rows.find(x=>x.s.id===s.id);const a=row?row.a:null;
   const ent=D.entri.filter(e=>e.siswaId===s.id);const pl=(D.rencana||[]).filter(p=>p.siswaId===s.id);
   const P=pmc(ent,pl,TODAY);const now=P.find(d=>d.t===TODAY)||P[P.length-1]||null;
   const e28=ent.filter(e=>e.tanggal<=TODAY&&diffDays(TODAY,e.tanggal)<28);const ss=e28.flatMap(sesiOf);
@@ -2239,7 +2278,7 @@ function pdfAtlet(){
   const M=latestMap(D.tes||[])[s.id]||{};
   const tes=TESTS.filter(T=>M[T.key]).map(T=>{const m=M[T.key];const k=skalaOf(T,m.v,s.jk,m.bb||s.bb);return`<tr><td>${esc(T.label)}</td><td class="r">${dec(m.v,stepDec(T))} ${esc(T.unit)}</td><td class="r">${m.prev!=null?dec(m.prev,stepDec(T)):"–"}</td><td>${k?k+" · "+SKALA[k]:"–"}</td><td>${fmtD(m.tgl)}</td></tr>`}).join("");
   const fz=now?formZone(now.formPct):null;
-  bukaLaporan(`<section class="rp">
+  return(`<section class="rp">
     <div class="hd"><div><h3>Dashboard atlet</h3><h1>${esc(nm0(s))}</h1><small>${esc(s.cabor)}${s.kelas?" · "+esc(s.kelas):""}${age!=null?" · "+age+" tahun":""}${s.bb?" · "+dec(+s.bb,1)+" kg":""}${s.tb?" · "+dec(+s.tb,2)+" m":""}${s.pelatih?" · Pelatih: "+esc(s.pelatih):""}</small></div><div style="text-align:right"><h3>Data per</h3><b>${fmtLong(TODAY)}</b><small>Dicetak ${tglCetak()}</small></div></div>
     ${a?`<p style="margin:0;font-size:13px">${pill(a.status)} ${a.reasons.map(esc).join(" · ")}</p>`:""}
     <div class="sm">${box(a&&a.rdy?a.rdy.skor:"–","kesiapan hari ini",a&&a.rdy?a.rdy.warna:null)}${box(now?Math.round(now.ctl):"–","fitness (CTL)")}${box(now?Math.round(now.atl):"–","fatigue (ATL)")}${box(now&&now.formPct!=null?(now.formPct>0?"+":"")+now.formPct+"%":"–","form % "+(fz?"· "+fz.id:""),fz?fz.warna:null)}
@@ -2259,7 +2298,71 @@ function pdfAtlet(){
     <div class="blk"><h3>Tes fisik (hasil terakhir)</h3>${tes?`<table><tr><th>Tes</th><th class="r">Hasil</th><th class="r">Sebelumnya</th><th>Skala</th><th>Tanggal</th></tr>${tes}</table>`:'<p class="muted" style="margin:0">Belum ada hasil tes.</p>'}${g.atPerf?`<div style="margin-top:6px">${g.atPerf}</div>`:""}</div>
     <div class="ft"><span>Monitoring Latihan Atlet</span><span>Kesiapan: ≥70 siap · 50–69 waspada · &lt;50 perlu pemulihan</span></div></section>`);
 }
-$("#btnPdfAt").addEventListener("click",pdfAtlet);
+
+/* ---------- CSV ---------- */
+const csvQ=v=>{const s=String(v??"");return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+const csvN=(v,d=2)=>v==null||!isFinite(v)?"":+(+v).toFixed(d);
+function csvHarian(ids,hari){
+  const D=data();const set=new Set(ids);const nm={};D.siswa.forEach(s=>nm[s.id]=s);const dari=hari?addDays(TODAY,-hari+1):"0000";
+  const head=["tanggal","nama","cabor","tim",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","jumlah_sesi","rpe_rata2","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
+  const rows=D.entri.filter(e=>set.has(e.siswaId)&&e.tanggal>=dari&&e.tanggal<=TODAY).sort((a,b)=>a.tanggal<b.tanggal?-1:a.tanggal>b.tanggal?1:(nm[a.siswaId]||{nama:""}).nama.localeCompare((nm[b.siswaId]||{nama:""}).nama))
+    .map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,nm0(s.nama?s:{nama:""}),s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellOf(e)??"",e.nyeri??"",(e.area||[]).join(" / "),sesiOf(e).length,e.rpe??"",e.durasi??"",loadOf(e),e.jenis??"",e.hrIstirahat??"",e.hrv??"",e.tinggi??""].map(csvQ).join(",")});
+  downloadText("data-harian-"+TODAY+".csv","\ufeff"+head.join(",")+"\n"+rows.join("\n"));return rows.length;
+}
+function csvRingkas(ids){
+  const D=data();const set=new Set(ids);const rows=computeRows().filter(x=>set.has(x.s.id)).sort((a,b)=>a.s.cabor.localeCompare(b.s.cabor)||a.s.nama.localeCompare(b.s.nama));
+  const M=latestMap(D.tes||[]);
+  const head=["nama","cabor","tim","jk","usia","bb_kg","tb_m","bmi","status","tingkat","kesiapan","acwr_rolling","acwr_ewma","form_pct","fitness_ctl","fatigue_atl","monotony","strain","strain_rasio","wellness_terakhir","z_wellness","beban_7h_tss","kepatuhan_28h_pct",
+    "rata_tss_harian_28h","jumlah_sesi_28h","rata_durasi_sesi_28h","rata_rpe_28h","rata_wellness_28h","rata_nyeri_28h","rata_hr_istirahat_28h","rata_hrv_28h","alasan",...TESTS.flatMap(T=>[T.key,T.key+"_skala"])];
+  const avg=v=>{const q=STAT(v);return q?q.m:null};
+  const out=rows.map(({s,a})=>{
+    const ent=D.entri.filter(e=>e.siswaId===s.id);const pl=(D.rencana||[]).filter(p=>p.siswaId===s.id);const P=pmc(ent,pl,TODAY);const now=P.find(d=>d.t===TODAY)||P[P.length-1]||{};
+    const e28=ent.filter(e=>e.tanggal<=TODAY&&diffDays(TODAY,e.tanggal)<28);const ss=e28.flatMap(sesiOf);const ws=e28.filter(hasW);
+    const lBy={};e28.forEach(e=>lBy[e.tanggal]=(lBy[e.tanggal]||0)+loadRaw(e));const daily=[...Array(28)].map((_,k)=>lBy[addDays(TODAY,-k)]||0);
+    const m=M[s.id]||{};const bmi=s.bb&&s.tb?s.bb/(s.tb*s.tb):null;
+    return[nm0(s),s.cabor,s.kelas||"",s.jk||"",ageOf(s)??"",s.bb||"",s.tb||"",csvN(bmi,1),LABEL[a.status],a.lvl===2?"segera":a.lvl===1?"pantau":"aman",a.rdy?a.rdy.skor:"",csvN(a.acwr),csvN(a.acwrE),a.formPct??"",csvN(now.ctl,1),csvN(now.atl,1),csvN(a.mono),a.fo.strain||"",csvN(a.fo.rasio),a.wt??"",csvN(a.z),a.acute,Math.round(a.compliance*100),
+      csvN(avg(daily),1),ss.length,csvN(avg(ss.map(x=>+x.durasi)),1),csvN(avg(ss.map(x=>+x.rpe)),1),csvN(avg(ws.map(wellTotal)),1),csvN(avg(ws.map(e=>+e.nyeri||0)),1),csvN(avg(e28.map(e=>e.hrIstirahat)),1),csvN(avg(e28.map(e=>e.hrv)),1),a.reasons.join(" | "),
+      ...TESTS.flatMap(T=>{const x=m[T.key];return x?[x.v,skalaOf(T,x.v,s.jk,x.bb||s.bb)??""]:["",""]})].map(csvQ).join(",")});
+  downloadText("ringkasan-atlet-"+TODAY+".csv","\ufeff"+head.join(",")+"\n"+out.join("\n"));return out.length;
+}
+
+/* ---------- jendela ekspor: pilih jenis & atlet ---------- */
+const EX={sel:new Set(),cari:""};
+function exRender(){
+  const D=data();const L=[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama));
+  const cabs=[...new Set(L.map(s=>s.cabor))];
+  $("#exQuick").innerHTML=`<button type="button" class="chip" data-exq="semua">Semua (${L.length})</button>${cabs.map(c=>`<button type="button" class="chip" data-exq="c:${esc(c)}">${esc(c)} (${L.filter(s=>s.cabor===c).length})</button>`).join("")}<button type="button" class="chip" data-exq="kosong">Kosongkan</button>`;
+  const q=EX.cari.toLowerCase();let h="",cur="";
+  L.filter(s=>!q||s.nama.toLowerCase().includes(q)).forEach(s=>{if(s.cabor!==cur){cur=s.cabor;h+=`<div class="gh">${esc(cur)}</div>`}h+=`<label><input type="checkbox" data-exid="${s.id}" ${EX.sel.has(s.id)?"checked":""}> ${esc(s.nama)}<small>${esc(s.kelas||"")}</small></label>`});
+  $("#exList").innerHTML=h||'<p class="note" style="padding:8px">Tidak ada nama yang cocok.</p>';
+  const j=(document.querySelector('input[name="exJenis"]:checked')||{}).value;
+  $("#exCount").textContent="· "+EX.sel.size+" dipilih";$("#exRangeBox").hidden=j!=="csvh";
+  $("#exGo").textContent=j==="atlet"?`Buat PDF (${EX.sel.size} atlet · ±${EX.sel.size*3} halaman)`:j==="tim"?"Buat PDF laporan":"Unduh CSV";
+}
+function openEx(jenis,ids){
+  EX.sel=new Set(ids.filter(Boolean));EX.cari="";$("#exCari").value="";$("#exMsg").textContent="";
+  document.querySelectorAll('input[name="exJenis"]').forEach(r=>r.checked=r.value===jenis);exRender();
+  const d=$("#exDlg");if(!d.open){if(d.showModal)d.showModal();else d.setAttribute("open","")}
+}
+const poolIds=()=>computeRows().filter(x=>!S.cabor||x.s.cabor===S.cabor).map(x=>x.s.id);
+$("#btnPdfTim").addEventListener("click",()=>openEx("tim",poolIds()));
+$("#btnPdfAt").addEventListener("click",()=>openEx("atlet",[AT.sel]));
+$("#btnCsv").addEventListener("click",()=>openEx("csvh",poolIds()));
+$("#exClose").addEventListener("click",()=>$("#exDlg").close());
+$("#exForm").addEventListener("change",e=>{const c=e.target.closest("[data-exid]");if(c){c.checked?EX.sel.add(c.dataset.exid):EX.sel.delete(c.dataset.exid)}exRender()});
+$("#exCari").addEventListener("input",e=>{EX.cari=e.target.value;exRender()});
+$("#exQuick").addEventListener("click",e=>{const b=e.target.closest("[data-exq]");if(!b)return;const v=b.dataset.exq;const L=data().siswa;
+  if(v==="semua")EX.sel=new Set(L.map(s=>s.id));else if(v==="kosong")EX.sel=new Set();else{const c=v.slice(2);const ids=L.filter(s=>s.cabor===c).map(s=>s.id);const all=ids.every(id=>EX.sel.has(id));ids.forEach(id=>all?EX.sel.delete(id):EX.sel.add(id))}
+  exRender()});
+$("#exForm").addEventListener("submit",e=>{
+  e.preventDefault();const j=(document.querySelector('input[name="exJenis"]:checked')||{}).value;
+  const ids=data().siswa.filter(s=>EX.sel.has(s.id)).sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>s.id);
+  if(!ids.length)return msg("#exMsg","Pilih minimal satu atlet.");
+  if(j==="csvh"){const n=csvHarian(ids,+$("#exRange").value);return msg("#exMsg",n?`${n} baris diunduh.`:"Tidak ada data harian pada rentang ini.",!!n)}
+  if(j==="csvr"){const n=csvRingkas(ids);return msg("#exMsg",n+" atlet diunduh.",true)}
+  $("#exDlg").close();
+  if(j==="tim")pdfTim(ids);else pdfAtlet(ids);
+});
 
 /* ---------- tautan pribadi atlet ---------- */
 const LK={id:null};
@@ -2307,13 +2410,7 @@ $("#formSiswa").addEventListener("submit",async e=>{
 });
 
 /* ---------- CSV ---------- */
-$("#btnCsv").addEventListener("click",async()=>{
-  const D=data();const nm={};D.siswa.forEach(s=>nm[s.id]=s);
-  const head=["tanggal","nama","cabor","tim",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","jumlah_sesi","rpe_rata2","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
-  const q=v=>{const s=String(v??"");return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-  const rows=[...D.entri].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,s.nama,s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellOf(e)??"",e.nyeri??"",(e.area||[]).join(" / "),sesiOf(e).length,e.rpe??"",e.durasi??"",loadOf(e),e.jenis??"",e.hrIstirahat??"",e.hrv??"",e.tinggi??""].map(q).join(",")});
-  downloadText("monitoring-latihan-atlet-"+TODAY+".csv","﻿"+head.join(",")+"\n"+rows.join("\n"))
-});
+
 
 /* ---------- navigasi ---------- */
 document.querySelector(".tabs").addEventListener("click",e=>{
