@@ -16,7 +16,9 @@ create table if not exists public.profil (
   dibuat timestamptz not null default now()
 );
 
--- Setiap akun baru otomatis mendapat baris profil berstatus "menunggu".
+-- Setiap akun baru otomatis mendapat baris profil dan ruang kerja sendiri (peran "pelatih").
+-- Akun baru TIDAK bisa melihat atlet milik akun lain; akses hanya lewat undangan pemilik.
+alter table public.profil alter column role set default 'pelatih';
 create or replace function public.buat_profil()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
@@ -60,21 +62,108 @@ create unique index if not exists siswa_kode_idx on public.siswa (kode);
 -- Nomor WhatsApp atlet (opsional) untuk tombol pengingat
 alter table public.siswa add column if not exists hp text;
 
+-- ---------- Kepemilikan: setiap atlet milik satu akun (ruang kerja) ----------
+alter table public.siswa add column if not exists pemilik uuid references auth.users(id) on delete cascade;
+alter table public.siswa alter column pemilik set default auth.uid();
+create index if not exists siswa_pemilik_idx on public.siswa (pemilik);
+
+-- Anggota tim: pemilik mengundang akun lain sebagai asisten pelatih atau pengamat.
+create table if not exists public.akses (
+  pemilik uuid not null references auth.users(id) on delete cascade,
+  anggota uuid not null references auth.users(id) on delete cascade,
+  peran text not null default 'pengamat' check (peran in ('pelatih','pengamat')),
+  cabor text[] not null default '{}',          -- kosong = semua cabor milik pemilik
+  dibuat timestamptz not null default now(),
+  primary key (pemilik, anggota),
+  check (pemilik <> anggota)
+);
+create index if not exists akses_anggota_idx on public.akses (anggota);
+-- Undangan baru berlaku setelah diterima oleh akun yang diundang.
+alter table public.akses add column if not exists diterima boolean not null default false;
+
+-- Migrasi satu kali dari versi lama (satu organisasi) ke ruang kerja per akun.
+create table if not exists public._migrasi (nama text primary key, waktu timestamptz not null default now());
+alter table public._migrasi enable row level security;
+do $$
+declare adm uuid;
+begin
+  if not exists (select 1 from public._migrasi where nama = 'ruang_kerja_v1') then
+    select id into adm from public.profil where role = 'admin' order by dibuat limit 1;
+    if adm is not null then
+      -- semua atlet lama menjadi milik pengelola pertama
+      update public.siswa set pemilik = adm where pemilik is null;
+      -- pelatih & guru yang sudah disetujui menjadi anggota tim pengelola (aksesnya tidak berubah)
+      insert into public.akses (pemilik, anggota, peran, cabor)
+        select adm, p.id, case when p.role = 'guru' then 'pengamat' else 'pelatih' end,
+               case when p.role = 'pelatih' then coalesce(p.cabor, '{}') else '{}' end
+        from public.profil p where p.role in ('pelatih','guru') and p.id <> adm
+        on conflict (pemilik, anggota) do nothing;
+      update public.akses set diterima = true where pemilik = adm;
+    end if;
+    -- akun guru & yang masih menunggu kini punya ruang kerja sendiri (kosong)
+    update public.profil set role = 'pelatih' where role in ('guru','menunggu');
+    insert into public._migrasi (nama) values ('ruang_kerja_v1');
+  end if;
+end $$;
+
+-- Pemilik atlet tidak bisa dipindahkan ke akun lain.
+create or replace function public.kunci_pemilik() returns trigger language plpgsql as $$
+begin
+  if new.pemilik is distinct from old.pemilik then raise exception 'Pemilik atlet tidak bisa diubah'; end if;
+  return new;
+end $$;
+drop trigger if exists siswa_kunci_pemilik on public.siswa;
+create trigger siswa_kunci_pemilik before update on public.siswa for each row execute function public.kunci_pemilik();
+
+-- Inti aturan akses: boleh jika atlet milik saya, atau saya diundang pemiliknya
+-- (untuk mengubah harus sebagai pelatih; bila cabor dibatasi, harus cabor yang cocok).
+-- Akun yang dinonaktifkan pengelola (peran "menunggu") tidak bisa mengakses apa pun.
+create or replace function public.akses_atlet(p_pemilik uuid, p_cabor text, p_ubah boolean) returns boolean
+language sql stable security definer set search_path = public as $$
+  select auth.uid() is not null
+     and coalesce(public.peran_saya(), 'menunggu') <> 'menunggu'
+     and (p_pemilik = auth.uid()
+          or exists (select 1 from public.akses a
+                     where a.pemilik = p_pemilik and a.anggota = auth.uid() and a.diterima
+                       and (not p_ubah or a.peran = 'pelatih')
+                       and (cardinality(a.cabor) = 0 or p_cabor = any(a.cabor))))
+$$;
 create or replace function public.boleh_lihat_siswa(sid uuid) returns boolean
 language sql stable security definer set search_path = public as $$
-  select case public.peran_saya()
-    when 'admin' then true
-    when 'guru' then true
-    when 'pelatih' then exists (select 1 from public.siswa s where s.id = sid and s.cabor = any(public.cabor_saya()))
-    else false end
+  select exists (select 1 from public.siswa s where s.id = sid and public.akses_atlet(s.pemilik, s.cabor, false))
 $$;
 create or replace function public.boleh_ubah_siswa(sid uuid) returns boolean
 language sql stable security definer set search_path = public as $$
-  select case public.peran_saya()
-    when 'admin' then true
-    when 'pelatih' then exists (select 1 from public.siswa s where s.id = sid and s.cabor = any(public.cabor_saya()))
-    else false end
+  select exists (select 1 from public.siswa s where s.id = sid and public.akses_atlet(s.pemilik, s.cabor, true))
 $$;
+
+-- Undang anggota tim lewat email (hanya pemilik yang bisa mengundang ke ruang kerjanya sendiri).
+create or replace function public.undang_anggota(p_email text, p_peran text, p_cabor text[]) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare m uuid;
+begin
+  if auth.uid() is null or coalesce(public.peran_saya(), 'menunggu') = 'menunggu' then raise exception 'Tidak diizinkan'; end if;
+  if p_peran not in ('pelatih','pengamat') then raise exception 'Peran tidak dikenal'; end if;
+  select id into m from public.profil where lower(email) = lower(trim(p_email));
+  if m is null then raise exception 'Email ini belum terdaftar. Minta orang tersebut mendaftar dulu di web, lalu undang lagi.'; end if;
+  if m = auth.uid() then raise exception 'Tidak bisa mengundang akun sendiri'; end if;
+  insert into public.akses (pemilik, anggota, peran, cabor) values (auth.uid(), m, p_peran, coalesce(p_cabor, '{}'))
+    on conflict (pemilik, anggota) do update set peran = excluded.peran, cabor = excluded.cabor;
+  return jsonb_build_object('ok', true);
+end $$;
+
+-- Akun yang diundang menerima atau menolak undangan.
+create or replace function public.jawab_undangan(p_pemilik uuid, p_terima boolean) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'Tidak diizinkan'; end if;
+  if p_terima then update public.akses set diterima = true where pemilik = p_pemilik and anggota = auth.uid();
+  else delete from public.akses where pemilik = p_pemilik and anggota = auth.uid(); end if;
+end $$;
+revoke all on function public.jawab_undangan(uuid, boolean) from public;
+grant execute on function public.jawab_undangan(uuid, boolean) to authenticated;
+revoke all on function public.undang_anggota(text, text, text[]) from public;
+grant execute on function public.undang_anggota(text, text, text[]) to authenticated;
 
 -- ---------- Input harian (wellness & beban) ----------
 create table if not exists public.entri (
@@ -127,30 +216,34 @@ alter table public.siswa  enable row level security;
 alter table public.entri  enable row level security;
 alter table public.tes    enable row level security;
 alter table public.rencana enable row level security;
+alter table public.akses   enable row level security;
 
 drop policy if exists profil_baca on public.profil;
 create policy profil_baca on public.profil for select
-  using (id = auth.uid() or public.peran_saya() = 'admin');
+  using (id = auth.uid() or public.peran_saya() = 'admin'
+         or exists (select 1 from public.akses a
+                    where (a.pemilik = auth.uid() and a.anggota = profil.id)
+                       or (a.anggota = auth.uid() and a.pemilik = profil.id)));
+
+drop policy if exists akses_baca on public.akses;
+create policy akses_baca on public.akses for select using (pemilik = auth.uid() or anggota = auth.uid());
+drop policy if exists akses_ubah on public.akses;
+create policy akses_ubah on public.akses for update using (pemilik = auth.uid()) with check (pemilik = auth.uid());
+drop policy if exists akses_hapus on public.akses;
+create policy akses_hapus on public.akses for delete using (pemilik = auth.uid() or anggota = auth.uid());
 drop policy if exists profil_ubah on public.profil;
 create policy profil_ubah on public.profil for update
   using (public.peran_saya() = 'admin') with check (public.peran_saya() = 'admin');
 
 drop policy if exists siswa_baca on public.siswa;
-create policy siswa_baca on public.siswa for select
-  using (public.peran_saya() in ('admin','guru')
-         or (public.peran_saya() = 'pelatih' and cabor = any(public.cabor_saya())));
+create policy siswa_baca on public.siswa for select using (public.akses_atlet(pemilik, cabor, false));
 drop policy if exists siswa_tambah on public.siswa;
-create policy siswa_tambah on public.siswa for insert
-  with check (public.peran_saya() = 'admin'
-              or (public.peran_saya() = 'pelatih' and cabor = any(public.cabor_saya())));
+create policy siswa_tambah on public.siswa for insert with check (public.akses_atlet(pemilik, cabor, true));
 drop policy if exists siswa_ubah on public.siswa;
 create policy siswa_ubah on public.siswa for update
-  using (public.boleh_ubah_siswa(id))
-  with check (public.peran_saya() = 'admin'
-              or (public.peran_saya() = 'pelatih' and cabor = any(public.cabor_saya())));
+  using (public.akses_atlet(pemilik, cabor, true)) with check (public.akses_atlet(pemilik, cabor, true));
 drop policy if exists siswa_hapus on public.siswa;
-create policy siswa_hapus on public.siswa for delete
-  using (public.peran_saya() = 'admin');
+create policy siswa_hapus on public.siswa for delete using (pemilik = auth.uid());
 
 drop policy if exists entri_baca on public.entri;
 create policy entri_baca on public.entri for select using (public.boleh_lihat_siswa(siswa_id));
@@ -159,7 +252,7 @@ create policy entri_tulis on public.entri for insert with check (public.boleh_ub
 drop policy if exists entri_ubah on public.entri;
 create policy entri_ubah on public.entri for update using (public.boleh_ubah_siswa(siswa_id)) with check (public.boleh_ubah_siswa(siswa_id));
 drop policy if exists entri_hapus on public.entri;
-create policy entri_hapus on public.entri for delete using (public.peran_saya() = 'admin');
+create policy entri_hapus on public.entri for delete using (public.boleh_ubah_siswa(siswa_id));
 
 drop policy if exists tes_baca on public.tes;
 create policy tes_baca on public.tes for select using (public.boleh_lihat_siswa(siswa_id));
@@ -168,7 +261,7 @@ create policy tes_tulis on public.tes for insert with check (public.boleh_ubah_s
 drop policy if exists tes_ubah on public.tes;
 create policy tes_ubah on public.tes for update using (public.boleh_ubah_siswa(siswa_id)) with check (public.boleh_ubah_siswa(siswa_id));
 drop policy if exists tes_hapus on public.tes;
-create policy tes_hapus on public.tes for delete using (public.peran_saya() = 'admin');
+create policy tes_hapus on public.tes for delete using (public.boleh_ubah_siswa(siswa_id));
 
 drop policy if exists rencana_baca on public.rencana;
 create policy rencana_baca on public.rencana for select using (public.boleh_lihat_siswa(siswa_id));
@@ -262,9 +355,11 @@ do $$ begin
   begin alter publication supabase_realtime add table public.tes;    exception when others then null; end;
   begin alter publication supabase_realtime add table public.profil; exception when others then null; end;
   begin alter publication supabase_realtime add table public.rencana; exception when others then null; end;
+  begin alter publication supabase_realtime add table public.akses; exception when others then null; end;
 end $$;
 
 -- =====================================================================
--- SETELAH Anda mendaftar lewat halaman web, jadikan akun Anda pengelola:
+-- (Opsional) jadikan akun Anda pengelola platform agar bisa menonaktifkan akun lain.
+-- Pengelola TIDAK bisa melihat atlet milik akun lain.
 --   update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 -- =====================================================================

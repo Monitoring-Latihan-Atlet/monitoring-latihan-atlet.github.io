@@ -573,7 +573,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
     <section class="login card" aria-live="polite">
       <h2>Masuk</h2>
       <div id="loginBody"><p class="sub">Memeriksa akun…</p></div>
-      <p class="fine"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Data atlet bersifat rahasia dan hanya dipakai untuk pembinaan atlet. Akses diberikan oleh pengelola program.</span></p>
+      <p class="fine"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Setiap akun punya ruang kerja sendiri. Data atlet Anda tidak terlihat oleh akun lain, kecuali orang yang Anda undang sendiri.</span></p>
     </section>
   </div>
 
@@ -618,7 +618,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
       <button role="tab" aria-selected="false" data-tab="input" id="tab-input">Input harian</button>
       <button role="tab" aria-selected="false" data-tab="tes" id="tab-tes">Tes fisik</button>
       <button role="tab" aria-selected="false" data-tab="siswa" id="tab-siswa">Data atlet</button>
-      <button role="tab" aria-selected="false" data-tab="akses" id="tab-akses" hidden>Pengguna</button>
+      <button role="tab" aria-selected="false" data-tab="akses" id="tab-akses" hidden>Tim &amp; akses</button>
     </div>
   </div>
 </div>
@@ -899,13 +899,24 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
   <!-- AKSES -->
   <section id="v-akses" hidden style="display:flex;flex-direction:column;gap:16px">
     <div class="card">
-      <h2>Pengguna &amp; peran</h2>
-      <p class="note">Pelatih dan pengamat mendaftar sendiri lewat halaman masuk (tombol <b>Daftar</b>) memakai email mereka. Akun baru berstatus <b>menunggu</b> sampai Anda menetapkan perannya di sini. Pelatih hanya melihat dan mengisi data atlet dari cabor yang Anda pilih.</p>
-      <p class="sub" id="aPending"></p>
+      <h2>Ruang kerja &amp; tim</h2>
+      <p class="note">Setiap akun punya <b>ruang kerja sendiri</b>. Atlet yang Anda tambahkan hanya terlihat oleh Anda dan anggota tim yang Anda undang — akun lain yang mendaftar, termasuk pelatih lain dan pengelola platform, <b>tidak bisa melihatnya</b>.</p>
       <p class="msg" id="msgAkses" role="status"></p>
     </div>
-    <div class="list" id="aList"></div>
-    <p class="rules"><b>Keamanan.</b> Peran juga diterapkan di database: pelatih tidak bisa membaca data atlet di luar cabornya, dan pengamat tidak bisa mengubah data apa pun, meskipun mencoba lewat cara lain.</p>
+    <form class="card" id="formUndang" novalidate>
+      <h3>Undang anggota tim</h3>
+      <p class="note">Orang yang diundang harus sudah mendaftar di web ini, lalu menerima undangan di tab <b>Tim &amp; akses</b> miliknya. Akses bisa Anda cabut kapan saja.</p>
+      <div class="two" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <label class="fl">Email<input type="text" id="uEmail" inputmode="email" autocomplete="off" placeholder="email@contoh.com"></label>
+        <label class="fl">Peran<select id="uPeran"><option value="pelatih">Asisten pelatih — melihat &amp; mengisi data</option><option value="pengamat">Pengamat — hanya melihat</option></select></label>
+      </div>
+      <div class="fl"><span>Batasi ke cabor (kosongkan = semua atlet Anda)</span><div class="chips" id="uCabor"></div></div>
+      <div><button class="btn" type="submit">Kirim undangan</button></div>
+    </form>
+    <div class="card"><h3>Anggota tim saya</h3><div class="list" id="aTim"></div></div>
+    <div class="card"><h3>Undangan &amp; tim yang saya ikuti</h3><div class="list" id="aIkut"></div></div>
+    <div class="card" id="aAdminBox" hidden><h3>Semua akun · pengelola platform</h3><p class="note">Anda bisa menonaktifkan akun yang menyalahgunakan web ini. Pengelola <b>tidak</b> bisa melihat atlet milik akun lain.</p><div class="list" id="aList"></div></div>
+    <p class="rules"><b>Keamanan.</b> Aturan ini dijalankan di database, bukan hanya di tampilan: akun lain tidak bisa membaca, mengubah, menghapus, atau memindahkan atlet Anda meskipun mencoba lewat cara lain. Asisten pelatih hanya melihat cabor yang Anda izinkan; pengamat tidak bisa mengubah apa pun.</p>
   </section>
 
   <!-- SISWA -->
@@ -981,7 +992,7 @@ $("#today").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",da
 
 const ME={state:"checking",role:null,cabor:[],id:null,name:"",email:null,avatar:"",isOwner:false};
 const TS={sub:"analisis",jk:"",cabor:"",test:"sprint30",sel:null};
-const S={db:null,dl:null,live:{siswa:[],entri:[],tes:[],rencana:[]},demo:null,mode:"loading",filter:"semua",cabor:"",sel:null,tab:"atlet",charts:{}};
+const S={db:null,dl:null,live:{siswa:[],entri:[],tes:[],rencana:[],akses:[]},demo:null,mode:"loading",filter:"semua",cabor:"",sel:null,tab:"atlet",charts:{}};
 
 /* ---------- data contoh ---------- */
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -1110,13 +1121,21 @@ function analyze(s,list){
   return{...base,status,reasons:R.length?R.concat(Y):Y.length?Y:["Dalam batas normal"],todayIn:last.tanggal===TODAY};
 }
 function rawData(){return S.mode==="live"&&S.live.siswa.length?S.live:(S.demo||(S.demo=makeDemo()))}
+/* Boleh mengubah data atlet ini? (pemilik, atau asisten pelatih yang diundang & cabornya cocok). Database tetap jadi penentu akhir. */
+function bisaUbah(s){
+  if(S.mode!=="live")return ME.role!=="guru";
+  if(!s||!ME.id)return false;if(s.pemilik===ME.id)return true;
+  if(s.pemilik===undefined)return true; /* database belum diperbarui: biarkan database yang menolak bila tidak berhak */
+  return(S.live.akses||[]).some(a=>a.pemilik===s.pemilik&&a.anggota===ME.id&&a.diterima&&a.peran==="pelatih"&&(!(a.cabor||[]).length||a.cabor.includes(s.cabor)));
+}
+const namaAkun=id=>{const p=(S.profil||[]).find(x=>x.id===id);return p?(p.nama||p.email||"akun lain"):"akun lain"};
 function scope(D){
-  if(ME.role!=="pelatih"||!ME.cabor.length)return D;
+  if(S.mode==="live"||ME.role!=="pelatih"||!ME.cabor.length)return D;
   const siswa=D.siswa.filter(s=>ME.cabor.includes(s.cabor));const ids=new Set(siswa.map(s=>s.id));
   return{siswa,entri:D.entri.filter(e=>ids.has(e.siswaId)),tes:(D.tes||[]).filter(t=>ids.has(t.siswaId)),rencana:(D.rencana||[]).filter(p=>ids.has(p.siswaId))};
 }
 function data(){return scope(rawData())}
-function inputData(){return scope(S.mode==="live"?S.live:rawData())}
+function inputData(){const D=scope(S.mode==="live"?S.live:rawData());if(S.mode!=="live")return D;const siswa=D.siswa.filter(bisaUbah);const ids=new Set(siswa.map(x=>x.id));return{...D,siswa,entri:D.entri.filter(e=>ids.has(e.siswaId)),tes:(D.tes||[]).filter(t=>ids.has(t.siswaId)),rencana:(D.rencana||[]).filter(r=>ids.has(r.siswaId))}}
 const ORDER={merah:0,kuning:1,kosong:2,hijau:3};
 const LABEL={merah:"Merah",kuning:"Kuning",hijau:"Hijau",kosong:"Tanpa data"};
 
@@ -1146,7 +1165,8 @@ function banner(){
   const b=$("#banner");
   if(S.mode==="loading"){b.hidden=false;b.textContent="Memuat data…";return}
   if(S.mode==="demo"){b.hidden=false;b.textContent="Mode contoh: aplikasi belum terhubung ke database, jadi yang tampil adalah 14 atlet contoh. Entri baru hanya bertahan sampai halaman ditutup.";return}
-  if(!S.live.siswa.length){b.hidden=false;b.textContent="Belum ada atlet terdaftar, jadi dashboard menampilkan data contoh. Begitu atlet pertama ditambahkan di tab Data atlet, semua grafik memakai data asli.";return}
+  if(!S.live.siswa.length){b.hidden=false;b.textContent="Ruang kerja Anda masih kosong. Yang tampil sekarang adalah 14 atlet CONTOH (fiktif) — bukan data milik akun lain. Begitu Anda menambahkan atlet pertama di tab Data atlet, semua grafik memakai data Anda sendiri.";return}
+  if(S.noAkses){b.hidden=false;b.textContent="Database perlu diperbarui agar data tiap akun terpisah: jalankan ulang setup.sql di Supabase (aman untuk data yang sudah ada).";return}
   if(S.noRencana){b.hidden=false;b.textContent="Kalender latihan belum aktif: tabel rencana belum ada di database. Jalankan ulang setup.sql di Supabase (aman untuk data yang sudah ada).";return}
   b.hidden=true;
 }
@@ -1576,7 +1596,7 @@ $("#atPick").addEventListener("change",e=>{AT.sel=e.target.value;renderAtlet()})
 /* ---------- kalender latihan & rencana ---------- */
 const KAL={m:TODAY.slice(0,8)+"01",day:TODAY,edit:null,drag:null};
 const DOWS=["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
-const canPlan=()=>ME.role==="admin"||ME.role==="pelatih";
+const canPlan=()=>{const s=curAthlete();return!!s&&bisaUbah(s)};
 const fmtLong=t=>parse(t).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 const fmtDur=m=>m>=60?Math.floor(m/60)+" j "+pad(m%60)+" m":m+" m";
 const sgn=(v,d)=>v==null?"–":(v>0?"+":"")+(d?dec(v,d):Math.round(v));
@@ -1731,8 +1751,7 @@ const SE={edit:null};
 function renderSiswa(){
   const D=inputData();
   $("#caborList").innerHTML=["Sepak bola","Bola voli","Bola basket","Atletik","Bulu tangkis","Pencak silat","Renang","Sepak takraw","Futsal","Karate","Taekwondo","Rugby"].map(c=>`<option value="${c}">`).join("");
-  const ro=ME.role==="guru";
-  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Tim · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${ro?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada atlet. Tambahkan lewat formulir di atas.</div>`;
+  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Tim · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${S.mode==="live"&&s.pemilik&&s.pemilik!==ME.id?" · tim "+esc(namaAkun(s.pemilik)):""}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${!bisaUbah(s)?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada atlet. Tambahkan lewat formulir di atas.</div>`;
 }
 $("#siswaList").addEventListener("click",e=>{
   const lk=e.target.closest("button[data-link]");if(lk){openLink(lk.dataset.link);return}
@@ -1789,7 +1808,7 @@ function updateSummary(){
 function entriHari(){const t=$("#inTgl").value;return F.sid&&t?inputData().entri.find(x=>x.siswaId===F.sid&&x.tanggal===t):null}
 function renderSesiAda(old){
   const w=$("#wellAda");w.hidden=!hasW(old);if(hasW(old))w.innerHTML=`<span>Kondisi pagi tanggal ini sudah diisi: <b>wellness ${wellTotal(old)}/25</b>${+old.nyeri?" · nyeri "+old.nyeri+"/10":""}. Isi lagi hanya jika ingin mengubah.</span>`;
-  const ss=old?sesiOf(old):[];const ro=ME.role==="guru";
+  const ss=old?sesiOf(old):[];const ro=S.mode!=="live"&&ME.role==="guru";
   $("#sesiAda").innerHTML=ss.length?'<span class="note">Sesi yang sudah tercatat:</span>'+ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)};display:flex;justify-content:space-between;align-items:center;gap:8px"><span><b>${esc(x.jenis||"Latihan")}</b><small>${sesiInfo(x)}</small></span>${ro?"":`<button type="button" class="btn ghost sm" data-hs="${esc(x.id||"")}">Hapus</button>`}</div>`).join(""):"";
 }
 async function simpanEntri(row){
@@ -2053,6 +2072,8 @@ const DB={
       else if(table==="tes")S.live.tes=await DB.loadAll("tes");
       else if(table==="rencana"){try{S.live.rencana=await DB.loadAll("rencana",q=>q.gte("tanggal",addDays(TODAY,-120)))}catch(_){S.live.rencana=[];S.noRencana=true}}
       else if(table==="profil"){await loadProfil();return}
+      else if(table==="akses"){try{S.live.akses=await DB.loadAll("akses");S.noAkses=false}catch(_){S.live.akses=[];S.noAkses=true}
+        if(S.entered){await loadProfil();["siswa","entri","tes","rencana"].forEach(t=>DB.refresh(t,100))}return}
       if(S.entered)renderAll();
     }catch(e){const b=$("#banner");b.hidden=false;b.textContent="Gagal memuat data. Periksa koneksi internet lalu muat ulang halaman."}
   }
@@ -2098,7 +2119,7 @@ function renderLogin(){
   const av=document.createElement("div");av.className="avatar";av.textContent=initials(ME.name||ME.email||"?");box.appendChild(av);
   const t=document.createElement("div");t.style.minWidth="0";const n=document.createElement("div");n.className="n";n.textContent=ME.name||"Pengguna";const e=document.createElement("div");e.className="e";e.textContent=ME.email||"";t.append(n,e);box.appendChild(t);b.appendChild(box);
   if(ME.state==="pending"){
-    const a=document.createElement("div");a.className="alert";a.innerHTML="<b>Akun menunggu persetujuan.</b> Pengelola program perlu menetapkan peran Anda (pelatih atau pengamat) sebelum dashboard bisa dibuka. Muat ulang halaman setelah disetujui.";b.appendChild(a);
+    const a=document.createElement("div");a.className="alert";a.innerHTML="<b>Akun dinonaktifkan.</b> Akun ini sedang dinonaktifkan oleh pengelola platform. Hubungi pengelola bila menurut Anda ini keliru.";b.appendChild(a);
   }else{
     const info=document.createElement("div");info.className="sumrow";info.style.borderTop="0";
     info.innerHTML=`<span>Peran</span><span class="pill r-${ME.role}">${ROLE_LABEL[ME.role]}${ME.role==="pelatih"&&ME.cabor.length?" · "+esc(ME.cabor.join(", ")):""}</span>`;b.appendChild(info);
@@ -2142,26 +2163,26 @@ async function loadMe(){
   ME.id=user.id;ME.email=user.email;
   const{data:p}=await S.db.from("profil").select("*").eq("id",user.id).maybeSingle();
   ME.name=(p&&p.nama)||(user.user_metadata&&user.user_metadata.nama)||"";
-  ME.role=p&&p.role&&p.role!=="menunggu"?p.role:null;ME.cabor=(p&&p.cabor)||[];
+  ME.role=p&&p.role&&p.role!=="menunggu"?(p.role==="guru"?"pelatih":p.role):null;ME.cabor=[];
   ME.state=ME.role?"ok":"pending";
 }
 async function afterSignIn(autoEnter){
   await loadMe();
-  if(ME.state==="ok"){await Promise.all(["siswa","entri","tes","rencana"].map(DB.fetch));startRealtime();if(autoEnter){enterApp();return}}
+  if(ME.state==="ok"){await Promise.all(["akses","profil"].map(DB.fetch));await Promise.all(["siswa","entri","tes","rencana"].map(DB.fetch));startRealtime();if(autoEnter){enterApp();return}}
   renderLogin();
 }
-async function signOut(){try{await S.db.auth.signOut()}catch(_){}S.entered=false;ME.state="signedout";ME.role=null;ME.id=null;LG.mode="masuk";LG.info="";S.live={siswa:[],entri:[],tes:[],rencana:[]};$("#app").hidden=true;$("#home").hidden=false;renderLogin()}
+async function signOut(){try{await S.db.auth.signOut()}catch(_){}S.entered=false;ME.state="signedout";ME.role=null;ME.id=null;LG.mode="masuk";LG.info="";S.live={siswa:[],entri:[],tes:[],rencana:[],akses:[]};S.profil=[];$("#app").hidden=true;$("#home").hidden=false;renderLogin()}
 let rtStarted=false;
 function startRealtime(){
   if(rtStarted||!S.db.channel)return;rtStarted=true;
-  try{S.db.channel("monitor").on("postgres_changes",{event:"*",schema:"public"},p=>{if(["siswa","entri","tes","rencana","profil"].includes(p.table))DB.refresh(p.table,600)}).subscribe()}catch(_){}
+  try{S.db.channel("monitor").on("postgres_changes",{event:"*",schema:"public"},p=>{if(["siswa","entri","tes","rencana","profil","akses"].includes(p.table))DB.refresh(p.table,600)}).subscribe()}catch(_){}
 }
 function applyRoleUI(){
   const ro=ME.role==="guru",admin=ME.role==="admin";
-  $("#tab-input").hidden=ro;$("#tab-akses").hidden=!admin;
+  $("#tab-input").hidden=ro;$("#tab-akses").hidden=S.mode!=="live";
   document.querySelector('.seg button[data-sub="input"]').hidden=ro;
   $("#formSiswa").hidden=ro;
-  if((ro&&(S.tab==="input"))||(!admin&&S.tab==="akses"))S.tab="atlet";
+  if((ro&&(S.tab==="input"))||(S.mode!=="live"&&S.tab==="akses"))S.tab="atlet";
   if(ro&&TS.sub==="input"){TS.sub="analisis";document.querySelector('.seg button[data-sub="analisis"]').click()}
   const u=$("#uchip");u.innerHTML="";const av=document.createElement("span");av.className="avatar";av.style.cssText="width:26px;height:26px;font-size:12px";av.textContent=initials(ME.name||ME.email||"?");u.appendChild(av);
   const t=document.createElement("span");t.textContent=(ME.name||"Anda")+" ";const sm=document.createElement("small");sm.textContent="· "+ROLE_LABEL[ME.role]+(ME.role==="pelatih"&&ME.cabor.length?" "+ME.cabor.join(", "):"");t.appendChild(sm);u.appendChild(t);
@@ -2182,41 +2203,53 @@ $("#btnOut").addEventListener("click",exitApp);
 
 /* ---------- pengguna & peran (pengelola) ---------- */
 async function loadProfil(){
-  if(S.mode!=="live"||ME.role!=="admin")return;
-  const{data,error}=await S.db.from("profil").select("*").order("dibuat",{ascending:true});
+  if(S.mode!=="live")return;
+  const{data,error}=await S.db.from("profil").select("id,email,nama,role,dibuat").order("dibuat",{ascending:true});
   if(!error)S.profil=data||[];
   if(S.tab==="akses")renderAkses();
 }
-const AK={edit:{}};
+const AK={cabor:[],busy:false};
+const PERAN_TIM={pelatih:"Asisten pelatih",pengamat:"Pengamat"};
 function renderAkses(){
-  const el=$("#aList");
-  if(S.mode!=="live"){el.innerHTML='<div class="empty">Pengaturan pengguna aktif setelah aplikasi terhubung ke database.</div>';return}
-  const caborAll=[...new Set(rawData().siswa.map(s=>s.cabor))].sort();
-  const rows=[...S.profil].sort((a,b)=>(a.role==="menunggu"?0:1)-(b.role==="menunggu"?0:1));
-  const pend=rows.filter(r=>r.role==="menunggu").length;
-  $("#aPending").textContent=pend?pend+" akun menunggu persetujuan.":"Tidak ada akun yang menunggu persetujuan.";
-  el.innerHTML='<div class="prow head"><span>Pengguna</span><span>Peran</span><span>Cabor (untuk pelatih)</span><span></span></div>'+(rows.length?"":'<div class="empty">Belum ada pengguna.</div>');
-  rows.forEach(r=>{
-    const st=AK.edit[r.id]||(AK.edit[r.id]={role:r.role,cabor:[...(r.cabor||[])]});
-    const row=document.createElement("div");row.className="prow";if(r.role==="menunggu")row.style.background="var(--amber-bg)";
-    const who=document.createElement("span");who.className="p";const av=document.createElement("span");av.className="avatar";av.style.cssText="width:32px;height:32px;font-size:13px;flex:none";av.textContent=initials(r.nama||r.email||"?");
-    const d=document.createElement("div");const nb=document.createElement("b");nb.textContent=r.nama||"(tanpa nama)";const sm=document.createElement("small");sm.textContent=r.email||"";d.append(nb,sm);who.append(av,d);
-    const sel=document.createElement("select");sel.setAttribute("aria-label","Peran");[["menunggu","Menunggu persetujuan"],["pelatih","Pelatih"],["guru","Pengamat (orang tua, manajer, guru)"],["admin","Pengelola"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;if(st.role===v)o.selected=true;sel.appendChild(o)});
-    if(r.id===ME.id)sel.disabled=true;
-    sel.onchange=()=>{st.role=sel.value;renderAkses()};
-    const cab=document.createElement("span");cab.className="chips";
-    if(st.role==="pelatih"){if(!caborAll.length)cab.innerHTML='<span class="note">Tambahkan atlet dulu</span>';caborAll.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="chip small";b.textContent=c;b.setAttribute("aria-pressed",st.cabor.includes(c));b.onclick=()=>{st.cabor=st.cabor.includes(c)?st.cabor.filter(x=>x!==c):st.cabor.concat(c);b.setAttribute("aria-pressed",st.cabor.includes(c))};cab.appendChild(b)})}
-    else{const n=document.createElement("span");n.className="sub";n.textContent=st.role==="menunggu"?"–":"Semua cabor";cab.appendChild(n)}
-    const act=document.createElement("span");
-    if(r.id!==ME.id){const sv=document.createElement("button");sv.type="button";sv.className="btn sm";sv.textContent="Simpan";
-      sv.onclick=async()=>{if(st.role==="pelatih"&&!st.cabor.length)return msg("#msgAkses","Pilih minimal satu cabor untuk pelatih.");
-        const{error}=await S.db.from("profil").update({role:st.role,cabor:st.role==="pelatih"?st.cabor:[]}).eq("id",r.id);
-        if(error)return msg("#msgAkses","Gagal menyimpan peran. Pastikan Anda masih berperan sebagai pengelola.");
-        msg("#msgAkses","Peran "+(r.nama||r.email)+" disimpan.",true);delete AK.edit[r.id];loadProfil()};act.appendChild(sv)}
-    else{const n=document.createElement("span");n.className="sub";n.textContent="Akun Anda";act.appendChild(n)}
-    row.append(who,sel,cab,act);el.appendChild(row);
-  });
+  if(S.mode!=="live"){$("#aTim").innerHTML='<div class="empty">Tim &amp; akses aktif setelah aplikasi terhubung ke database.</div>';return}
+  const A=S.live.akses||[];
+  const own=[...new Set(S.live.siswa.filter(x=>x.pemilik===ME.id).map(x=>x.cabor))].sort();
+  AK.cabor=AK.cabor.filter(c=>own.includes(c));
+  $("#uCabor").innerHTML=own.length?own.map(c=>`<button type="button" class="chip small" data-uc="${esc(c)}" aria-pressed="${AK.cabor.includes(c)}">${esc(c)}</button>`).join(""):'<span class="note">Belum ada atlet di ruang kerja Anda.</span>';
+  const row=(who,detail,status,acts)=>`<div class="row" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.2fr) 130px auto;cursor:default"><span class="nm">${who}</span><span class="why">${detail}</span><span>${status}</span><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${acts}</span></div>`;
+  const prof=id=>(S.profil||[]).find(x=>x.id===id)||{};
+  const who=id=>{const p=prof(id);return`${esc(p.nama||"(tanpa nama)")}<small>${esc(p.email||"")}</small>`};
+  const det=a=>`${PERAN_TIM[a.peran]} · ${(a.cabor||[]).length?"cabor "+esc(a.cabor.join(", ")):"semua cabor"}`;
+  const st=a=>a.diterima?'<span class="pill p-hijau">Aktif</span>':'<span class="pill p-kuning">Menunggu diterima</span>';
+  const tim=A.filter(a=>a.pemilik===ME.id);
+  $("#aTim").innerHTML=tim.length?tim.map(a=>row(who(a.anggota),det(a),st(a),`<button type="button" class="btn ghost sm" data-cabut="${a.anggota}">Cabut akses</button>`)).join(""):'<div class="empty">Belum ada anggota. Data atlet Anda hanya terlihat oleh Anda.</div>';
+  const ikut=A.filter(a=>a.anggota===ME.id);
+  $("#aIkut").innerHTML=ikut.length?ikut.map(a=>row(who(a.pemilik),det(a),st(a),a.diterima?`<button type="button" class="btn ghost sm" data-jawab="${a.pemilik}" data-v="0">Keluar dari tim</button>`:`<button type="button" class="btn sm" data-jawab="${a.pemilik}" data-v="1">Terima</button><button type="button" class="btn ghost sm" data-jawab="${a.pemilik}" data-v="0">Tolak</button>`)).join(""):'<div class="empty">Tidak ada undangan.</div>';
+  const adm=ME.role==="admin";$("#aAdminBox").hidden=!adm;
+  if(adm)$("#aList").innerHTML=(S.profil||[]).map(p=>row(`${esc(p.nama||"(tanpa nama)")}<small>${esc(p.email||"")}</small>`,p.id===ME.id?"Akun Anda":"Ruang kerja sendiri",p.role==="menunggu"?'<span class="pill p-merah">Nonaktif</span>':p.role==="admin"?'<span class="pill p-hijau">Pengelola</span>':'<span class="pill p-hijau">Aktif</span>',
+    p.id===ME.id?"":`<select data-role="${p.id}" aria-label="Status akun"><option value="pelatih" ${p.role!=="menunggu"&&p.role!=="admin"?"selected":""}>Aktif</option><option value="menunggu" ${p.role==="menunggu"?"selected":""}>Nonaktifkan</option><option value="admin" ${p.role==="admin"?"selected":""}>Pengelola</option></select>`)).join("");
 }
+$("#uCabor").addEventListener("click",e=>{const b=e.target.closest("[data-uc]");if(!b)return;const c=b.dataset.uc;AK.cabor=AK.cabor.includes(c)?AK.cabor.filter(x=>x!==c):AK.cabor.concat(c);b.setAttribute("aria-pressed",AK.cabor.includes(c))});
+$("#formUndang").addEventListener("submit",async e=>{
+  e.preventDefault();if(S.mode!=="live")return;
+  const email=$("#uEmail").value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return msg("#msgAkses","Isi email yang valid.");
+  if(email.toLowerCase()===(ME.email||"").toLowerCase())return msg("#msgAkses","Itu email Anda sendiri.");
+  const{error}=await S.db.rpc("undang_anggota",{p_email:email,p_peran:$("#uPeran").value,p_cabor:AK.cabor});
+  if(error)return msg("#msgAkses",/belum terdaftar/i.test(error.message)?error.message:/function|schema cache/i.test(error.message)?"Database perlu diperbarui: jalankan ulang setup.sql di Supabase.":"Gagal mengundang: "+error.message);
+  msg("#msgAkses","Undangan terkirim ke "+email+". Akses berlaku setelah ia menerimanya di tab Tim & akses.",true);$("#uEmail").value="";AK.cabor=[];DB.fetch("akses");
+});
+$("#v-akses").addEventListener("click",async e=>{
+  const c=e.target.closest("[data-cabut]"),j=e.target.closest("[data-jawab]");
+  if(c){if(!confirm("Cabut akses akun ini ke data atlet Anda?"))return;const{error}=await S.db.from("akses").delete().eq("pemilik",ME.id).eq("anggota",c.dataset.cabut);
+    if(error)return msg("#msgAkses","Gagal mencabut akses.");msg("#msgAkses","Akses dicabut.",true);DB.fetch("akses")}
+  if(j){const ok=j.dataset.v==="1";if(!ok&&!confirm("Keluar / tolak undangan tim ini?"))return;const{error}=await S.db.rpc("jawab_undangan",{p_pemilik:j.dataset.jawab,p_terima:ok});
+    if(error)return msg("#msgAkses","Gagal menyimpan.");msg("#msgAkses",ok?"Undangan diterima. Atlet tim itu kini muncul di dashboard Anda.":"Selesai.",true);DB.fetch("akses")}
+});
+$("#v-akses").addEventListener("change",async e=>{
+  const sel=e.target.closest("[data-role]");if(!sel)return;
+  const{error}=await S.db.from("profil").update({role:sel.value}).eq("id",sel.dataset.role);
+  if(error)return msg("#msgAkses","Gagal mengubah status akun.");msg("#msgAkses","Status akun disimpan.",true);loadProfil();
+});
 
 const rethemer=()=>{if(!S.entered)return;if(S.tab==="atlet")renderAtlet();if(S.tab==="kal")renderKal();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();updateSummary();painColor()};
 
