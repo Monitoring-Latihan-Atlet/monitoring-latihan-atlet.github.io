@@ -274,6 +274,27 @@ create policy rencana_hapus on public.rencana for delete using (public.boleh_uba
 
 -- ---------- Halaman atlet (tanpa login, memakai kode tautan) ----------
 -- Atlet hanya bisa membaca & menulis data dirinya sendiri lewat dua fungsi ini.
+-- ---------- Sambungan Strava (token hanya bisa dibaca server / Edge Function) ----------
+create table if not exists public.strava_akun (
+  siswa_id uuid primary key references public.siswa(id) on delete cascade,
+  athlete_id bigint not null unique,
+  nama text,
+  access_token text not null,
+  refresh_token text not null,
+  expires_at bigint not null,
+  terhubung_pada timestamptz not null default now(),
+  sinkron_terakhir timestamptz
+);
+alter table public.strava_akun enable row level security;
+revoke all on public.strava_akun from anon, authenticated;
+-- Tidak ada policy: anon & pengguna login tidak bisa membaca token. Pelatih hanya melihat siapa yang terhubung:
+create or replace function public.strava_terhubung() returns table (siswa_id uuid, sinkron timestamptz)
+language sql stable security definer set search_path = public as $$
+  select a.siswa_id, a.sinkron_terakhir from public.strava_akun a where public.boleh_lihat_siswa(a.siswa_id)
+$$;
+revoke all on function public.strava_terhubung() from public;
+grant execute on function public.strava_terhubung() to authenticated;
+
 create or replace function public.atlet_data(p_kode uuid)
 returns jsonb language sql stable security definer set search_path = public as $$
   select jsonb_build_object(
@@ -285,7 +306,9 @@ returns jsonb language sql stable security definer set search_path = public as $
                        from public.tes t where t.siswa_id = s.id), '[]'::jsonb),
     'rencana', coalesce((select jsonb_agg(jsonb_build_object('tanggal', r.tanggal, 'jenis', r.jenis, 'judul', r.judul,
                          'deskripsi', r.deskripsi, 'durasi', r.durasi, 'rpe', r.rpe) order by r.tanggal)
-                       from public.rencana r where r.siswa_id = s.id and r.tanggal between current_date - 42 and current_date + 35), '[]'::jsonb))
+                       from public.rencana r where r.siswa_id = s.id and r.tanggal between current_date - 42 and current_date + 35), '[]'::jsonb),
+    'strava', (select jsonb_build_object('nama', a.nama, 'sinkron', a.sinkron_terakhir)
+               from public.strava_akun a where a.siswa_id = s.id))
   from public.siswa s where s.kode = p_kode
 $$;
 
@@ -294,6 +317,7 @@ returns jsonb language plpgsql security definer set search_path = public as $$
 declare
   sid uuid; rid text; cur public.entri%rowtype; ss jsonb;
   w jsonb := p_data->'wellness'; ns jsonb := p_data->'sesi'; hapus text := p_data->>'hapus_sesi'; k text;
+  ub jsonb := p_data->'ubah_rpe';
 begin
   select id into sid from public.siswa where kode = p_kode;
   if sid is null then raise exception 'Tautan atlet tidak dikenal'; end if;
@@ -327,8 +351,16 @@ begin
               'hr', case when (ns->>'hr') ~ '^[0-9]+$' and (ns->>'hr')::int between 30 and 240 then (ns->>'hr')::int end,
               'hrmax', case when (ns->>'hrmax') ~ '^[0-9]+$' and (ns->>'hrmax')::int between 30 and 250 then (ns->>'hrmax')::int end,
               'km', case when (ns->>'km') ~ '^[0-9]+(\.[0-9]+)?$' and (ns->>'km')::numeric < 1000 then round((ns->>'km')::numeric, 2) end,
-              'sumber', case when ns->>'sumber' in ('jam', 'manual') then ns->>'sumber' end)));
+              'rpe_tebak', case when (ns->>'rpe_tebak') = 'true' then true end,
+              'sumber', case when ns->>'sumber' in ('jam', 'manual', 'strava') then ns->>'sumber' end)));
     end if;
+  end if;
+  -- ubah RPE satu sesi (mis. sesi dari Strava yang RPE-nya masih tebakan)
+  if ub is not null then
+    if coalesce((ub->>'rpe')::int, 0) not between 1 and 10 then raise exception 'RPE harus 1–10'; end if;
+    ss := coalesce((select jsonb_agg(case when x->>'id' = ub->>'id'
+                      then (x - 'rpe_tebak') || jsonb_build_object('rpe', (ub->>'rpe')::int) else x end)
+                    from jsonb_array_elements(ss) x), '[]'::jsonb);
   end if;
   if hapus is not null then
     ss := coalesce((select jsonb_agg(x) from jsonb_array_elements(ss) x where x->>'id' is distinct from hapus), '[]'::jsonb);

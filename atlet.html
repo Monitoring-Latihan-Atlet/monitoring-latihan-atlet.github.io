@@ -77,6 +77,13 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 .week em{width:9px;height:9px;border-radius:50%;background:var(--gray-bg);font-style:normal}
 .week .today{color:var(--ink);font-weight:700}
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
+.strava{border:1px solid #fc4c02;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:color-mix(in srgb,#fc4c02 8%,var(--surface2))}
+.strava .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn-strava{background:#fc4c02;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.btn-strava:disabled{opacity:.6}
+.tag-s{background:#fc4c02;color:#fff;border-radius:5px;font-size:10.5px;font-weight:800;padding:1px 5px;margin-left:4px;vertical-align:1px}
+.rpesel{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;font:inherit;font-size:12.5px;padding:1px 2px}
+.rpesel.tebak{border-color:#ffc000}
 .filebtn{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--line);background:var(--surface2);border-radius:10px;padding:11px;font-weight:600;cursor:pointer}
 .score{display:flex;align-items:center;gap:14px}
 .score .ring{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--rc) calc(var(--v)*1%),var(--gray-bg) 0);flex:none}
@@ -187,7 +194,8 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
       <h2><span class="n" id="n2">2</span>Sesi latihan</h2>
       <div id="sesiList" style="display:flex;flex-direction:column;gap:6px"></div>
       <form id="fSesi" novalidate style="display:flex;flex-direction:column;gap:12px">
-        <label class="filebtn">⌚ Impor dari jam / Strava<input type="file" id="fileImp" accept=".fit,.gpx,.tcx,.csv,.gz" hidden></label>
+        <div id="stravaBox" class="strava" hidden></div>
+        <label class="filebtn">⌚ Impor dari file jam<input type="file" id="fileImp" accept=".fit,.gpx,.tcx,.csv,.gz" hidden></label>
         <div id="impBox" class="imp"></div>
         <button type="button" class="btn ghost" id="pakaiRencana" hidden>Isi sesuai rencana pelatih</button>
         <div style="display:flex;flex-direction:column;gap:6px"><span class="note">Jenis latihan</span><div class="chips" id="jenis"></div></div>
@@ -314,6 +322,7 @@ function applyLocal(tanggal,data){
   let ss=sesiOf(e);
   if(data.sesi&&!ss.some(x=>x.id===data.sesi.id))ss=ss.concat(data.sesi);
   if(data.hapus_sesi)ss=ss.filter(x=>x.id!==data.hapus_sesi);
+  if(data.ubah_rpe)ss=ss.map(x=>x.id===data.ubah_rpe.id?{...x,rpe:data.ubah_rpe.rpe,rpe_tebak:undefined}:x);
   e.sesi=ss;e.durasi=ss.reduce((x,y)=>x+y.durasi,0);e.jenis=ss[0]?ss[0].jenis:null;e._pend=true;
   ls.set(CK,A.data);
 }
@@ -374,7 +383,7 @@ function render(){
   /* sesi */
   const ss=sesiOf(e);
   $("#n2").className="n"+(ss.length?" ok":"");$("#n2").textContent=ss.length?"✓":"2";
-  $("#sesiList").innerHTML=ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><span><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${sTss(x)} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}</small>${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" data-del="${esc(x.id)}">Hapus</button></div>`).join("");
+  $("#sesiList").innerHTML=ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><span><b>${esc(x.jenis||"Latihan")}${x.sumber==="strava"?'<span class="tag-s">STRAVA</span>':""}</b><small>${x.durasi} mnt · RPE <select class="rpesel${x.rpe_tebak?" tebak":""}" data-rpe-sesi="${esc(x.id)}" aria-label="Ubah RPE sesi ini">${[1,2,3,4,5,6,7,8,9,10].map(v=>`<option ${v===+x.rpe?"selected":""}>${v}</option>`).join("")}</select>${x.rpe_tebak?" (tebakan, sesuaikan)":""} · ${sTss(x)} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}</small>${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" data-del="${esc(x.id)}">Hapus</button></div>`).join("");
   $("#bSesi").textContent=ss.length?"Simpan sesi tambahan":"Simpan sesi";
   $("#pakaiRencana").hidden=!ps.length;
   /* minggu */
@@ -384,6 +393,7 @@ function render(){
   const nx=(A.data.rencana||[]).filter(p=>p.tanggal>TODAY&&p.tanggal<=addDays(TODAY,7));
   $("#next").innerHTML=nx.length?'<span class="note">Rencana 7 hari ke depan</span>'+nx.map(p=>`<div class="wo" style="--jc:${jColor(p.jenis)}"><span><b>${esc(p.judul)}</b><small>${parse(p.tanggal).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"short"})} · ${p.durasi||0} mnt · RPE ${p.rpe??"–"}</small></span></div>`).join(""):"";
   renderDash();
+  renderStrava();
 }
 function fillWell(){
   const e=entri(A.day);A.w={};A.nyeri=0;A.area=[];
@@ -544,6 +554,64 @@ $("#impBox").addEventListener("click",async e=>{
   IM.list=[];$("#impBox").innerHTML="";msg("#mSesi",pick.length+" aktivitas tersimpan"+(antri?" (menunggu sinyal untuk dikirim)":"")+". Periksa RPE-nya di daftar sesi.",true);
 });
 
+/* ---------- sinkron otomatis Strava (lewat Supabase Edge Function "strava") ---------- */
+const ST={cid:ls.get("stravaCid"),busy:false,info:""};
+const FN=(CFG.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/strava";
+async function fnCall(body){
+  const r=await fetch(FN,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.supabaseAnonKey},body:JSON.stringify(body)});
+  let j={};try{j=await r.json()}catch(_){}
+  if(!r.ok)throw new Error(j.error||(r.status===401?"Fungsi Strava belum diatur (matikan Verify JWT).":"Gagal menghubungi Strava ("+r.status+")."));
+  return j;
+}
+const fmtJam=t=>{const d=new Date(t);return d.toLocaleDateString("id-ID",{day:"numeric",month:"short"})+" "+d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})};
+function renderStrava(){
+  const box=$("#stravaBox");if(!box)return;
+  if(!ST.cid||!A.data){box.hidden=true;return}
+  box.hidden=false;const sv=A.data.strava;
+  box.innerHTML=sv?`<div><b>✓ Terhubung ke Strava</b>${sv.nama?" sebagai "+esc(sv.nama):""}<br><small class="note">Latihan yang terekam di Strava masuk otomatis${sv.sinkron?" · terakhir "+fmtJam(sv.sinkron):""}. Periksa RPE-nya di daftar sesi.</small></div>
+    <div class="row"><button type="button" class="btn ghost" id="stSync" ${ST.busy?"disabled":""}>${ST.busy?"Menyinkronkan…":"Sinkronkan sekarang"}</button><button type="button" class="lnk" id="stPutus">Putuskan</button></div>${ST.info?`<p class="msg ok" style="margin:0">${esc(ST.info)}</p>`:""}`
+   :`<button type="button" class="btn-strava" id="stConnect" ${ST.busy?"disabled":""}>${ST.busy?"Menghubungkan…":"Hubungkan dengan Strava"}</button>
+    <small class="note">Sekali hubungkan, latihan dari Strava masuk sendiri. Jam Garmin, Coros, Polar, Suunto, Amazfit, atau Apple Watch ikut masuk bila jamnya sudah tersambung ke Strava.</small>${ST.info?`<p class="msg err" style="margin:0">${esc(ST.info)}</p>`:""}`;
+}
+function stravaAuthUrl(){
+  const mobile=/android|iphone|ipad|ipod/i.test(navigator.userAgent);
+  const p=new URLSearchParams({client_id:ST.cid,redirect_uri:location.origin+location.pathname+"?k="+K,response_type:"code",approval_prompt:"auto",scope:"read,activity:read_all",state:"strava"});
+  return"https://www.strava.com/oauth/"+(mobile?"mobile/":"")+"authorize?"+p;
+}
+async function stravaSync(diam){
+  if(ST.busy||!navigator.onLine)return;ST.busy=true;if(!diam)renderStrava();
+  try{const j=await fnCall({aksi:"sinkron",kode:K});ST.info=diam?"":(j.baru?j.baru+" latihan baru dari Strava.":"Tidak ada latihan baru.");if(j.baru||!diam)await load()}
+  catch(err){if(!diam)ST.info=err.message}
+  ST.busy=false;renderStrava();
+}
+async function initStrava(){
+  const q=new URLSearchParams(location.search);
+  if(q.get("state")==="strava"){
+    history.replaceState(null,"",location.pathname+"?k="+K);
+    if(q.get("code")){ST.busy=true;renderStrava();
+      try{const j=await fnCall({aksi:"hubungkan",kode:K,code:q.get("code"),scope:q.get("scope")||""});ST.info=j.baru?j.baru+" latihan 7 hari terakhir diambil dari Strava.":"Strava terhubung. Latihan berikutnya masuk otomatis.";await load()}
+      catch(err){ST.info=err.message}
+      ST.busy=false;}
+    else ST.info="Sambungan Strava dibatalkan.";
+  }
+  try{const j=await fnCall({aksi:"info"});ST.cid=j.clientId||null;ls.set("stravaCid",ST.cid)}catch(_){if(navigator.onLine)ST.cid=null}
+  renderStrava();
+  const sv=A.data&&A.data.strava;
+  if(sv&&(!sv.sinkron||Date.now()-Date.parse(sv.sinkron)>30*60000))stravaSync(true);
+}
+$("#stravaBox").addEventListener("click",async e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="stConnect"){ST.info="";location.href=stravaAuthUrl();return}
+  if(b.id==="stSync"){stravaSync(false);return}
+  if(b.id==="stPutus"){if(!confirm("Putuskan sambungan Strava? Latihan yang sudah masuk tetap tersimpan."))return;
+    try{await fnCall({aksi:"putus",kode:K});ST.info="";await load()}catch(err){ST.info=err.message}renderStrava()}
+});
+document.addEventListener("change",async e=>{
+  const sel=e.target.closest("select[data-rpe-sesi]");if(!sel)return;
+  try{const r=await save(A.day,{ubah_rpe:{id:sel.dataset.rpeSesi,rpe:+sel.value}});msg("#mSesi",r==="ok"?"RPE diperbarui.":"Tersimpan di HP, akan dikirim saat online.",true)}
+  catch(err){msg("#mSesi",err.message||"Gagal mengubah RPE.")}
+});
+
 /* ---------- interaksi ---------- */
 document.addEventListener("click",async ev=>{
   const b=ev.target.closest("button");if(!b)return;
@@ -591,7 +659,7 @@ addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;if(!standalon
 $("#bInstall").addEventListener("click",async()=>{if(!ip)return;ip.prompt();try{await ip.userChoice}catch(_){}ip=null;$("#installCard").hidden=true});
 if(!standalone&&/iphone|ipad|ipod/i.test(navigator.userAgent)){$("#installCard").hidden=false;$("#installTxt").textContent="Di iPhone: ketuk tombol Bagikan (kotak dengan panah ke atas) di Safari, lalu pilih “Tambahkan ke Layar Utama”."}
 
-build();fillWell();try{if(localStorage.getItem("atletView")==="dash")setView("dash")}catch(_){}load().then(flush);
+build();fillWell();try{if(localStorage.getItem("atletView")==="dash")setView("dash")}catch(_){}load().then(flush).then(initStrava);
 })();
 </script>
 </body>

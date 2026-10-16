@@ -1110,7 +1110,7 @@ function kesiapanAt(list,t,P){
   const d=(P||pmc(list)).find(x=>x.t===t);
   return KESIAPAN.hitung({w:wellTotal(e),hr:e.hrIstirahat,hrv:e.hrv,nyeri:e.nyeri},riw,d?d.formPct:null);
 }
-const sesiInfo=x=>`${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}`;
+const sesiInfo=x=>`${x.sumber==="strava"?"Strava · ":""}${x.durasi} mnt · RPE ${x.rpe}${x.rpe_tebak?" (tebakan)":""} · ${Math.round(sesiTss(x))} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}`;
 const aggSesi=ss=>{const d=ss.reduce((x,y)=>x+(+y.durasi||0),0);return{sesi:ss,durasi:d,rpe:d?Math.round(ss.reduce((x,y)=>x+(+y.rpe||0)*(+y.durasi||0),0)/d):0,jenis:ss[0]&&ss[0].jenis||null}};
 function analyze(s,list){
   const es=list.filter(e=>e.tanggal<=TODAY&&diffDays(TODAY,e.tanggal)<60).sort((a,b)=>a.tanggal<b.tanggal?-1:1);
@@ -1857,7 +1857,7 @@ const SE={edit:null};
 function renderSiswa(){
   const D=inputData();
   $("#caborList").innerHTML=["Sepak bola","Bola voli","Bola basket","Atletik","Bulu tangkis","Pencak silat","Renang","Sepak takraw","Futsal","Karate","Taekwondo","Rugby"].map(c=>`<option value="${c}">`).join("");
-  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Tim · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${S.mode==="live"&&s.pemilik&&s.pemilik!==ME.id?" · tim "+esc(namaAkun(s.pemilik)):""}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${!bisaUbah(s)?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada atlet. Tambahkan lewat formulir di atas.</div>`;
+  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Tim · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${S.mode==="live"&&s.pemilik&&s.pemilik!==ME.id?" · tim "+esc(namaAkun(s.pemilik)):""}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}${S.strava&&S.strava[s.id]!==undefined?`<small style="display:block;color:#fc4c02;font-weight:700" title="${S.strava[s.id]?"Sinkron terakhir "+new Date(S.strava[s.id]).toLocaleString("id-ID"):"Belum pernah sinkron"}">Strava ✓</small>`:""}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${!bisaUbah(s)?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada atlet. Tambahkan lewat formulir di atas.</div>`;
 }
 $("#siswaList").addEventListener("click",e=>{
   const lk=e.target.closest("button[data-link]");if(lk){openLink(lk.dataset.link);return}
@@ -2173,7 +2173,8 @@ const DB={
   refresh(table,delay){clearTimeout(DB.timers[table]);DB.timers[table]=setTimeout(()=>DB.fetch(table),delay||150)},
   async fetch(table){
     try{
-      if(table==="siswa")S.live.siswa=await DB.loadAll("siswa");
+      if(table==="siswa"){S.live.siswa=await DB.loadAll("siswa");
+        try{const{data,error}=await S.db.rpc("strava_terhubung");if(!error){S.strava={};(data||[]).forEach(r=>S.strava[r.siswa_id]=r.sinkron)}}catch(_){}}
       else if(table==="entri")S.live.entri=await DB.loadAll("entri",q=>q.gte("tanggal",addDays(TODAY,-120)));
       else if(table==="tes")S.live.tes=await DB.loadAll("tes");
       else if(table==="rencana"){try{S.live.rencana=await DB.loadAll("rencana",q=>q.gte("tanggal",addDays(TODAY,-120)))}catch(_){S.live.rencana=[];S.noRencana=true}}
