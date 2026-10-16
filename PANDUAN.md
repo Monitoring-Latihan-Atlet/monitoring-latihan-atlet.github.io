@@ -172,6 +172,15 @@ update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 
 **Wajib:** setelah memperbarui ke versi ini, jalankan ulang seluruh `setup.sql` di Supabase. Skrip ini menambah kode tautan atlet, kolom `sesi`, dan dua fungsi khusus halaman atlet.
 
+## 12. Fitness, fatigue, form %, dan ACWR dalam satu model
+
+- **Fitness (CTL)** = rata-rata beban 42 hari, **Fatigue (ATL)** = rata-rata beban 7 hari (rata-rata berbobot eksponensial).
+- **Form %** = (Fitness − Fatigue) ÷ Fitness × 100, seperti intervals.icu. Zona: **Transisi** > +20% · **Segar** +5…+20% · **Zona abu-abu** −10…+5% · **Optimal** −30…−10% · **Risiko tinggi** < −30%.
+- **ACWR EWMA** = Fatigue ÷ Fitness = 1 − Form%/100. Jadi Form −30% ≈ ACWR 1,3 dan Form −50% = ACWR 1,5 — zona Form % dan zona ACWR Gabbett saling cocok.
+- **Status gabungan** memakai zona **paling waspada** dari ACWR rolling 7:28 dan ACWR EWMA; dipakai untuk status merah/kuning, kartu risiko cedera, skor kesiapan, kalender, dan laporan.
+- Form % baru dinilai setelah **≥ 4 minggu data** dan Fitness ≥ 10. Sebelum itu tertulis *data belum cukup* — karena saat Fitness masih kecil (misalnya 3), Form absolut −13 bisa terlihat "optimal" padahal sebenarnya lonjakan besar.
+- Fitness dan fatigue diawali dari **rata-rata beban harian 4 minggu pertama**, bukan dari 0, agar atlet baru tidak mendapat peringatan palsu "zona bahaya".
+
 ## Hal penting lain
 
 - **Proyek gratis bisa dijeda.** Di paket gratis Supabase, proyek yang tidak dipakai beberapa hari bisa dijeda otomatis. Cukup buka dashboard Supabase dan klik *Restore*. Kalau web dipakai setiap hari, ini jarang terjadi.
