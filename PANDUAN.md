@@ -181,6 +181,26 @@ update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 - Form % baru dinilai setelah **≥ 4 minggu data** dan Fitness ≥ 10. Sebelum itu tertulis *data belum cukup* — karena saat Fitness masih kecil (misalnya 3), Form absolut −13 bisa terlihat "optimal" padahal sebenarnya lonjakan besar.
 - Fitness dan fatigue diawali dari **rata-rata beban harian 4 minggu pertama**, bukan dari 0, agar atlet baru tidak mendapat peringatan palsu "zona bahaya".
 
+## 13. Peringatan otomatis dan monotony–strain
+
+**Perlu perhatian hari ini.** Di bagian paling atas tab **Ringkasan tim** ada daftar atlet yang perlu perhatian. Daftar yang sama muncul sebagai jendela **sekali sehari** saat aplikasi pertama kali dibuka. Jumlahnya juga tampil sebagai angka merah di tab Ringkasan tim.
+
+| Tanda | Kapan muncul | Tingkat |
+|---|---|---|
+| ACWR ≥ 1,5 | ACWR rolling atau EWMA di zona bahaya | Segera |
+| Kesiapan < 50 | Skor kesiapan hari ini di bawah 50 | Segera |
+| Nyeri | Nyeri naik dibanding entri sebelumnya (≥ 3); nyeri ≥ 6 atau ≥ 3 tiga entri berturut-turut | Pantau / segera |
+| Monoton / strain | Monotony > 2, strain ≥ 1,5× biasanya, atau keduanya (segera) | Pantau / segera |
+| Belum mengisi | Tidak mengisi kondisi pagi ≥ 3 hari, atau belum pernah | Pantau |
+
+Klik chip untuk menyaring, klik nama untuk membuka profil, tombol **WA** untuk menghubungi atlet (pesannya sudah berisi tautan pribadi), atau **Salin daftar** / **Kirim daftar ke WhatsApp** untuk dibagikan ke tim pelatih.
+
+**Monotony dan strain (Foster).**
+- **Monotony** = rata-rata beban harian 7 hari ÷ simpangan bakunya (hari istirahat dihitung 0). Di atas **2,0** berarti latihan monoton: bebannya hampir sama setiap hari dan kurang hari ringan.
+- **Strain** = beban 7 hari × monotony. Karena satuan TSS berbeda dari sRPE, strain dibandingkan dengan **rata-rata strain atlet itu sendiri selama 12 minggu** (muncul setelah ±4 minggu data).
+- Monotony > 2 **bersamaan** dengan strain ≥ 1,25× biasanya membuat status atlet **merah**, karena kombinasi ini paling sering mendahului sakit dan overtraining.
+- Grafik dan kartunya ada di tab **Dashboard atlet** dan di dashboard aplikasi atlet (*Variasi latihan*).
+
 ## Hal penting lain
 
 - **Proyek gratis bisa dijeda.** Di paket gratis Supabase, proyek yang tidak dipakai beberapa hari bisa dijeda otomatis. Cukup buka dashboard Supabase dan klik *Restore*. Kalau web dipakai setiap hari, ini jarang terjadi.
