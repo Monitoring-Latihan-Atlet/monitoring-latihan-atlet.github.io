@@ -79,6 +79,13 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
 .strava{border:1px solid #fc4c02;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:color-mix(in srgb,#fc4c02 8%,var(--surface2))}
 .strava .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.strava.icu{border-color:#38bdf8;background:color-mix(in srgb,#38bdf8 8%,var(--surface2))}
+.strava details summary{cursor:pointer;color:var(--ink);font-size:13.5px;font-weight:600}
+.strava ol{margin:6px 0 0;padding-left:20px;font-size:13.5px;color:var(--ink);display:flex;flex-direction:column;gap:3px}
+.strava input[type=password]{width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit}
+.btn-icu{background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:15px;cursor:pointer}
+.btn-icu:disabled{opacity:.6}
+.tag-i{background:#0ea5e9;color:#fff;border-radius:5px;font-size:10.5px;font-weight:800;padding:1px 5px;margin-left:4px;vertical-align:1px}
 .btn-strava{background:#fc4c02;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;justify-content:center}
 .btn-strava:disabled{opacity:.6}
 .tag-s{background:#fc4c02;color:#fff;border-radius:5px;font-size:10.5px;font-weight:800;padding:1px 5px;margin-left:4px;vertical-align:1px}
@@ -194,6 +201,7 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
       <h2><span class="n" id="n2">2</span>Sesi latihan</h2>
       <div id="sesiList" style="display:flex;flex-direction:column;gap:6px"></div>
       <form id="fSesi" novalidate style="display:flex;flex-direction:column;gap:12px">
+        <div id="icuBox" class="strava icu" hidden></div>
         <div id="stravaBox" class="strava" hidden></div>
         <label class="filebtn">⌚ Impor dari file jam<input type="file" id="fileImp" accept=".fit,.gpx,.tcx,.csv,.gz" hidden></label>
         <div id="impBox" class="imp"></div>
@@ -383,7 +391,7 @@ function render(){
   /* sesi */
   const ss=sesiOf(e);
   $("#n2").className="n"+(ss.length?" ok":"");$("#n2").textContent=ss.length?"✓":"2";
-  $("#sesiList").innerHTML=ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><span><b>${esc(x.jenis||"Latihan")}${x.sumber==="strava"?'<span class="tag-s">STRAVA</span>':""}</b><small>${x.durasi} mnt · RPE <select class="rpesel${x.rpe_tebak?" tebak":""}" data-rpe-sesi="${esc(x.id)}" aria-label="Ubah RPE sesi ini">${[1,2,3,4,5,6,7,8,9,10].map(v=>`<option ${v===+x.rpe?"selected":""}>${v}</option>`).join("")}</select>${x.rpe_tebak?" (tebakan, sesuaikan)":""} · ${sTss(x)} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}</small>${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" data-del="${esc(x.id)}">Hapus</button></div>`).join("");
+  $("#sesiList").innerHTML=ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><span><b>${esc(x.jenis||"Latihan")}${x.sumber==="strava"?'<span class="tag-s">STRAVA</span>':x.sumber==="intervals"?'<span class="tag-i">JAM</span>':""}</b><small>${x.durasi} mnt · RPE <select class="rpesel${x.rpe_tebak?" tebak":""}" data-rpe-sesi="${esc(x.id)}" aria-label="Ubah RPE sesi ini">${[1,2,3,4,5,6,7,8,9,10].map(v=>`<option ${v===+x.rpe?"selected":""}>${v}</option>`).join("")}</select>${x.rpe_tebak?" (tebakan, sesuaikan)":""} · ${sTss(x)} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}</small>${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" data-del="${esc(x.id)}">Hapus</button></div>`).join("");
   $("#bSesi").textContent=ss.length?"Simpan sesi tambahan":"Simpan sesi";
   $("#pakaiRencana").hidden=!ps.length;
   /* minggu */
@@ -393,6 +401,7 @@ function render(){
   const nx=(A.data.rencana||[]).filter(p=>p.tanggal>TODAY&&p.tanggal<=addDays(TODAY,7));
   $("#next").innerHTML=nx.length?'<span class="note">Rencana 7 hari ke depan</span>'+nx.map(p=>`<div class="wo" style="--jc:${jColor(p.jenis)}"><span><b>${esc(p.judul)}</b><small>${parse(p.tanggal).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"short"})} · ${p.durasi||0} mnt · RPE ${p.rpe??"–"}</small></span></div>`).join(""):"";
   renderDash();
+  renderIcu();
   renderStrava();
 }
 function fillWell(){
@@ -612,6 +621,56 @@ document.addEventListener("change",async e=>{
   catch(err){msg("#mSesi",err.message||"Gagal mengubah RPE.")}
 });
 
+/* ---------- sinkron otomatis intervals.icu (gratis; lewat Supabase Edge Function "intervals") ---------- */
+const IC={ok:ls.get("icuOk"),busy:false,info:"",err:false};
+const FNI=(CFG.supabaseUrl||"").replace(/\/$/,"")+"/functions/v1/intervals";
+async function icuCall(body){
+  const r=await fetch(FNI,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.supabaseAnonKey},body:JSON.stringify(body)});
+  let j={};try{j=await r.json()}catch(_){}
+  if(!r.ok)throw new Error(j.error||(r.status===401?"Fungsi intervals belum diatur (matikan Verify JWT).":"Gagal menghubungi server ("+r.status+")."));
+  return j;
+}
+function renderIcu(){
+  const box=$("#icuBox");if(!box)return;
+  if(!IC.ok||!A.data){box.hidden=true;return}
+  box.hidden=false;const iv=A.data.intervals;
+  const note=IC.info?`<p class="msg ${IC.err?"err":"ok"}" style="margin:0">${esc(IC.info)}</p>`:"";
+  box.innerHTML=iv?`<div><b>✓ Jam tersambung lewat intervals.icu</b>${iv.nama?" ("+esc(iv.nama)+")":""}<br><small class="note">Latihan dari jam masuk otomatis${iv.sinkron?" · terakhir "+fmtJam(iv.sinkron):""}. Periksa RPE-nya di daftar sesi.</small></div>
+    <div class="row"><button type="button" class="btn ghost" id="icSync" ${IC.busy?"disabled":""}>${IC.busy?"Menyinkronkan…":"Sinkronkan sekarang"}</button><button type="button" class="lnk" id="icPutus">Putuskan</button></div>${note}`
+   :`<div><b>⌚ Sinkron otomatis dari jam (gratis)</b><br><small class="note">Garmin, Coros, Polar, Suunto, Wahoo — lewat intervals.icu. Cukup sekali.</small></div>
+    <details><summary>Cara mendapatkan API key</summary><ol>
+      <li>Daftar gratis di <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a>.</li>
+      <li>Di intervals.icu buka <b>Settings → Connections</b>, sambungkan jammu (Garmin Connect, Coros, Polar, Suunto, Wahoo). <b>Jangan lewat Strava</b> — data dari Strava tidak bisa diteruskan.</li>
+      <li>Buka <b>Settings → Developer Settings</b>, tekan <b>Generate</b> pada API Key, lalu salin.</li>
+      <li>Tempel di bawah dan tekan <b>Hubungkan</b>.</li></ol></details>
+    <input type="password" id="icKey" placeholder="Tempel API key intervals.icu" autocomplete="off" aria-label="API key intervals.icu">
+    <button type="button" class="btn-icu" id="icConnect" ${IC.busy?"disabled":""}>${IC.busy?"Menghubungkan…":"Hubungkan"}</button>
+    <small class="note">API key disimpan aman di server dan hanya dipakai untuk mengambil latihanmu.</small>${note}`;
+}
+async function icuSync(diam){
+  if(IC.busy||!navigator.onLine)return;IC.busy=true;if(!diam)renderIcu();
+  try{const j=await icuCall({aksi:"sinkron",kode:K});IC.err=false;IC.info=diam?"":(j.baru?j.baru+" latihan baru dari jam.":"Tidak ada latihan baru.");if(j.baru||!diam)await load()}
+  catch(err){if(!diam){IC.err=true;IC.info=err.message}}
+  IC.busy=false;renderIcu();
+}
+async function initIcu(){
+  try{await icuCall({aksi:"info"});IC.ok=true}catch(_){if(navigator.onLine)IC.ok=false}
+  ls.set("icuOk",IC.ok);renderIcu();
+  const iv=A.data&&A.data.intervals;
+  if(iv&&(!iv.sinkron||Date.now()-Date.parse(iv.sinkron)>30*60000))icuSync(true);
+}
+$("#icuBox").addEventListener("click",async e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="icConnect"){const key=($("#icKey").value||"").trim();if(!key){IC.err=true;IC.info="Tempel API key dulu.";renderIcu();return}
+    IC.busy=true;IC.info="";renderIcu();
+    try{const j=await icuCall({aksi:"hubungkan",kode:K,apiKey:key});IC.err=false;IC.info=j.baru?j.baru+" latihan 7 hari terakhir diambil.":"Tersambung. Latihan berikutnya masuk otomatis.";await load()}
+    catch(err){IC.err=true;IC.info=err.message}
+    IC.busy=false;renderIcu();return}
+  if(b.id==="icSync"){icuSync(false);return}
+  if(b.id==="icPutus"){if(!confirm("Putuskan sinkron jam? Latihan yang sudah masuk tetap tersimpan."))return;
+    try{await icuCall({aksi:"putus",kode:K});IC.info="";await load()}catch(err){IC.err=true;IC.info=err.message}renderIcu()}
+});
+
 /* ---------- interaksi ---------- */
 document.addEventListener("click",async ev=>{
   const b=ev.target.closest("button");if(!b)return;
@@ -659,7 +718,7 @@ addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;if(!standalon
 $("#bInstall").addEventListener("click",async()=>{if(!ip)return;ip.prompt();try{await ip.userChoice}catch(_){}ip=null;$("#installCard").hidden=true});
 if(!standalone&&/iphone|ipad|ipod/i.test(navigator.userAgent)){$("#installCard").hidden=false;$("#installTxt").textContent="Di iPhone: ketuk tombol Bagikan (kotak dengan panah ke atas) di Safari, lalu pilih “Tambahkan ke Layar Utama”."}
 
-build();fillWell();try{if(localStorage.getItem("atletView")==="dash")setView("dash")}catch(_){}load().then(flush).then(initStrava);
+build();fillWell();try{if(localStorage.getItem("atletView")==="dash")setView("dash")}catch(_){}load().then(flush).then(()=>{initIcu();initStrava()});
 })();
 </script>
 </body>

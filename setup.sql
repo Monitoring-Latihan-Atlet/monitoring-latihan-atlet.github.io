@@ -295,6 +295,24 @@ $$;
 revoke all on function public.strava_terhubung() from public;
 grant execute on function public.strava_terhubung() to authenticated;
 
+-- ---------- Sambungan intervals.icu (API key hanya bisa dibaca server / Edge Function) ----------
+create table if not exists public.intervals_akun (
+  siswa_id uuid primary key references public.siswa(id) on delete cascade,
+  athlete_id text not null,
+  nama text,
+  api_key text not null,
+  terhubung_pada timestamptz not null default now(),
+  sinkron_terakhir timestamptz
+);
+alter table public.intervals_akun enable row level security;
+revoke all on public.intervals_akun from anon, authenticated;
+create or replace function public.intervals_terhubung() returns table (siswa_id uuid, sinkron timestamptz)
+language sql stable security definer set search_path = public as $$
+  select a.siswa_id, a.sinkron_terakhir from public.intervals_akun a where public.boleh_lihat_siswa(a.siswa_id)
+$$;
+revoke all on function public.intervals_terhubung() from public;
+grant execute on function public.intervals_terhubung() to authenticated;
+
 create or replace function public.atlet_data(p_kode uuid)
 returns jsonb language sql stable security definer set search_path = public as $$
   select jsonb_build_object(
@@ -308,7 +326,9 @@ returns jsonb language sql stable security definer set search_path = public as $
                          'deskripsi', r.deskripsi, 'durasi', r.durasi, 'rpe', r.rpe) order by r.tanggal)
                        from public.rencana r where r.siswa_id = s.id and r.tanggal between current_date - 42 and current_date + 35), '[]'::jsonb),
     'strava', (select jsonb_build_object('nama', a.nama, 'sinkron', a.sinkron_terakhir)
-               from public.strava_akun a where a.siswa_id = s.id))
+               from public.strava_akun a where a.siswa_id = s.id),
+    'intervals', (select jsonb_build_object('nama', a.nama, 'sinkron', a.sinkron_terakhir)
+               from public.intervals_akun a where a.siswa_id = s.id))
   from public.siswa s where s.kode = p_kode
 $$;
 
@@ -352,7 +372,7 @@ begin
               'hrmax', case when (ns->>'hrmax') ~ '^[0-9]+$' and (ns->>'hrmax')::int between 30 and 250 then (ns->>'hrmax')::int end,
               'km', case when (ns->>'km') ~ '^[0-9]+(\.[0-9]+)?$' and (ns->>'km')::numeric < 1000 then round((ns->>'km')::numeric, 2) end,
               'rpe_tebak', case when (ns->>'rpe_tebak') = 'true' then true end,
-              'sumber', case when ns->>'sumber' in ('jam', 'manual', 'strava') then ns->>'sumber' end)));
+              'sumber', case when ns->>'sumber' in ('jam', 'manual', 'strava', 'intervals') then ns->>'sumber' end)));
     end if;
   end if;
   -- ubah RPE satu sesi (mis. sesi dari Strava yang RPE-nya masih tebakan)

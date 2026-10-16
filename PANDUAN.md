@@ -201,9 +201,48 @@ Klik chip untuk menyaring, klik nama untuk membuka profil, tombol **WA** untuk m
 - Monotony > 2 **bersamaan** dengan strain ≥ 1,25× biasanya membuat status atlet **merah**, karena kombinasi ini paling sering mendahului sakit dan overtraining.
 - Grafik dan kartunya ada di tab **Dashboard atlet** dan di dashboard aplikasi atlet (*Variasi latihan*).
 
-## 14. Sinkron otomatis Strava (dan Garmin, Coros, Polar, Suunto, Apple Watch)
+## 14. Sinkron otomatis dari jam (intervals.icu — gratis)
 
-Atlet cukup **sekali** menekan **Hubungkan dengan Strava** di halaman pribadinya. Setelah itu setiap latihan yang terekam di Strava masuk sendiri ke aplikasi dalam hitungan detik, tanpa unggah file. Jam **Garmin, Coros, Polar, Suunto, Wahoo, Amazfit, dan Apple Watch** ikut masuk, asalkan jamnya sudah tersambung ke Strava. Contoh untuk Garmin: aplikasi Garmin Connect → Lainnya → Pengaturan → Aplikasi Terhubung → Strava. Sambungan langsung ke Garmin tanpa Strava memerlukan izin bisnis dari Garmin, jadi jalurnya lewat Strava.
+Jam **Garmin, Coros, Polar, Suunto, dan Wahoo** disambungkan atlet ke **intervals.icu** (gratis). Atlet lalu menempelkan **API key** intervals.icu **sekali** di halaman pribadinya. Setelah itu latihan dari jam masuk sendiri ke aplikasi ini, tanpa unggah file.
+
+Jam harus disambungkan **langsung** ke intervals.icu. Aktivitas yang masuk ke intervals.icu **dari Strava** tidak boleh diteruskan lewat API, jadi tidak ikut masuk.
+
+**Persiapan pelatih (sekali saja, lebih mudah di laptop):**
+
+1. **Perbarui database.** Jalankan ulang `setup.sql` di Supabase → SQL Editor (aman untuk data yang sudah ada).
+2. **Pasang fungsi server.** Buka Supabase → **Edge Functions → Deploy a new function → Via Editor**. Beri nama persis `intervals`. Hapus contoh kodenya, lalu tempel seluruh isi file
+   https://raw.githubusercontent.com/Monitoring-Latihan-Atlet/monitoring-latihan-atlet.github.io/main/supabase/functions/intervals/index.ts
+   dan klik **Deploy**.
+3. **Matikan pemeriksaan JWT.** Buka fungsi `intervals` → **Details/Settings**, matikan **Enforce JWT Verification** (Verify JWT), lalu **Save**. Keamanan tetap terjaga: fungsi hanya menerima kode atlet yang sah atau login pelatih, dan API key disimpan di tabel yang tidak bisa dibaca dari aplikasi.
+4. Selesai. Kotak **Sinkron otomatis dari jam** muncul di halaman pribadi atlet (tab *Isi hari ini*, bagian *Sesi latihan*).
+
+**Kapan data ditarik:** setiap kali atlet membuka halamannya dan setiap kali pelatih membuka aplikasi (paling sering tiap 30 menit), atau saat tombol **Sinkronkan sekarang** ditekan.
+
+**(Opsional) sinkron tiap jam walau tidak ada yang membuka aplikasi:**
+1. Buka **Edge Functions → Secrets** dan tambahkan `CRON_SECRET` = kata acak bebas.
+2. Buka **Integrations → Cron** (aktifkan bila diminta) → **Create job**:
+   - Nama: `sinkron-jam`
+   - Jadwal: `0 * * * *` (tiap jam)
+   - Jenis: **Supabase Edge Function**, metode **POST**, fungsi `intervals`
+   - Header: `x-cron-secret` = nilai `CRON_SECRET` tadi
+   - Body: `{"aksi":"sinkron_semua"}`
+
+**Langkah untuk atlet (petunjuknya juga ada di aplikasi):**
+1. Daftar gratis di https://intervals.icu.
+2. Buka **Settings → Connections**, lalu sambungkan jamnya (Garmin Connect, Coros, Polar, Suunto, atau Wahoo).
+3. Buka **Settings → Developer Settings**, tekan **Generate** pada *API Key*, lalu salin.
+4. Buka tautan pribadi dari pelatih → *Isi hari ini* → tempel API key → **Hubungkan**.
+
+**Yang terjadi setelah tersambung:**
+- Latihan 7 hari terakhir langsung diambil.
+- **RPE** memakai RPE yang diisi atlet di intervals.icu bila ada. Bila tidak, RPE ditebak dari denyut jantung (% HRmax) dan ditandai **(tebakan)**. Atlet bisa mengubahnya langsung dari daftar sesi.
+- Aktivitas yang sudah diimpor manual dari file jam tidak dobel.
+- Pelatih melihat tanda **Jam (intervals.icu) ✓** di tab **Data atlet**. Sesinya diberi label "Jam (intervals.icu)".
+- Atlet bisa **Putuskan** kapan saja. Latihan yang sudah masuk tetap tersimpan.
+
+### 14b. (Opsional, berbayar) Sinkron lewat Strava
+
+Sejak Juni 2026, membuat aplikasi API Strava **memerlukan langganan Strava** pada akun pelatih (sekitar US$79,99 per tahun). Aplikasi baru bisa dipakai hingga 10 atlet tanpa ditinjau Strava. Fungsi `strava` sudah tersedia bila suatu saat ingin dipakai.
 
 **Persiapan pelatih (sekali saja, lebih mudah di laptop):**
 
