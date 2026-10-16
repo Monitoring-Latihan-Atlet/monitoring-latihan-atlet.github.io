@@ -91,6 +91,9 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 .tag-s{background:#fc4c02;color:#fff;border-radius:5px;font-size:10.5px;font-weight:800;padding:1px 5px;margin-left:4px;vertical-align:1px}
 .rpesel{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;font:inherit;font-size:12.5px;padding:1px 2px}
 .rpesel.tebak{border-color:#ffc000}
+.wskor{display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;background:var(--surface2);border-left:4px solid var(--wc,#555);font-size:14px}
+.wskor b{font-family:var(--display);font-size:26px;color:var(--wc,var(--ink));line-height:1}
+.wskor small{color:var(--muted);display:block}
 .filebtn{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--line);background:var(--surface2);border-radius:10px;padding:11px;font-weight:600;cursor:pointer}
 .score{display:flex;align-items:center;gap:14px}
 .score .ring{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--rc) calc(var(--v)*1%),var(--gray-bg) 0);flex:none}
@@ -178,11 +181,12 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
     <div class="card" id="planCard" hidden><h2>Rencana pelatih</h2><div id="plans" style="display:flex;flex-direction:column;gap:6px"></div></div>
 
     <div class="card">
-      <h2><span class="n" id="n1">1</span>Kondisi pagi</h2>
+      <h2><span class="n" id="n1">1</span>Wellness · kondisi pagi</h2>
       <div id="wellDone" hidden></div>
       <form id="fWell" novalidate style="display:flex;flex-direction:column;gap:12px">
-        <p class="note">Pilih yang paling sesuai. 1 = paling buruk, 5 = paling baik.</p>
+        <p class="note">Isi setiap pagi sebelum latihan. Pilih yang paling sesuai: 1 = paling buruk, 5 = paling baik.</p>
         <div id="wellBox"></div>
+        <div class="wskor" id="wSkor" aria-live="polite"></div>
         <div class="wq"><span class="q">Nyeri otot / sendi</span>
           <div class="pain"><b id="nyeriVal">0</b><input type="range" id="nyeri" min="0" max="10" value="0" aria-label="Skala nyeri 0 sampai 10"></div>
           <div class="note" style="display:flex;justify-content:space-between"><span>0 tidak ada</span><span>5 mengganggu</span><span>10 sangat</span></div>
@@ -192,7 +196,7 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
           <label class="fl">Nadi istirahat (bpm)<input type="number" id="hr" min="30" max="120" inputmode="numeric" placeholder="opsional"></label>
           <label class="fl">HRV (ms)<input type="number" id="hrv" min="5" max="250" inputmode="numeric" placeholder="opsional"></label>
         </div>
-        <button class="btn" type="submit">Simpan kondisi pagi</button>
+        <button class="btn" type="submit">Simpan wellness</button>
         <p class="msg" id="mWell" role="status"></p>
       </form>
     </div>
@@ -237,7 +241,7 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
         <p class="note"><b style="color:#ffd400">Fitness</b> naik pelan bila kamu rutin berlatih. <b style="color:#ff4b42">Fatigue</b> naik cepat setelah latihan berat. Garis putus-putus = perkiraan dari rencana pelatih.</p></div>
       <div class="card"><h2>Form % (kesegaran)</h2><div class="cv"><canvas id="cForm" aria-label="Form dan zonanya"></canvas></div><div class="legend" id="formLeg"></div></div>
       <div class="card"><h2>Beban mingguan</h2><div class="cv"><canvas id="cWeek" aria-label="TSS mingguan per jenis latihan"></canvas></div><p class="note">Warna = jenis latihan. Batang transparan = rencana minggu depan.</p></div>
-      <div class="card"><h2>Kondisi pagi · 28 hari</h2><div class="cv"><canvas id="cWell" aria-label="Wellness, nadi istirahat dan HRV"></canvas></div><p class="note">Nadi istirahat naik dan HRV turun beberapa hari berturut-turut bisa tanda kelelahan atau mulai sakit.</p></div>
+      <div class="card"><h2>Wellness · 28 hari</h2><div class="cv"><canvas id="cWell" aria-label="Wellness, nadi istirahat dan HRV"></canvas></div><p class="note">Nadi istirahat naik dan HRV turun beberapa hari berturut-turut bisa tanda kelelahan atau mulai sakit.</p></div>
       <div class="card"><h2>Tes fisik</h2><div id="dTes" style="display:flex;flex-direction:column;gap:10px"></div></div>
       <div class="card"><h2>Profil &amp; zona denyut jantung</h2><div id="dProf" style="display:flex;flex-direction:column;gap:10px"></div></div>
     </div>
@@ -404,13 +408,21 @@ function render(){
   renderIcu();
   renderStrava();
 }
+/* skor wellness langsung terlihat saat mengisi (5 butir × 1–5 = 5–25) */
+function wSkor(){
+  const el=$("#wSkor");if(!el)return;const n=WELL.filter(([k])=>A.w[k]).length;
+  if(!n){el.innerHTML=`<span>Skor wellness muncul di sini setelah kamu memilih.</span>`;el.style.setProperty("--wc","#555");return}
+  const t=WELL.reduce((x,[k])=>x+(A.w[k]||0),0);
+  const [lbl,c]=n<5?["belum lengkap ("+n+"/5 butir)","#8a8f9c"]:t>=18?["Baik","#5cc23a"]:t>=14?["Cukup","#7cc94f"]:t>=11?["Agak rendah","#ffc000"]:["Rendah — sampaikan ke pelatih","#ff4b42"];
+  el.style.setProperty("--wc",c);el.innerHTML=`<b>${t}<span style="font-size:15px;color:var(--muted)">/25</span></b><span>Skor wellness<small>${lbl}</small></span>`;
+}
 function fillWell(){
   const e=entri(A.day);A.w={};A.nyeri=0;A.area=[];
   if(hasW(e)){WELL.forEach(([k])=>A.w[k]=+e[k]);A.nyeri=+e.nyeri||0;A.area=[...(e.area||[])]}
   document.querySelectorAll("#wellBox button").forEach(b=>b.setAttribute("aria-pressed",A.w[b.dataset.k]===+b.dataset.v));
   $("#nyeri").value=A.nyeri;$("#nyeriVal").textContent=A.nyeri;$("#areas").hidden=!A.nyeri;
   document.querySelectorAll("#areas button").forEach(b=>b.setAttribute("aria-pressed",A.area.includes(b.dataset.a)));
-  $("#hr").value=e&&e.hr_istirahat?e.hr_istirahat:"";$("#hrv").value=e&&e.hrv?e.hrv:"";
+  $("#hr").value=e&&e.hr_istirahat?e.hr_istirahat:"";$("#hrv").value=e&&e.hrv?e.hrv:"";wSkor();
 }
 function resetSesi(){A.jenis=null;A.rpe=null;A.ext=null;const ib=document.getElementById("impBox");if(ib)ib.innerHTML="";$("#dur").value="";document.querySelectorAll("#jenis button,#rpe button").forEach(b=>b.setAttribute("aria-pressed","false"))}
 const setJenis=j=>{A.jenis=j;document.querySelectorAll("#jenis button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.j===j))};
@@ -677,7 +689,7 @@ document.addEventListener("click",async ev=>{
   if(b.dataset.view){setView(b.dataset.view);return}
   if(b.dataset.day){A.day=b.dataset.day;A.editWell=false;fillWell();resetSesi();$("#mWell").textContent="";$("#mSesi").textContent="";render();return}
   if(b.id==="ubahWell"){A.editWell=true;fillWell();render();return}
-  if(b.dataset.k){A.w[b.dataset.k]=+b.dataset.v;b.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));return}
+  if(b.dataset.k){A.w[b.dataset.k]=+b.dataset.v;b.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));wSkor();return}
   if(b.dataset.a){const a=b.dataset.a;A.area=A.area.includes(a)?A.area.filter(x=>x!==a):A.area.concat(a);b.setAttribute("aria-pressed",A.area.includes(a));return}
   if(b.dataset.j){setJenis(A.jenis===b.dataset.j?null:b.dataset.j);return}
   if(b.dataset.r){setRpe(+b.dataset.r);return}
@@ -695,7 +707,7 @@ $("#fWell").addEventListener("submit",async ev=>{
   if(hrv!==""&&(+hrv<5||+hrv>250))return msg("#mWell","HRV biasanya 5–250 ms. Periksa lagi.");
   const w={...A.w,nyeri:A.nyeri,area:A.nyeri?A.area:[],hr:hr===""?null:Math.round(+hr),hrv:hrv===""?null:Math.round(+hrv)};
   try{const r=await save(A.day,{wellness:w});A.editWell=false;render();msg("#mWell","",true);
-    const sb=$("#status");if(r==="ok"){sb.hidden=false;sb.className="banner ok";sb.textContent="Kondisi pagi tersimpan. Terima kasih!";setTimeout(status,4000)}}
+    const sb=$("#status");if(r==="ok"){sb.hidden=false;sb.className="banner ok";sb.textContent="Wellness tersimpan. Terima kasih!";setTimeout(status,4000)}}
   catch(err){msg("#mWell",err.message||"Gagal menyimpan.")}
 });
 $("#fSesi").addEventListener("submit",async ev=>{
