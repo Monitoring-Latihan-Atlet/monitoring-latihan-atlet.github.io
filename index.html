@@ -44,11 +44,51 @@ h3{font-size:12px;font-weight:600;color:var(--muted);margin:0;text-transform:upp
 .card .note{font-size:13px;color:var(--muted);margin:0}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 .toolbar .r{display:flex;gap:8px;flex-wrap:wrap}
-select,input[type=text],input[type=number],input[type=date],input[type=search]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
+select,input[type=text],input[type=tel],input[type=number],input[type=date],input[type=search],textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
 .btn{font-weight:700;font-size:15px;background:var(--accent);color:#000;border:0;border-radius:9px;padding:10px 18px;cursor:pointer}
 .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
 .btn.sm{font-size:14px;padding:8px 12px}
 a.btn{text-decoration:none;display:inline-block}
+.badge{background:var(--red);color:#fff;border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;margin-left:4px;vertical-align:1px}
+.rdy b{font-family:var(--display);font-size:20px}
+.alertbox{border:1px solid var(--red);background:var(--red-bg);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.alertbox b{color:var(--red)}
+.alertbox button{all:unset;cursor:pointer;display:flex;gap:8px;flex-wrap:wrap;font-size:14px}
+.alertbox button:hover span:first-child{text-decoration:underline}
+.alertbox button:focus-visible{outline:2px solid var(--accent)}
+.remind{display:flex;flex-wrap:wrap;gap:6px}
+.remind span{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 12px;font-size:13px}
+.remind a{background:#25d366;color:#000;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;text-decoration:none}
+.filebtn{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.imp{width:100%;border-collapse:collapse;font-size:13px}.imp td,.imp th{padding:6px 5px;border-top:1px solid var(--line);text-align:left;vertical-align:middle}.imp th{color:var(--muted);font-weight:600}
+.imp select{padding:4px 6px}
+/* laporan mingguan (tema terang, siap cetak) */
+#report{background:#e9e9ec;color:#161a2b;min-height:100vh;padding:16px;font-family:var(--body)}
+.rp-bar{max-width:820px;margin:0 auto 12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rp-bar span{font-size:13px;color:#5e6475}
+.rp{background:#fff;max-width:820px;margin:0 auto 16px;padding:28px 32px;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:14px}
+.rp h1{font-family:var(--display);font-size:28px;margin:0;color:#161a2b}
+.rp h3{color:#5e6475;font-size:11px;margin:0}
+.rp .hd{display:flex;justify-content:space-between;gap:12px;border-bottom:3px solid #ff5b0a;padding-bottom:10px}
+.rp .hd small{display:block;color:#5e6475;font-size:12px}
+.rp .sm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.rp .sm div{border:1px solid #e5e0d8;border-radius:8px;padding:8px 10px}
+.rp .sm b{display:block;font-family:var(--display);font-size:22px;line-height:1.1}
+.rp .sm span{font-size:11.5px;color:#5e6475}
+.rp table{width:100%;border-collapse:collapse;font-size:12px;color:#161a2b}
+.rp th,.rp td{border-bottom:1px solid #e5e0d8;padding:6px 5px;text-align:left;vertical-align:top}
+.rp th{color:#5e6475;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.rp .note-box{border:1px solid #e5e0d8;border-radius:8px;padding:10px 12px;min-height:90px;font-size:13px;white-space:pre-wrap;background:repeating-linear-gradient(#fff 0 27px,#eee 27px 28px)}
+.rp .pill2{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;color:#fff}
+.rp .ft{font-size:11px;color:#8a8f9c;display:flex;justify-content:space-between}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff!important}
+  #app,#home,.rp-bar{display:none!important}
+  #report{display:block!important;background:#fff;padding:0}
+  .rp{box-shadow:none;border-radius:0;padding:0;max-width:none;margin:0;break-after:page}
+  .rp:last-child{break-after:auto}
+}
 /* KPI */
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 12px;display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer;position:relative;overflow:hidden}
@@ -80,7 +120,7 @@ a.btn{text-decoration:none;display:inline-block}
 .legend span{display:inline-flex;align-items:center;gap:6px}.legend i{width:14px;height:10px;border-radius:3px;display:inline-block}
 /* table */
 .list{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-.row{display:grid;grid-template-columns:minmax(0,1.5fr) 108px minmax(0,2fr) 120px 70px 84px 70px;gap:12px;align-items:center;padding:11px 16px;border:0;border-top:1px solid var(--line);background:none;width:100%;text-align:left;cursor:pointer}
+.row{display:grid;grid-template-columns:minmax(0,1.5fr) 108px 58px minmax(0,2fr) 120px 70px 84px 70px;gap:12px;align-items:center;padding:11px 16px;border:0;border-top:1px solid var(--line);background:none;width:100%;text-align:left;cursor:pointer}
 .row:first-child{border-top:0}
 .row.head{cursor:default;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:var(--surface2);font-weight:600}
 .row:not(.head):hover{background:var(--surface2)}
@@ -97,7 +137,7 @@ a.btn{text-decoration:none;display:inline-block}
 .avatar{width:46px;height:46px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:20px;flex:none}
 .who{display:flex;gap:12px;align-items:center}
 .sub{color:var(--muted);font-size:14px}
-.metrics{display:grid;grid-template-columns:minmax(230px,1.6fr) repeat(5,minmax(0,1fr));gap:8px}
+.metrics{display:grid;grid-template-columns:minmax(230px,1.6fr) repeat(6,minmax(0,1fr));gap:8px}
 .ag{display:block;max-width:100%;height:auto}.agc{display:flex;justify-content:flex-start}
 .m{background:var(--surface2);border-radius:9px;padding:9px 11px}
 .m .v{font-family:var(--display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
@@ -193,7 +233,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:6px}
 .mini .m .v{font-size:19px}
 /* strip ringkasan beban atlet */
-.xstrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.xstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
 .xs{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--sc,var(--accent));border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .xs b{font-family:var(--display);font-size:26px;line-height:1.05;font-variant-numeric:tabular-nums;color:var(--sc,var(--ink))}
 .xs span{font-size:12px;color:var(--muted)}
@@ -411,6 +451,8 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:no-preference){.row,.kpi,.chip,.five button,.ladder button{transition:background .15s,border-color .15s}}
 </style>
 
+<div id="report" hidden></div>
+
 <div id="home" class="home">
   <header class="hnav">
     <div class="hnav-in">
@@ -501,7 +543,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   <!-- DASHBOARD ATLET -->
   <section id="v-atlet" style="display:flex;flex-direction:column;gap:12px">
-    <div class="atbar"><h2>Dashboard atlet</h2><select id="atPick" aria-label="Pilih atlet"></select></div>
+    <div class="atbar"><h2>Dashboard atlet</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost sm" id="btnRep">Laporan mingguan</button><select id="atPick" aria-label="Pilih atlet"></select></div></div>
     <div id="atletBody" style="display:flex;flex-direction:column;gap:12px"></div>
   </section>
 
@@ -557,6 +599,17 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </dialog>
 
+  <dialog id="repDlg" class="dlg" aria-labelledby="repTitle">
+    <div class="dlg-h"><div><h2 id="repTitle">Laporan mingguan</h2><p class="sub" id="repWho"></p></div><button type="button" class="x" id="repClose" aria-label="Tutup">×</button></div>
+    <form class="dlg-b" id="repForm">
+      <label class="fl">Minggu<select id="rWeek"></select></label>
+      <div class="fl"><span>Isi laporan</span><div class="chips"><label class="ck"><input type="radio" name="rScope" value="atlet" checked> Atlet ini saja</label><label class="ck"><input type="radio" name="rScope" value="cabor"> <span id="rCaborLbl">Semua atlet cabor ini</span></label></div></div>
+      <label class="fl">Catatan pelatih (opsional, ikut tercetak)<textarea id="rNote" rows="4" placeholder="Evaluasi minggu ini dan fokus minggu depan"></textarea></label>
+      <button class="btn" type="submit">Tampilkan laporan</button>
+      <p class="note">Laporan bisa dicetak atau disimpan sebagai PDF, lalu dikirim ke atlet atau orang tua.</p>
+    </form>
+  </dialog>
+
   <!-- DASHBOARD -->
   <section id="v-dash" hidden style="display:flex;flex-direction:column;gap:16px">
     <div class="toolbar">
@@ -567,6 +620,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       </div>
     </div>
     <div class="kpis" id="kpis"></div>
+    <div class="card" id="pengingat"></div>
 
     <div class="g3">
       <div class="card">
@@ -653,6 +707,8 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <div id="sesiAda" style="display:flex;flex-direction:column;gap:6px"></div>
           <p class="note">Latihan lebih dari sekali sehari? Simpan sesi pertama, lalu tambahkan sesi berikutnya. Kosongkan durasi jika hanya mengisi kondisi pagi.</p>
           <div class="planhint" id="planHint" hidden></div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="btn ghost sm filebtn">⌚ Impor dari jam / Strava<input type="file" id="inFile" accept=".fit,.gpx,.tcx,.csv,.gz" hidden></label><span class="note">File .fit, .gpx, .tcx, atau activities.csv dari Strava</span></div>
+          <div id="imporBox" style="display:flex;flex-direction:column;gap:8px"></div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <span class="note">Jenis latihan (opsional)</span>
             <div class="chips" id="inJenis" role="group" aria-label="Jenis latihan"></div>
@@ -770,6 +826,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <label class="fl">Nama lengkap<input type="text" id="sNama" autocomplete="off"></label>
         <label class="fl">Cabang olahraga<input type="text" id="sCabor" list="caborList" autocomplete="off"></label>
         <label class="fl">Pelatih<input type="text" id="sPelatih" autocomplete="off" placeholder="Nama pelatih cabor"></label>
+        <label class="fl">No. WhatsApp atlet<input type="tel" id="sHp" autocomplete="off" inputmode="tel" placeholder="opsional, mis. 0812…"></label>
         <label class="fl">Kelas<input type="text" id="sKelas" placeholder="mis. X-KKO" autocomplete="off"></label>
         <label class="fl">Gender<select id="sJk"><option value="">Pilih…</option><option value="L">Pria</option><option value="P">Wanita</option></select></label>
         <label class="fl">Tanggal lahir<input type="date" id="sLahir"></label>
@@ -788,6 +845,8 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <script src="config.js"></script>
 <script src="norma.js"></script>
+<script src="kesiapan.js"></script>
+<script src="impor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
@@ -913,6 +972,14 @@ const sesiOf=e=>Array.isArray(e&&e.sesi)&&e.sesi.length?e.sesi:(e&&+e.durasi>0?[
 const sesiTss=x=>(TSS_JAM[+x.rpe]||0)*(+x.durasi||0)/60;
 const loadRaw=e=>sesiOf(e).reduce((t,x)=>t+sesiTss(x),0);
 const loadOf=e=>Math.round(loadRaw(e));
+/* Skor kesiapan 0–100 untuk tanggal t (lihat kesiapan.js). list = entri satu atlet. */
+function kesiapanAt(list,t,P){
+  const e=list.find(x=>x.tanggal===t);if(!hasW(e)||!window.KESIAPAN)return null;
+  const riw=list.filter(x=>x.tanggal<t&&diffDays(t,x.tanggal)<=28).map(x=>({w:wellOf(x),hr:x.hrIstirahat,hrv:x.hrv}));
+  const d=(P||pmc(list)).find(x=>x.t===t);
+  return KESIAPAN.hitung({w:wellTotal(e),hr:e.hrIstirahat,hrv:e.hrv,nyeri:e.nyeri},riw,d?d.form:null);
+}
+const sesiInfo=x=>`${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}`;
 const aggSesi=ss=>{const d=ss.reduce((x,y)=>x+(+y.durasi||0),0);return{sesi:ss,durasi:d,rpe:d?Math.round(ss.reduce((x,y)=>x+(+y.rpe||0)*(+y.durasi||0),0)/d):0,jenis:ss[0]&&ss[0].jenis||null}};
 function analyze(s,list){
   const es=list.filter(e=>e.tanggal<=TODAY&&diffDays(TODAY,e.tanggal)<60).sort((a,b)=>a.tanggal<b.tanggal?-1:1);
@@ -935,7 +1002,7 @@ function analyze(s,list){
   const hs=es.filter(e=>e.tinggi);let gv=null;
   if(hs.length>=2){const a=hs[0],b=hs[hs.length-1];const dd=diffDays(b.tanggal,a.tanggal);if(dd>=28)gv=(b.tinggi-a.tinggi)/(dd/365)}
   const last3=ws.slice(-3);const R=[],Y=[];
-  const base={acwr,mono,z,wt,gv,acute,days,last,items,byDate,compliance:days.filter(d=>d.has).length/28};
+  const base={acwr,mono,z,wt,gv,acute,days,last,items,byDate,compliance:days.filter(d=>d.has).length/28,rdy:kesiapanAt(es,TODAY)};
   if(!fresh)return{...base,status:"kosong",reasons:[last?"Tidak ada entri 4 hari terakhir":"Belum ada entri"],todayIn:false};
   if(last3.length===3&&last3.every(e=>+e.nyeri>=3))R.push("Nyeri ≥3 di 3 entri terakhir"+(lw&&lw.area&&lw.area.length?" ("+lw.area.join(", ")+")":""));
   if(acwr!=null&&acwr>1.5)R.push("Lonjakan beban (ACWR zona bahaya)");
@@ -1001,7 +1068,7 @@ function renderDash(){
   $("#fCabor").innerHTML='<option value="">Semua cabor</option>'+cabs.map(c=>`<option ${c===S.cabor?"selected":""}>${esc(c)}</option>`).join("");
   const pool=all.filter(x=>!S.cabor||x.s.cabor===S.cabor);
   $("#scopeTitle").textContent=S.cabor?"Ringkasan "+S.cabor:"Ringkasan seluruh kelas";
-  renderKpis(pool);renderRisk(pool);renderCabor(all);renderClass(pool);renderAcwrAll(pool);renderHeat(pool);renderList(pool);
+  renderKpis(pool);renderPengingat(pool);renderRisk(pool);renderCabor(all);renderClass(pool);renderAcwrAll(pool);renderHeat(pool);renderList(pool);
   renderDetail(all.find(x=>x.s.id===S.sel));
 }
 function renderKpis(pool){
@@ -1011,6 +1078,28 @@ function renderKpis(pool){
   const K=[["merah","Perlu tindakan","red",cnt("merah"),pct(cnt("merah"))],["kuning","Perlu dipantau","amber",cnt("kuning"),pct(cnt("kuning"))],["hijau","Aman berlatih","green",cnt("hijau"),pct(cnt("hijau"))],["hari","Kepatuhan isi hari ini","",inToday,""]];
   $("#kpis").innerHTML=K.map(([k,l,c,v,s])=>`<button class="kpi ${c}" data-f="${k}" aria-pressed="${S.filter===k}"><span class="t">${l}</span><span class="n">${v}${k==="hari"?`<small>/${pool.length}</small>`:""}</span>${k==="hari"?`<span class="meter"><i style="width:${Math.round(inToday/n*100)}%"></i></span><span class="s">Klik untuk melihat yang belum mengisi</span>`:`<span class="s">${s}</span>`}</button>`).join("");
 }
+/* ---------- pengingat & peringatan ---------- */
+function waNo(hp){let d=String(hp||"").replace(/\D/g,"");if(d.startsWith("0"))d="62"+d.slice(1);else if(d.startsWith("8"))d="62"+d;return /^62\d{8,13}$/.test(d)?d:null}
+const PG={teks:""};
+function renderPengingat(pool){
+  const merah=pool.filter(x=>x.a.status==="merah");
+  const belum=pool.filter(x=>!hasW(x.a.byDate[TODAY])).sort((a,b)=>a.s.nama.localeCompare(b.s.nama));
+  const tgl=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long"});
+  PG.teks=`Pengingat isi kondisi pagi (${tgl}):\n`+belum.map(x=>"- "+x.s.nama.replace(" (contoh)","")).join("\n")+"\n\nBuka tautan pribadi masing-masing (Latihan Saya) dan isi sebelum latihan. Terima kasih!";
+  const pesan=s=>{const u=S.mode==="live"&&s.kode?atletUrl(s):"";return`Halo ${s.nama.split(" ")[0]}, jangan lupa isi kondisi pagi hari ini ya.${u?"\n"+u:""}`};
+  let h="";
+  if(merah.length)h+=`<div class="alertbox"><b>⚠ ${merah.length} atlet perlu tindakan</b>${merah.map(({s,a})=>`<button type="button" data-pid="${s.id}"><span>${esc(s.nama)}</span><span class="note">${esc(a.reasons[0]||"")}</span></button>`).join("")}</div>`;
+  h+=`<div class="ch"><h3>Belum mengisi kondisi pagi hari ini</h3><span class="note">${belum.length} dari ${pool.length} atlet</span></div>`;
+  h+=belum.length?`<div class="remind">${belum.map(({s})=>{const n=waNo(s.hp);return`<span>${esc(s.nama)}${n?`<a href="https://wa.me/${n}?text=${encodeURIComponent(pesan(s))}" target="_blank" rel="noopener" title="Kirim pengingat lewat WhatsApp">WA</a>`:""}</span>`}).join("")}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn sm" href="https://wa.me/?text=${encodeURIComponent(PG.teks)}" target="_blank" rel="noopener">Kirim pengingat ke grup WhatsApp</a><button type="button" class="btn ghost sm" id="pgCopy">Salin daftar</button></div>
+    <p class="note">Tombol <b style="color:#25d366">WA</b> muncul jika nomor WhatsApp atlet diisi di tab Data siswa; pesannya sudah berisi tautan pribadi atlet.</p>`:'<p class="note" style="color:var(--green)">Semua atlet sudah mengisi kondisi pagi hari ini ✓</p>';
+  $("#pengingat").innerHTML=h;
+}
+$("#pengingat").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-pid]");if(b){S.sel=b.dataset.pid;renderDash();scrollDetail();return}
+  if(e.target.closest("#pgCopy")){const ok=await copyText(PG.teks);e.target.textContent=ok?"Disalin ✓":"Gagal menyalin";setTimeout(()=>{const x=$("#pgCopy");if(x)x.textContent="Salin daftar"},2000)}
+});
+function updateBadge(){const n=computeRows().filter(x=>x.a.status==="merah").length;$("#tab-dash").innerHTML="Ringkasan kelas"+(n?`<span class="badge" aria-label="${n} atlet perlu tindakan">${n}</span>`:"")}
 function renderRisk(pool){
   const T=tok();const col={merah:T.red,kuning:T.amber,hijau:T.green,kosong:T.accent2};
   const pts=pool.filter(x=>x.a.acwr!=null&&x.a.z!=null).map(x=>({x:+x.a.acwr.toFixed(2),y:+Math.max(-3.4,Math.min(2.4,x.a.z)).toFixed(2),n:x.s.nama.replace(" (contoh)",""),st:x.a.status,id:x.s.id}));
@@ -1082,13 +1171,13 @@ function renderList(pool){
   if(S.filter==="hari")view=pool.filter(x=>!x.a.todayIn);else if(S.filter!=="semua")view=pool.filter(x=>x.a.status===S.filter);
   view=[...view].sort((a,b)=>ORDER[a.a.status]-ORDER[b.a.status]||(b.a.acwr||0)-(a.a.acwr||0));
   $("#listTitle").textContent=S.filter==="semua"?"Daftar prioritas":S.filter==="hari"?"Belum mengisi hari ini":"Siswa berstatus "+LABEL[S.filter].toLowerCase();
-  const head=`<div class="row head"><span>Siswa</span><span>Status</span><span>Alasan</span><span>ACWR</span><span class="num">Wellness</span><span class="num">Beban 7h</span><span class="num sp">14 hari</span></div>`;
-  $("#list").innerHTML=head+(view.length?view.map(({s,a})=>`<button class="row ${S.sel===s.id?"sel":""}" data-id="${s.id}"><span class="nm">${esc(s.nama)}<small>${esc(s.cabor)} · ${esc(s.kelas||"")}</small></span><span><span class="pill p-${a.status}">${LABEL[a.status]}</span></span><span class="why">${a.reasons.map(esc).join(" · ")}</span><span class="agc">${acwrGauge(a.acwr)}</span><span class="num">${a.wt!=null?a.wt+"/25":"–"}</span><span class="num">${a.acute.toLocaleString("id-ID")}</span><span class="sp">${spark(a.days)}</span></button>`).join(""):`<div class="empty">${S.filter==="hari"?"Semua siswa sudah mengisi hari ini.":"Tidak ada siswa di kategori ini."}</div>`);
+  const head=`<div class="row head"><span>Siswa</span><span>Status</span><span class="num" title="Skor kesiapan hari ini (0–100)">Siap</span><span>Alasan</span><span>ACWR</span><span class="num">Wellness</span><span class="num">Beban 7h</span><span class="num sp">14 hari</span></div>`;
+  $("#list").innerHTML=head+(view.length?view.map(({s,a})=>`<button class="row ${S.sel===s.id?"sel":""}" data-id="${s.id}"><span class="nm">${esc(s.nama)}<small>${esc(s.cabor)} · ${esc(s.kelas||"")}</small></span><span><span class="pill p-${a.status}">${LABEL[a.status]}</span></span><span class="rdy num" title="${a.rdy?"Kesiapan: "+a.rdy.label:"Belum mengisi kondisi pagi hari ini"}">${a.rdy?`<b style="color:${a.rdy.warna}">${a.rdy.skor}</b>`:"–"}</span><span class="why">${a.reasons.map(esc).join(" · ")}</span><span class="agc">${acwrGauge(a.acwr)}</span><span class="num">${a.wt!=null?a.wt+"/25":"–"}</span><span class="num">${a.acute.toLocaleString("id-ID")}</span><span class="sp">${spark(a.days)}</span></button>`).join(""):`<div class="empty">${S.filter==="hari"?"Semua siswa sudah mengisi hari ini.":"Tidak ada siswa di kategori ini."}</div>`);
 }
 function renderDetail(x){
   const el=$("#detail");if(!x){el.hidden=true;["dLoad","dAcwr","dWell","dRadar"].forEach(k=>{if(S.charts[k]){S.charts[k].destroy();delete S.charts[k]}});return}
   el.hidden=false;const{s,a}=x;const T=tok();
-  const M=[["Beban 7 hari",a.acute.toLocaleString("id-ID")],["Wellness",a.wt!=null?a.wt+"/25":"–"],["z-wellness",a.z!=null?dec(a.z):"< 7 data"],["Monotony",dec(a.mono)],["Kepatuhan 28h",Math.round(a.compliance*100)+"%"]];
+  const M=[["Beban 7 hari",a.acute.toLocaleString("id-ID")],["Wellness",a.wt!=null?a.wt+"/25":"–"],["z-wellness",a.z!=null?dec(a.z):"< 7 data"],["Monotony",dec(a.mono)],["Kepatuhan 28h",Math.round(a.compliance*100)+"%"],["Kesiapan hari ini",a.rdy?`<span style="color:${a.rdy.warna}">${a.rdy.skor}</span>`:"–"]];
   el.innerHTML=`<div class="dhead"><div class="who"><div class="avatar">${esc(initials(s.nama))}</div><div><h2>${esc(s.nama)}</h2><div class="sub">${esc(s.cabor)} · ${esc(s.kelas||"")}${a.last?" · entri terakhir "+fmtD(a.last.tanggal):""}${a.gv!=null?" · tumbuh "+dec(a.gv,1)+" cm/thn":""}</div></div></div><div style="display:flex;gap:8px;align-items:center"><span class="pill p-${a.status}">${LABEL[a.status]}</span><button class="btn ghost sm" id="closeDetail">Tutup</button></div></div>
   <ul class="reasons">${a.reasons.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
   <div class="metrics"><div class="m"><div class="v" style="line-height:0">${acwrGauge(a.acwr,true)}</div><div class="k">ACWR (beban akut ÷ kronis)</div></div>${M.map(([k,v])=>`<div class="m"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("")}</div>
@@ -1318,7 +1407,8 @@ function renderAtlet(){
   let cpN=0,cpOk=0;for(let k=0;k<28;k++){const t=addDays(TODAY,-k);const pt=(plBy[t]||[]).reduce((x,y)=>x+planTss(y),0);const c=complianceOf(pt,eBy[t]?loadOf(eBy[t]):null,t);if(c){cpN++;if(c==="hijau")cpOk++}}
   const fut=p.filter(d=>d.proj);const pk=fut.length?fut[fut.length-1]:null;
   const sx=(v,l,sub,c)=>`<div class="xs" style="--sc:${c||"var(--accent)"}"><span>${l}</span><b>${v}</b><small>${sub}</small></div>`;
-  const strip=`<div class="xstrip">${sx(last?Math.round(last.ctl):"–","Fitness (CTL)","rata-rata beban 42 hari","#ffd400")}${sx(last?Math.round(last.atl):"–","Fatigue (ATL)","rata-rata beban 7 hari","#ff2a2a")}${sx(last?(last.form>0?"+":"")+Math.round(last.form):"–","Form (TSB)",fz?fz[2]:"–",fz?fz[3]:null)}${sx(ramp!=null?(ramp>0?"+":"")+dec(ramp,1):"–","Ramp rate","perubahan fitness 7 hari",ramp==null?null:ramp>7?"var(--red)":ramp>5?"var(--amber)":"var(--green)")}${sx(tss7!=null?tss7:"–","TSS 7 hari",pk?"proyeksi form "+fmtD(pk.t)+": "+(pk.form>0?"+":"")+Math.round(pk.form):"belum ada rencana ke depan","#5aa9ff")}${sx(cpN?Math.round(cpOk/cpN*100)+"%":"–","Kepatuhan rencana",cpN?cpOk+" dari "+cpN+" sesi sesuai (28 hari)":"belum ada rencana","#3fb950")}</div>`;
+  const rdy=kesiapanAt(ent,TODAY,p);
+  const strip=`<div class="xstrip">${sx(rdy?rdy.skor:"–","Kesiapan hari ini",rdy?rdy.label+" · "+rdy.parts.map(x=>x.nama.split(" ")[0].toLowerCase()+" "+x.nilai).join(", "):"belum mengisi kondisi pagi",rdy?rdy.warna:null)}${sx(last?Math.round(last.ctl):"–","Fitness (CTL)","rata-rata beban 42 hari","#ffd400")}${sx(last?Math.round(last.atl):"–","Fatigue (ATL)","rata-rata beban 7 hari","#ff2a2a")}${sx(last?(last.form>0?"+":"")+Math.round(last.form):"–","Form (TSB)",fz?fz[2]:"–",fz?fz[3]:null)}${sx(ramp!=null?(ramp>0?"+":"")+dec(ramp,1):"–","Ramp rate","perubahan fitness 7 hari",ramp==null?null:ramp>7?"var(--red)":ramp>5?"var(--amber)":"var(--green)")}${sx(tss7!=null?tss7:"–","TSS 7 hari",pk?"proyeksi form "+fmtD(pk.t)+": "+(pk.form>0?"+":"")+Math.round(pk.form):"belum ada rencana ke depan","#5aa9ff")}${sx(cpN?Math.round(cpOk/cpN*100)+"%":"–","Kepatuhan rencana",cpN?cpOk+" dari "+cpN+" sesi sesuai (28 hari)":"belum ada rencana","#3fb950")}</div>`;
   const fld=(l,v,u)=>`<div class="xf"><span class="xl">${l}</span><span class="xc">:</span><span class="xv${v?"":" req"}">${v?esc(v):"Wajib diisi"}</span>${u?`<span class="xu">${u}</span>`:""}</div>`;
   box.innerHTML=`
   <div class="xhead">
@@ -1454,7 +1544,7 @@ function fillDlgLists(){
   $("#dlgTitle").textContent=fmtLong(t);$("#dlgWho").textContent=s.nama+" · "+s.cabor;
   const pt=ps.reduce((x,p)=>x+planTss(p),0);const cp=complianceOf(pt,e?loadOf(e):null,t);
   const m=(k,v)=>`<div class="m"><div class="v">${v}</div><div class="k">${k}</div></div>`;
-  $("#dlgAct").innerHTML=e?`<div class="mini">${m("Sesi",sesiOf(e).length)}${m("Durasi",sesiOf(e).reduce((x,y)=>x+(+y.durasi||0),0)+" mnt")}${m("TSS",loadOf(e))}${m("Wellness",hasW(e)?wellTotal(e)+"/25":"–")}${m("Nyeri",hasW(e)?(e.nyeri||0)+"/10":"–")}${e.hrIstirahat?m("Nadi istirahat",e.hrIstirahat+" bpm"):""}${e.hrv?m("HRV",e.hrv+" ms"):""}</div>${sesiOf(e).map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS</small></div>`).join("")}${cp?`<p class="note" style="margin:0">Kepatuhan: <b style="color:${CPL[cp][0]}">${CPL[cp][1]}</b> · ${Math.round(loadOf(e)/pt*100)}% dari TSS rencana</p>`:""}`
+  $("#dlgAct").innerHTML=e?`<div class="mini">${m("Sesi",sesiOf(e).length)}${m("Durasi",sesiOf(e).reduce((x,y)=>x+(+y.durasi||0),0)+" mnt")}${m("TSS",loadOf(e))}${m("Wellness",hasW(e)?wellTotal(e)+"/25":"–")}${m("Nyeri",hasW(e)?(e.nyeri||0)+"/10":"–")}${e.hrIstirahat?m("Nadi istirahat",e.hrIstirahat+" bpm"):""}${e.hrv?m("HRV",e.hrv+" ms"):""}</div>${sesiOf(e).map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><b>${esc(x.jenis||"Latihan")}</b><small>${sesiInfo(x)}</small></div>`).join("")}${cp?`<p class="note" style="margin:0">Kepatuhan: <b style="color:${CPL[cp][0]}">${CPL[cp][1]}</b> · ${Math.round(loadOf(e)/pt*100)}% dari TSS rencana</p>`:""}`
     :`<p class="note" style="margin:0">${t>TODAY?"Hari ini belum tiba.":cp==="merah"?'<b style="color:var(--red)">Rencana tidak dilakukan / belum dicatat.</b> ':""}${t<=TODAY?"Belum ada entri. Isi lewat tab Input harian.":""}</p>`;
   $("#dlgPlans").innerHTML=ps.length?ps.map(p=>`<div class="wo big" style="--jc:${jColor(p.jenis)}"><b>${esc(p.judul)}</b><small>${esc(p.jenis||"–")} · ${p.durasi||0} mnt · RPE ${p.rpe??"–"} (${RPE[+p.rpe]||"–"}) · ${planTss(p)} TSS</small>${p.deskripsi?`<p>${esc(p.deskripsi)}</p>`:""}${canPlan()?`<div class="acts"><button type="button" class="btn ghost sm" data-pe="${p.id}">Ubah</button><button type="button" class="btn ghost sm" data-pd="${p.id}">Hapus</button></div>`:""}</div>`).join(""):'<p class="note" style="margin:0">Belum ada rencana untuk hari ini.</p>';
 }
@@ -1543,14 +1633,14 @@ function renderSiswa(){
 $("#siswaList").addEventListener("click",e=>{
   const lk=e.target.closest("button[data-link]");if(lk){openLink(lk.dataset.link);return}
   const b=e.target.closest("button[data-edit]");if(!b)return;const s=inputData().siswa.find(x=>x.id===b.dataset.edit);if(!s)return;
-  SE.edit=s.id;$("#sNama").value=s.nama;$("#sCabor").value=s.cabor;$("#sKelas").value=s.kelas||"";$("#sJk").value=s.jk||"";$("#sPelatih").value=s.pelatih||"";$("#sLahir").value=s.tglLahir||"";$("#sBb").value=s.bb||"";$("#sTb").value=s.tb||"";
+  SE.edit=s.id;$("#sNama").value=s.nama;$("#sCabor").value=s.cabor;$("#sKelas").value=s.kelas||"";$("#sJk").value=s.jk||"";$("#sPelatih").value=s.pelatih||"";$("#sLahir").value=s.tglLahir||"";$("#sBb").value=s.bb||"";$("#sTb").value=s.tb||"";$("#sHp").value=s.hp||"";
   $("#siswaFormTitle").textContent="Ubah data "+s.nama;$("#siswaSubmit").textContent="Simpan perubahan";$("#siswaCancel").hidden=false;$("#formSiswa").scrollIntoView({block:"start"});
 });
-function resetSiswaForm(){SE.edit=null;["#sNama","#sKelas","#sJk","#sPelatih","#sLahir","#sBb","#sTb"].forEach(x=>$(x).value="");$("#siswaFormTitle").textContent="Tambah siswa";$("#siswaSubmit").textContent="Tambah siswa";$("#siswaCancel").hidden=true}
+function resetSiswaForm(){SE.edit=null;["#sNama","#sKelas","#sJk","#sPelatih","#sLahir","#sBb","#sTb","#sHp"].forEach(x=>$(x).value="");$("#siswaFormTitle").textContent="Tambah siswa";$("#siswaSubmit").textContent="Tambah siswa";$("#siswaCancel").hidden=true}
 $("#siswaCancel").addEventListener("click",()=>{resetSiswaForm();$("#msgSiswa").textContent=""});
 
 /* ---------- input ---------- */
-const F={sid:"",cabor:"",w:{},nyeri:0,area:[],rpe:null,jenis:null};
+const F={sid:"",cabor:"",w:{},nyeri:0,area:[],rpe:null,jenis:null,ext:null};
 function buildInput(){
   $("#wellBox").innerHTML=WELL.map(([k,l,sub,d])=>`<div class="wrow"><div class="q">${l}<small>${sub}</small></div><div class="five" role="group" aria-label="${l}">${d.map((t,i)=>`<button type="button" data-k="${k}" data-v="${i+1}" aria-pressed="false"><span class="v">${i+1}</span><span class="d">${t}</span></button>`).join("")}</div></div>`).join("");
   $("#inRpe").innerHTML=RPE.map((t,i)=>`<button type="button" data-v="${i}" style="--rc:${i?rpeColor(i):"#444"}" aria-pressed="false"><b>${i}</b><span>${RPE_EMO[i]} ${t}${i?` <small style="opacity:.75">· ${TSS_JAM[i]} TSS/jam</small>`:""}</span></button>`).join("");
@@ -1596,7 +1686,7 @@ function entriHari(){const t=$("#inTgl").value;return F.sid&&t?inputData().entri
 function renderSesiAda(old){
   const w=$("#wellAda");w.hidden=!hasW(old);if(hasW(old))w.innerHTML=`<span>Kondisi pagi tanggal ini sudah diisi: <b>wellness ${wellTotal(old)}/25</b>${+old.nyeri?" · nyeri "+old.nyeri+"/10":""}. Isi lagi hanya jika ingin mengubah.</span>`;
   const ss=old?sesiOf(old):[];const ro=ME.role==="guru";
-  $("#sesiAda").innerHTML=ss.length?'<span class="note">Sesi yang sudah tercatat:</span>'+ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)};display:flex;justify-content:space-between;align-items:center;gap:8px"><span><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${Math.round(sesiTss(x))} TSS</small></span>${ro?"":`<button type="button" class="btn ghost sm" data-hs="${esc(x.id||"")}">Hapus</button>`}</div>`).join(""):"";
+  $("#sesiAda").innerHTML=ss.length?'<span class="note">Sesi yang sudah tercatat:</span>'+ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)};display:flex;justify-content:space-between;align-items:center;gap:8px"><span><b>${esc(x.jenis||"Latihan")}</b><small>${sesiInfo(x)}</small></span>${ro?"":`<button type="button" class="btn ghost sm" data-hs="${esc(x.id||"")}">Hapus</button>`}</div>`).join(""):"";
 }
 async function simpanEntri(row){
   if(S.mode==="live"&&S.db)await DB.upsert("entri",row);
@@ -1624,7 +1714,7 @@ $("#v-input").addEventListener("click",e=>{
   else if(b.dataset.plan){const ps=(inputData().rencana||[]).filter(p=>p.siswaId===F.sid&&p.tanggal===$("#inTgl").value);if(!ps.length)return;
     const dur=ps.reduce((x,p)=>x+(+p.durasi||0),0);const rpe=dur?Math.round(ps.reduce((x,p)=>x+(+p.rpe||0)*(+p.durasi||0),0)/dur):+ps[0].rpe||0;
     $("#inDur").value=dur;F.rpe=rpe;$("#inRpe").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.v===rpe));setJenis(ps[0].jenis||null)}
-  else if(b.dataset.s!==undefined){F.sid=b.dataset.s;renderPicker()}
+  else if(b.dataset.s!==undefined){if(F.sid!==b.dataset.s)clearImpor();F.sid=b.dataset.s;renderPicker()}
   else if(b.dataset.c!==undefined){F.cabor=b.dataset.c;renderPicker()}
   else if(b.dataset.a){const a=b.dataset.a;F.area=F.area.includes(a)?F.area.filter(x=>x!==a):F.area.concat(a);b.setAttribute("aria-pressed",F.area.includes(a))}
   else if(b.dataset.q!==undefined){$("#inDur").value=b.dataset.q}
@@ -1660,14 +1750,108 @@ $("#formEntri").addEventListener("submit",async e=>{
   if(ti!=="")row.tinggi=+(+ti).toFixed(1);
   if(hr!=="")row.hrIstirahat=Math.round(+hr);
   if(hrv!=="")row.hrv=Math.round(+hrv);
-  let ss=old?sesiOf(old):[];if(addS)ss=ss.concat({id:uid(),jenis:F.jenis||null,rpe:F.rpe,durasi:Math.round(+dur)});
+  let ss=old?sesiOf(old):[];
+  if(addS){const x={id:uid(),...(F.ext||{}),jenis:F.jenis||null,rpe:F.rpe,durasi:Math.round(+dur)};if(F.ext&&ss.some(y=>y.id===x.id))return msg("#msgEntri","Aktivitas dari file ini sudah pernah diimpor untuk tanggal tersebut.");ss=ss.concat(x)}
   Object.assign(row,aggSesi(ss));
   try{await simpanEntri(row)}catch(err){return msg("#msgEntri",entriErr(err))}
   msg("#msgEntri",(addS?"Sesi tersimpan"+(ss.length>1?" (sesi ke-"+ss.length+" hari itu)":""):"Tersimpan")+(S.mode==="live"?".":" di mode contoh (tidak permanen)."),true);
-  F.w={};F.rpe=null;F.nyeri=0;F.area=[];F.jenis=null;
+  F.w={};F.rpe=null;F.nyeri=0;F.area=[];F.jenis=null;clearImpor();
   document.querySelectorAll("#wellBox button,#inRpe button,#inArea button,#inJenis button").forEach(b=>b.setAttribute("aria-pressed","false"));
   $("#inNyeri").value=0;$("#nyeriVal").textContent="0";$("#inDur").value="";$("#inTinggi").value="";$("#inHr").value="";$("#inHrv").value="";painColor();updateSummary();renderDash();
 });
+
+/* ---------- impor dari jam / Strava (input harian) ---------- */
+const IMP={list:[]};
+const hrmaxOf=s=>{const a=s&&ageOf(s);return a!=null?Math.round(208-0.7*a):200};
+const extOf=a=>({id:"jam_"+a.mulai.getTime(),hr:a.hr||null,hrmax:a.hrmax||null,km:a.km||null,sumber:"jam"});
+function clearImpor(){F.ext=null;IMP.list=[];$("#imporBox").innerHTML=""}
+$("#inFile").addEventListener("change",async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  if(!F.sid){msg("#msgEntri","Pilih nama siswa dulu, lalu impor file.");return}
+  const s=inputData().siswa.find(x=>x.id===F.sid);const hm=hrmaxOf(s);
+  let acts;try{acts=await IMPOR.baca(f)}catch(err){$("#imporBox").innerHTML=`<p class="msg err">${esc(err.message)}</p>`;return}
+  acts=acts.filter(a=>a.tanggal<=TODAY);
+  if(!acts.length){$("#imporBox").innerHTML='<p class="msg err">Semua aktivitas di file ini bertanggal di masa depan.</p>';return}
+  if(acts.length===1){
+    const a=acts[0];const r=IMPOR.saranRpe(a.hr,hm);
+    $("#inTgl").value=a.tanggal;$("#inDur").value=a.durasi;if(r){F.rpe=r;$("#inRpe").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.v===r))}
+    if(a.jenis)setJenis(a.jenis);F.ext=extOf(a);
+    $("#imporBox").innerHTML=`<div class="planhint"><span>Dari file: <b>${esc(a.nama||a.olahraga||"Aktivitas")}</b> · ${fmtD(a.tanggal)} · ${a.durasi} mnt${a.hr?" · ♥ "+a.hr+" bpm":""}${a.km?" · "+String(a.km).replace(".",",")+" km":""}. ${r?`RPE ${r} disarankan dari denyut jantung; sesuaikan dengan rasa atlet.`:"Pilih RPE sesuai rasa atlet."}</span><button type="button" class="btn ghost sm" data-impx="1">Batal</button></div>`;
+    updateSummary();return;
+  }
+  IMP.list=acts.slice(0,60).map(a=>({...a,rpe:IMPOR.saranRpe(a.hr,hm)||5,pilih:diffDays(TODAY,a.tanggal)<=14}));
+  renderImpList();
+});
+function renderImpList(){
+  const L=IMP.list;const n=L.filter(a=>a.pilih).length;
+  $("#imporBox").innerHTML=`<p class="note">${L.length} aktivitas terbaca. Centang yang ingin disimpan, periksa RPE (saran dari denyut jantung) dan jenisnya.</p>
+  <div style="overflow-x:auto"><table class="imp"><tr><th></th><th>Tanggal</th><th>Aktivitas</th><th>Durasi</th><th>♥</th><th>RPE</th><th>Jenis</th></tr>${L.map((a,i)=>`<tr><td><input type="checkbox" data-ii="${i}" ${a.pilih?"checked":""} aria-label="Pilih"></td><td>${fmtD(a.tanggal)}</td><td>${esc(a.nama||a.olahraga)}${a.km?" · "+String(a.km).replace(".",",")+" km":""}</td><td>${a.durasi} m</td><td>${a.hr||"–"}</td><td><select data-ir="${i}">${[1,2,3,4,5,6,7,8,9,10].map(v=>`<option ${v===a.rpe?"selected":""}>${v}</option>`).join("")}</select></td><td><select data-ij="${i}"><option value="">–</option>${JENIS.map(([j])=>`<option ${j===a.jenis?"selected":""}>${j}</option>`).join("")}</select></td></tr>`).join("")}</table></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn sm" data-imps="1" ${n?"":"disabled"}>Simpan ${n} sesi</button><button type="button" class="btn ghost sm" data-impx="1">Batal</button></div>`;
+}
+$("#imporBox").addEventListener("change",e=>{const t=e.target;
+  if(t.dataset.ii)IMP.list[+t.dataset.ii].pilih=t.checked;else if(t.dataset.ir)IMP.list[+t.dataset.ir].rpe=+t.value;else if(t.dataset.ij)IMP.list[+t.dataset.ij].jenis=t.value||null;else return;
+  if(t.dataset.ii)renderImpList()});
+$("#imporBox").addEventListener("click",async e=>{
+  if(e.target.closest("[data-impx]")){clearImpor();updateSummary();return}
+  if(!e.target.closest("[data-imps]"))return;
+  const pick=IMP.list.filter(a=>a.pilih);const by={};pick.forEach(a=>(by[a.tanggal]=by[a.tanggal]||[]).push(a));
+  let n=0,dup=0;
+  try{for(const t of Object.keys(by).sort()){
+    const id=F.sid+"_"+t;const old=inputData().entri.find(x=>x.id===id);let ss=old?sesiOf(old):[];
+    by[t].forEach(a=>{const x={...extOf(a),jenis:a.jenis||null,rpe:a.rpe,durasi:a.durasi};if(ss.some(y=>y.id===x.id)){dup++;return}ss=ss.concat(x);n++});
+    const row={...(old||{dibuat:new Date().toISOString()}),id,siswaId:F.sid,tanggal:t,...aggSesi(ss)};await simpanEntri(row)}
+  }catch(err){return msg("#msgEntri",entriErr(err))}
+  clearImpor();msg("#msgEntri",`${n} sesi diimpor${dup?`, ${dup} dilewati karena sudah pernah diimpor`:""}.`,true);updateSummary();renderDash();
+});
+
+/* ---------- laporan mingguan ---------- */
+const RP={};
+function openReport(){
+  const s=data().siswa.find(x=>x.id===AT.sel);if(!s)return;
+  const m0=monday(TODAY);const def=parse(TODAY).getDay()%6===0?m0:addDays(m0,-7);
+  $("#rWeek").innerHTML=[...Array(10)].map((_,i)=>{const w=addDays(m0,-7*i);return`<option value="${w}" ${w===def?"selected":""}>${fmtD(w)} – ${fmtD(addDays(w,6))} ${parse(w).getFullYear()}${i===0?" (minggu ini)":i===1?" (minggu lalu)":""}</option>`}).join("");
+  $("#repWho").textContent=s.nama+" · "+s.cabor;$("#rCaborLbl").textContent=`Semua atlet ${s.cabor} (${data().siswa.filter(x=>x.cabor===s.cabor).length})`;
+  const d=$("#repDlg");if(!d.open){if(d.showModal)d.showModal();else d.setAttribute("open","")}
+}
+$("#btnRep").addEventListener("click",openReport);
+$("#repClose").addEventListener("click",()=>$("#repDlg").close());
+$("#repForm").addEventListener("submit",e=>{
+  e.preventDefault();const D=data();const s=D.siswa.find(x=>x.id===AT.sel);if(!s)return;
+  const scope=(document.querySelector('input[name="rScope"]:checked')||{}).value;
+  const list=scope==="cabor"?D.siswa.filter(x=>x.cabor===s.cabor).sort((a,b)=>a.nama.localeCompare(b.nama)):[s];
+  const w0=$("#rWeek").value,note=$("#rNote").value.trim();
+  const rows=computeRows();
+  $("#report").innerHTML=`<div class="rp-bar"><button type="button" class="btn" id="rpPrint">Cetak / simpan PDF</button><button type="button" class="btn ghost" id="rpBack" style="color:#161a2b;background:#fff">Kembali</button><span>Di jendela cetak, pilih printer “Simpan sebagai PDF” untuk membuat file PDF.</span></div>`+list.map(x=>reportPage(x,w0,note,rows.find(r=>r.s.id===x.id))).join("");
+  $("#repDlg").close();$("#app").hidden=true;$("#report").hidden=false;window.scrollTo(0,0);
+});
+$("#report").addEventListener("click",e=>{if(e.target.closest("#rpPrint"))window.print();if(e.target.closest("#rpBack")){$("#report").hidden=true;$("#report").innerHTML="";$("#app").hidden=false}});
+function reportPage(s,w0,note,row){
+  const D=data();const ent=D.entri.filter(e=>e.siswaId===s.id).sort((a,b)=>a.tanggal<b.tanggal?-1:1);const pl=(D.rencana||[]).filter(p=>p.siswaId===s.id);
+  const P=pmc(ent,pl,TODAY);const pd={};P.forEach(d=>pd[d.t]=d);
+  const days=[...Array(7)].map((_,i)=>addDays(w0,i));const eBy={};ent.forEach(e=>eBy[e.tanggal]=e);
+  const R=days.map(t=>{const e=eBy[t];const ps=pl.filter(p=>p.tanggal===t);const act=e?loadOf(e):0;const pt=ps.reduce((x,p)=>x+planTss(p),0);
+    return{t,e,ps,ss:e?sesiOf(e):[],act,pt,cp:complianceOf(pt,e?loadOf(e):null,t),w:wellOf(e),ny:e&&hasW(e)?+e.nyeri||0:null,area:e&&e.area||[],rdy:kesiapanAt(ent,t,P)}});
+  const sesi=R.reduce((x,r)=>x+r.ss.length,0),dur=R.reduce((x,r)=>x+r.ss.reduce((y,z)=>y+(+z.durasi||0),0),0);
+  const act=R.reduce((x,r)=>x+r.act,0),pt=R.reduce((x,r)=>x+r.pt,0);
+  const cpd=R.filter(r=>r.cp),cpok=cpd.filter(r=>r.cp==="hijau").length;
+  const wl=R.filter(r=>r.w!=null),ny=R.filter(r=>r.ny!=null).sort((a,b)=>b.ny-a.ny)[0];
+  const rd=R.filter(r=>r.rdy);const last=addDays(w0,6)<=TODAY?addDays(w0,6):TODAY;const pe=pd[last],pb=pd[addDays(w0,-1)];
+  const box=(v,l)=>`<div><b>${v}</b><span>${l}</span></div>`;
+  const W=700,H=150,bw=W/7;const mx=Math.max(60,...R.map(r=>Math.max(r.act,r.pt)));const y=v=>H-20-(v/mx)*(H-40);
+  const svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Beban harian dan wellness">${R.map((r,i)=>{const x=i*bw+bw*.2,w=bw*.6;
+    return`${r.pt?`<rect x="${x}" y="${y(r.pt)}" width="${w}" height="${H-20-y(r.pt)}" fill="none" stroke="#9aa0ad" stroke-dasharray="4 3"/>`:""}${r.act?`<rect x="${x+w*.15}" y="${y(r.act)}" width="${w*.7}" height="${H-20-y(r.act)}" fill="${r.cp?CPL[r.cp][0]:"#ff5b0a"}"/><text x="${x+w/2}" y="${y(r.act)-4}" font-size="11" text-anchor="middle" fill="#161a2b">${r.act}</text>`:""}${r.w!=null?`<circle cx="${x+w/2}" cy="${H-20-(r.w-5)/20*(H-40)}" r="5" fill="#2f80ed" stroke="#fff" stroke-width="1.5"/>`:""}<text x="${x+w/2}" y="${H-4}" font-size="11" text-anchor="middle" fill="#5e6475">${parse(r.t).toLocaleDateString("id-ID",{weekday:"short"})}</text>`}).join("")}<line x1="0" x2="${W}" y1="${H-20}" y2="${H-20}" stroke="#ccc"/></svg>`;
+  const st=row&&row.a;const age=ageOf(s);
+  return`<section class="rp">
+  <div class="hd"><div><h3>Laporan mingguan latihan</h3><h1>${esc(s.nama.replace(" (contoh)",""))}</h1><small>${esc(s.cabor)}${s.kelas?" · "+esc(s.kelas):""}${age!=null?" · "+age+" tahun":""}${s.pelatih?" · Pelatih: "+esc(s.pelatih):""}</small></div>
+    <div style="text-align:right"><h3>Periode</h3><b>${fmtD(w0)} – ${fmtD(addDays(w0,6))} ${parse(w0).getFullYear()}</b><small>Dicetak ${new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}</small></div></div>
+  <div class="sm">${box(sesi,"sesi latihan")}${box(Math.floor(dur/60)+" j "+pad(dur%60)+" m","durasi total")}${box(act+(pt?` <small style="font-size:13px;color:#5e6475">/ ${pt}</small>`:""),"TSS aktual / rencana")}${box(cpd.length?Math.round(cpok/cpd.length*100)+"%":"–","sesuai rencana"+(cpd.length?` (${cpok}/${cpd.length} hari)`:""))}${box(wl.length?dec(mean(wl.map(r=>r.w)),1)+"/25":"–","rata-rata wellness · diisi "+wl.length+"/7 hari")}${box(ny&&ny.ny?ny.ny+"/10":"0","nyeri tertinggi"+(ny&&ny.ny&&ny.area.length?" · "+esc(ny.area.join(", ")):""))}${box(rd.length?Math.round(mean(rd.map(r=>r.rdy.skor))):"–","rata-rata kesiapan (0–100)")}${box(pe?Math.round(pe.ctl)+" / "+(pe.form>0?"+":"")+Math.round(pe.form):"–","fitness / form akhir minggu"+(pe&&pb?" · ramp "+(pe.ctl-pb.ctl>0?"+":"")+dec(pe.ctl-pb.ctl,1):""))}</div>
+  <div><h3>Beban harian (batang) · rencana (garis putus) · wellness (titik biru)</h3>${svg}</div>
+  <table><tr><th>Hari</th><th>Rencana</th><th>Latihan tercatat</th><th>TSS</th><th>Wellness</th><th>Nyeri</th><th>Kesiapan</th></tr>${R.map(r=>`<tr><td><b>${parse(r.t).toLocaleDateString("id-ID",{weekday:"short",day:"numeric",month:"short"})}</b></td><td>${r.ps.map(p=>esc(p.judul)+` <span style="color:#5e6475">(${p.durasi||0}′, RPE ${p.rpe})</span>`).join("<br>")||"–"}</td><td>${r.ss.map(x=>esc(x.jenis||"Latihan")+` <span style="color:#5e6475">${x.durasi}′ · RPE ${x.rpe}${x.km?" · "+x.km+" km":""}${x.hr?" · ♥"+x.hr:""}</span>`).join("<br>")||(r.t>TODAY?"":"–")}</td><td>${r.act||(r.t>TODAY?"":"0")}${r.cp?` <span class="pill2" style="background:${CPL[r.cp][0]}">${r.cp==="hijau"?"✓":r.cp==="merah"?"✗":"~"}</span>`:""}</td><td>${r.w!=null?r.w:"–"}</td><td>${r.ny!=null?r.ny+(r.area.length?" · "+esc(r.area.join(", ")):""):"–"}</td><td>${r.rdy?`<b style="color:${{hijau:"#1f9d55",kuning:"#a87700",merah:"#d62f32"}[r.rdy.kat]}">${r.rdy.skor}</b>`:"–"}</td></tr>`).join("")}</table>
+  ${st?`<div><h3>Status terkini (per ${fmtD(TODAY)})</h3><p style="margin:4px 0 0;font-size:13px"><span class="pill2" style="background:${{merah:"#e5383b",kuning:"#d99a00",hijau:"#1f9d55",kosong:"#8a8f9c"}[st.status]}">${LABEL[st.status]}</span> ${esc(st.reasons.join(" · "))}</p></div>`:""}
+  <div><h3>Catatan pelatih</h3><div class="note-box">${esc(note)}</div></div>
+  <div class="ft"><span>Monitoring Latihan Atlet</span><span>Kesiapan: ≥70 siap · 50–69 waspada · &lt;50 perlu pemulihan</span></div>
+</section>`;
+}
 
 /* ---------- tautan pribadi atlet ---------- */
 const LK={id:null};
@@ -1704,11 +1888,12 @@ $("#formSiswa").addEventListener("submit",async e=>{
   if(bb!==""&&(+bb<25||+bb>200))return msg("#msgSiswa","Berat badan di luar rentang 25–200 kg.");
   if(tb!==""&&(+tb<1||+tb>2.3))return msg("#msgSiswa","Tinggi badan diisi dalam meter, misalnya 1,68.");
   const D=inputData();if(D.siswa.some(s=>s.id!==SE.edit&&s.nama.toLowerCase()===nama.toLowerCase()))return msg("#msgSiswa","Nama ini sudah terdaftar.");
-  const doc={nama,cabor,kelas,jk,pelatih,tglLahir:tglLahir||null,bb:bb===""?null:+bb,tb:tb===""?null:+tb};
+  const hp=$("#sHp").value.trim();if(hp&&!waNo(hp))return msg("#msgSiswa","Nomor WhatsApp tidak valid. Contoh: 081234567890.");
+  const doc={nama,cabor,kelas,jk,pelatih,tglLahir:tglLahir||null,bb:bb===""?null:+bb,tb:tb===""?null:+tb,hp:hp||null};
   const editing=SE.edit;
   if(S.mode==="live"&&S.db){
     try{if(editing)await DB.update("siswa",editing,doc);else await DB.insert("siswa",{...doc,dibuat:new Date().toISOString()});msg("#msgSiswa",editing?"Perubahan tersimpan.":nama+" ditambahkan.",true)}
-    catch(err){msg("#msgSiswa",err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin menyimpan data ini. Hubungi pengelola program.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.");return}
+    catch(err){msg("#msgSiswa",err&&err.code==="invalid_argument"?"Akun Anda tidak punya izin menyimpan data ini. Hubungi pengelola program.":err&&/column|schema cache/i.test(err.message||"")?"Database perlu diperbarui: jalankan ulang setup.sql di Supabase.":"Gagal menyimpan. Periksa koneksi lalu coba lagi.");return}
   }else{const R=rawData();if(editing){Object.assign(R.siswa.find(s=>s.id===editing),doc)}else R.siswa.push({id:"tmp"+Date.now(),...doc});msg("#msgSiswa",(editing?"Perubahan tersimpan":nama+" ditambahkan")+" di mode contoh (tidak permanen).",true);renderAll()}
   resetSiswaForm();
 });
@@ -1738,7 +1923,7 @@ $("#kpis").addEventListener("click",e=>{const b=e.target.closest(".kpi");if(!b)r
 $("#fCabor").addEventListener("change",e=>{S.cabor=e.target.value;renderDash()});
 $("#list").addEventListener("click",e=>{const r=e.target.closest(".row[data-id]");if(!r)return;S.sel=S.sel===r.dataset.id?null:r.dataset.id;renderDash();if(S.sel)scrollDetail()});
 
-function renderAll(){if(!S.entered)return;banner();if(S.tab==="atlet")renderAtlet();if(S.tab==="kal")renderKal();else if($("#kalDlg").open)fillDlgLists();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();if(S.tab==="akses")renderAkses();renderPicker();renderSiswa();updateSummary()}
+function renderAll(){if(!S.entered)return;banner();updateBadge();if(S.tab==="atlet")renderAtlet();if(S.tab==="kal")renderKal();else if($("#kalDlg").open)fillDlgLists();if(S.tab==="dash")renderDash();if(S.tab==="tes")renderTes();if(S.tab==="akses")renderAkses();renderPicker();renderSiswa();updateSummary()}
 /* ---------- penyimpanan (Supabase) ---------- */
 const CFG=window.MONITOR_CONFIG||{};
 const SB_MAP={siswa:{tglLahir:"tgl_lahir"},entri:{siswaId:"siswa_id",hrIstirahat:"hr_istirahat"},tes:{siswaId:"siswa_id"},rencana:{siswaId:"siswa_id"}};
