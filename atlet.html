@@ -207,6 +207,8 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
       <div class="tiles" id="dTiles"></div>
       <div class="card"><h2>Risiko cedera (ACWR)</h2><div id="dAcwr"></div><div id="dCurve"></div>
         <p class="note">ACWR = beban 7 hari terakhir dibanding rata-rata 4 minggu. Naikkan beban sedikit demi sedikit agar tetap di zona hijau.</p></div>
+      <div class="card"><h2>Variasi latihan (monotony &amp; strain)</h2><div id="dMono"></div>
+        <p class="note">Latihan yang baik punya hari berat dan hari ringan. Jika beban hampir sama setiap hari (monoton) dan totalnya tinggi, risiko sakit dan kelelahan berlebih naik.</p></div>
       <div class="card"><h2>Beban harian &amp; ACWR</h2><div class="cv" style="height:250px"><canvas id="cDaily" aria-label="Beban harian dan ACWR"></canvas></div>
         <p class="note">Batang = beban harian (TSS). Garis biru = ACWR (sumbu kanan); garis merah 0,8 dan 1,3 batas zona optimal, putus-putus 1,5 zona bahaya.</p></div>
       <div class="card">
@@ -456,7 +458,7 @@ function renderDash(){
   /* ACWR */
   const lBy={};D.entri.forEach(e=>{if(e.tanggal<=TODAY)lBy[e.tanggal]=(lBy[e.tanggal]||0)+dayTss(e)});
   const dser=window.ACWR?ACWR.seri(lBy,addDays(TODAY,-59),TODAY):[];const acNow=dser.length?dser[dser.length-1].acwr:null;
-  if(window.ACWR){$("#dAcwr").innerHTML=ACWR.kartu(acNow,ACWR.naikMingguan(lBy,TODAY),{acwrE:dser.length?dser[dser.length-1].acwrE:null,formPct:dser.length?dser[dser.length-1].formPct:null});$("#dCurve").innerHTML=acNow!=null?ACWR.kurva([{v:acNow,label:"Kamu"}]):""}
+  if(window.ACWR){$("#dAcwr").innerHTML=ACWR.kartu(acNow,ACWR.naikMingguan(lBy,TODAY),{acwrE:dser.length?dser[dser.length-1].acwrE:null,formPct:dser.length?dser[dser.length-1].formPct:null});$("#dCurve").innerHTML=acNow!=null?ACWR.kurva([{v:acNow,label:"Kamu"}]):"";$("#dMono").innerHTML=ACWR.fosterKartu(ACWR.foster(lBy,TODAY))}
   if(VIEW.v!=="dash")return;
   if(dser.length)chart("cDaily",{type:"bar",data:{labels:dser.map(d=>fD(d.t)),datasets:[{type:"bar",label:"TSS",data:dser.map(d=>d.load),backgroundColor:"rgba(20,184,166,.85)",yAxisID:"y",order:2},{type:"line",label:"ACWR",data:dser.map(d=>d.acwr),borderColor:"#60a5fa",borderWidth:2.2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:1},{type:"line",label:"ACWR EWMA",data:dser.map(d=>d.acwrE),borderColor:"#c084fc",borderDash:[5,4],borderWidth:2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:0}]},
     options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({beginAtZero:true,ticks:{maxTicksLimit:5,color:"#a8a8a8"}}),y1:ax({position:"right",min:0.2,max:Math.max(1.8,Math.ceil(Math.max(0,...dser.map(d=>Math.max(d.acwr||0,d.acwrE||0)))*5)/5),grid:{display:false},ticks:{stepSize:0.4,color:"#a8a8a8",callback:v=>dec(v,1)}})},

@@ -20,7 +20,7 @@ Waktu pemasangan sekitar 20–30 menit. Semua layanan di bawah punya paket grati
 ## 1. Buat database di Supabase
 
 1. Buka **supabase.com**, daftar, lalu klik **New project**.
-2. Isi nama proyek (misalnya `monitor-kko`), buat password database (simpan baik-baik), dan pilih region **Southeast Asia (Singapore)**.
+2. Isi nama proyek (misalnya `monitoring-latihan-atlet`), buat password database (simpan baik-baik), dan pilih region **Southeast Asia (Singapore)**.
 3. Tunggu sampai proyek siap (±2 menit).
 4. Buka menu **SQL Editor** → **New query**.
 5. Tempel seluruh isi `setup.sql`, lalu klik **Run**. Pastikan muncul pesan *Success*.
@@ -47,22 +47,22 @@ window.MONITOR_CONFIG={
 
 1. Daftar atau masuk di **dash.cloudflare.com**.
 2. Buka menu **Workers & Pages**, klik **Create application**, lalu **Get started** dan pilih **Drag and drop your files**.
-3. Isi nama proyek, misalnya `monitor-kko`. Nama ini menjadi alamat web: `monitor-kko.pages.dev`.
+3. Isi nama proyek, misalnya `monitoring-latihan-atlet`. Nama ini menjadi alamat web: `monitoring-latihan-atlet.pages.dev`.
 4. Seret **folder** ini (berisi `index.html`) ke kotak unggah, lalu klik **Deploy site**.
-5. Setelah selesai, web bisa dibuka di `https://monitor-kko.pages.dev`.
+5. Setelah selesai, web bisa dibuka di `https://monitoring-latihan-atlet.pages.dev`.
 
 **Memperbarui web:** buka proyek di Workers & Pages, klik **Create a new deployment**, lalu seret lagi folder yang sudah diperbarui.
 
 **Domain sendiri (opsional):** di proyek, buka tab **Custom domains**, lalu klik **Set up a custom domain**.
 - Kalau domain Anda dikelola di Cloudflare, pengaturannya otomatis.
-- Kalau memakai subdomain sekolah atau kampus (misalnya `monitoring.namasekolah.sch.id`), minta pengelola IT menambahkan **CNAME** yang mengarah ke `monitor-kko.pages.dev`.
+- Kalau memakai subdomain sekolah atau kampus (misalnya `monitoring.namasekolah.sch.id`), minta pengelola IT menambahkan **CNAME** yang mengarah ke `monitoring-latihan-atlet.pages.dev`.
 
 ## 4. Atur alamat web di Supabase
 
 Langkah ini diperlukan agar tautan konfirmasi email dan lupa kata sandi kembali ke web Anda.
 
 1. Buka Supabase **Authentication → URL Configuration**.
-2. Isi **Site URL** dengan alamat web Anda, misalnya `https://monitor-kko.pages.dev`.
+2. Isi **Site URL** dengan alamat web Anda, misalnya `https://monitoring-latihan-atlet.pages.dev`.
 3. Tambahkan alamat yang sama di **Redirect URLs**.
 
 ## 5. Ruang kerja per akun (data Anda tidak terlihat akun lain)
@@ -180,6 +180,26 @@ update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 - **Status gabungan** memakai zona **paling waspada** dari ACWR rolling 7:28 dan ACWR EWMA; dipakai untuk status merah/kuning, kartu risiko cedera, skor kesiapan, kalender, dan laporan.
 - Form % baru dinilai setelah **≥ 4 minggu data** dan Fitness ≥ 10. Sebelum itu tertulis *data belum cukup* — karena saat Fitness masih kecil (misalnya 3), Form absolut −13 bisa terlihat "optimal" padahal sebenarnya lonjakan besar.
 - Fitness dan fatigue diawali dari **rata-rata beban harian 4 minggu pertama**, bukan dari 0, agar atlet baru tidak mendapat peringatan palsu "zona bahaya".
+
+## 13. Peringatan otomatis dan monotony–strain
+
+**Perlu perhatian hari ini.** Di bagian paling atas tab **Ringkasan tim** ada daftar atlet yang perlu perhatian. Daftar yang sama muncul sebagai jendela **sekali sehari** saat aplikasi pertama kali dibuka. Jumlahnya juga tampil sebagai angka merah di tab Ringkasan tim.
+
+| Tanda | Kapan muncul | Tingkat |
+|---|---|---|
+| ACWR ≥ 1,5 | ACWR rolling atau EWMA di zona bahaya | Segera |
+| Kesiapan < 50 | Skor kesiapan hari ini di bawah 50 | Segera |
+| Nyeri | Nyeri naik dibanding entri sebelumnya (≥ 3); nyeri ≥ 6 atau ≥ 3 tiga entri berturut-turut | Pantau / segera |
+| Monoton / strain | Monotony > 2, strain ≥ 1,5× biasanya, atau keduanya (segera) | Pantau / segera |
+| Belum mengisi | Tidak mengisi kondisi pagi ≥ 3 hari, atau belum pernah | Pantau |
+
+Klik chip untuk menyaring, klik nama untuk membuka profil, tombol **WA** untuk menghubungi atlet (pesannya sudah berisi tautan pribadi), atau **Salin daftar** / **Kirim daftar ke WhatsApp** untuk dibagikan ke tim pelatih.
+
+**Monotony dan strain (Foster).**
+- **Monotony** = rata-rata beban harian 7 hari ÷ simpangan bakunya (hari istirahat dihitung 0). Di atas **2,0** berarti latihan monoton: bebannya hampir sama setiap hari dan kurang hari ringan.
+- **Strain** = beban 7 hari × monotony. Karena satuan TSS berbeda dari sRPE, strain dibandingkan dengan **rata-rata strain atlet itu sendiri selama 12 minggu** (muncul setelah ±4 minggu data).
+- Monotony > 2 **bersamaan** dengan strain ≥ 1,25× biasanya membuat status atlet **merah**, karena kombinasi ini paling sering mendahului sakit dan overtraining.
+- Grafik dan kartunya ada di tab **Dashboard atlet** dan di dashboard aplikasi atlet (*Variasi latihan*).
 
 ## Hal penting lain
 

@@ -1,5 +1,6 @@
 /* =====================================================================
-   ACWR (Acute:Chronic Workload Ratio) — zona risiko, kartu, kurva, dan seri harian.
+   ACWR (Acute:Chronic Workload Ratio) — zona risiko, kartu, kurva, dan seri harian,
+   ditambah monotony & strain (Foster) di bagian bawah file.
    Dipakai index.html (pelatih) dan atlet.html (atlet).
    ACWR = beban 7 hari terakhir ÷ rata-rata beban mingguan 4 minggu terakhir.
    Zona menurut Gabbett (2016), Br J Sports Med:
@@ -110,5 +111,56 @@
       <g transform="translate(${R-200},${B-16})"><rect width="12" height="4" y="4" fill="#cbd5e1"/><text x="18" y="10" font-size="11" fill="#cbd5e1">Performa</text><rect x="86" width="12" height="4" y="4" fill="#ef4444"/><text x="104" y="10" font-size="11" fill="#fca5a5">Risiko cedera</text></g>
     </svg>`;
   }
-  window.ACWR={Z,zona,FZ,formZona,formPct,benih,gabung,seri,naikMingguan,kartu,kurva};
+  /* =================================================================
+     Monotony & strain (Foster 1998, Med Sci Sports Exerc).
+       monotony = rata-rata beban harian 7 hari ÷ simpangan bakunya (hari istirahat = 0 ikut dihitung)
+       strain   = beban 7 hari × monotony
+     Monotony > 2,0 = latihan monoton (beban hampir sama tiap hari, kurang hari ringan). Monotony
+     DAN strain yang tinggi bersamaan dikaitkan dengan sakit dan overtraining. Strain tidak punya
+     ambang mutlak untuk satuan TSS, jadi dibandingkan dengan strain atlet itu sendiri: rata-rata
+     strain pada 12 titik mingguan sebelumnya (minimal 4 minggu berisi latihan).
+     ================================================================= */
+  const MZ=[
+    {k:"variasi",a:0,b:1.5,label:"Bervariasi",risk:"Pola berat–ringan baik",warna:"#22c55e",rentang:"< 1,5"},
+    {k:"agak",a:1.5,b:2,label:"Agak monoton",risk:"Perlu lebih banyak hari ringan",warna:"#f59e0b",rentang:"1,5 – 2,0"},
+    {k:"monoton",a:2,b:1e9,label:"Monoton",risk:"Risiko sakit & overtraining naik",warna:"#ef4444",rentang:"> 2,0"}];
+  const monoZona=v=>v==null||!isFinite(v)?null:MZ.find(z=>v>=z.a&&v<z.b);
+  function foster7(byDate,t){
+    const l=[];for(let k=6;k>=0;k--)l.push(+byDate[addDays(t,-k)]||0);
+    const sum=l.reduce((x,y)=>x+y,0);if(sum<=0)return{beban:0,mono:null,strain:0};
+    const m=sum/7;const s=Math.sqrt(l.reduce((x,y)=>x+(y-m)**2,0)/6);
+    const mono=s>0?Math.min(4,m/s):4; /* beban sama persis setiap hari → dibatasi 4 */
+    return{beban:Math.round(sum),mono:+mono.toFixed(2),strain:Math.round(sum*mono)};
+  }
+  function foster(byDate,t){
+    const f=foster7(byDate,t);
+    /* hanya minggu yang seluruhnya sesudah entri pertama, agar awal pencatatan tidak terbaca sebagai minggu ringan */
+    const first=Object.keys(byDate).filter(d=>byDate[d]!=null).sort()[0];
+    const prev=[];for(let k=1;k<=12;k++){const tw=addDays(t,-7*k);if(!first||addDays(tw,-6)<first)break;const p=foster7(byDate,tw);if(p.beban>0)prev.push(p.strain)}
+    const base=prev.length>=4?prev.reduce((x,y)=>x+y,0)/prev.length:null;
+    const rasio=base>0?+(f.strain/base).toFixed(2):null;
+    const mz=monoZona(f.mono);
+    const strainTinggi=rasio!=null&&rasio>=1.5,strainNaik=rasio!=null&&rasio>=1.25;
+    const lvl=mz&&mz.k==="monoton"&&strainNaik?2:(mz&&mz.k==="monoton")||strainTinggi?1:0;
+    const saran=!f.beban?"Belum ada latihan 7 hari terakhir."
+      :lvl===2?"Beban tinggi DAN monoton — kombinasi yang paling sering mendahului sakit atau overtraining. Sisipkan 1–2 hari ringan/istirahat dan buat pola berat–ringan."
+      :mz&&mz.k==="monoton"?"Beban harian hampir sama setiap hari. Buat pola berat–ringan dan sediakan minimal 1 hari istirahat atau pemulihan aktif per minggu."
+      :strainTinggi?"Strain minggu ini jauh di atas biasanya. Pastikan tidur, makan, dan pemulihan cukup; pantau tanda sakit (flu, radang tenggorokan)."
+      :mz&&mz.k==="agak"?"Variasi beban cukup, tapi bisa lebih baik: beri jarak antara sesi berat dan sesi ringan."
+      :"Variasi beban baik: ada hari berat dan hari ringan.";
+    return{...f,base:base!=null?Math.round(base):null,rasio,mz,lvl,saran};
+  }
+  /* Seri harian monotony & strain (jendela 7 hari bergulir). */
+  function fosterSeri(byDate,dari,sampai){const out=[];for(let t=dari;t<=sampai;t=addDays(t,1)){const f=foster7(byDate,t);out.push({t,...f})}return out}
+  function fosterKartu(f){
+    if(!f)return"";const mz=f.mz;
+    const rows=[...MZ].reverse().map(x=>{const on=mz&&mz.k===x.k;return`<div class="acl${on?" on":""}" style="--zc:${x.warna}"><div><b>${x.label}</b><small>${x.risk}</small></div><span class="acr">${x.rentang}</span>${on?`<span class="acme">◀ monotony ${dec(f.mono)}</span>`:""}</div>`}).join("");
+    const rc=f.rasio==null?null:f.rasio>=1.5?"#ef4444":f.rasio>=1.25?"#f59e0b":"#22c55e";
+    const ind=(l,val,c)=>`<span class="acind" style="--zc:${c||"#7d889e"}"><small>${l}</small><b>${val}</b></span>`;
+    const hc=f.lvl===2?"#ef4444":f.lvl===1?"#f59e0b":mz?mz.warna:null;
+    return`<div class="acwrcard">${mz?`<div class="achead" style="--zc:${hc}"><span class="acv">${dec(f.mono)}</span><span><b>${f.lvl===2?"Monoton + strain tinggi":mz.label}</b><small>Monotony 7 hari terakhir</small></span></div><p class="acsaran" style="--zc:${hc}">${f.saran}</p>`:`<div class="achead"><span class="acv">–</span><span><b>Belum ada latihan</b><small>Monotony muncul setelah ada sesi dalam 7 hari terakhir</small></span></div>`}
+      <div class="acinds">${ind("Beban 7 hari",String(f.beban),"#14b8a6")}${ind("Strain",f.strain?f.strain.toLocaleString("id-ID"):"–",rc)}${ind("Strain vs biasanya",f.rasio!=null?dec(f.rasio)+"×":"–",rc)}</div>${rows}
+      <p class="acsrc">Monotony = rata-rata ÷ simpangan baku beban harian 7 hari; strain = beban 7 hari × monotony (Foster 1998). Strain dibandingkan dengan rata-rata 12 minggu atlet sendiri${f.base!=null?" ("+f.base.toLocaleString("id-ID")+")":" — muncul setelah ±4 minggu data"}.</p></div>`;
+  }
+  window.ACWR={Z,zona,FZ,formZona,formPct,benih,gabung,seri,naikMingguan,kartu,kurva,MZ,monoZona,foster,fosterSeri,fosterKartu};
 })();
