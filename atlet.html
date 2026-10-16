@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Latihan Saya</title>
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#0a1122">
 <meta name="robots" content="noindex">
 <link rel="manifest" href="manifest-atlet.json">
 <link rel="icon" href="icon-192.png">
@@ -15,8 +15,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
 <style>
 /* Halaman atlet: satu kolom, tombol besar, tema gelap seperti dashboard pelatih */
-:root{--bg:#000;--surface:#0e0e0f;--surface2:#19191b;--ink:#f4f4f4;--muted:#a8a8a8;--line:#3b3b3e;--accent:#ff5b0a;--accent-soft:#3b1a08;
-  --red:#ff4b42;--red-bg:#3e1311;--amber:#ffc000;--amber-bg:#3b2f00;--green:#5cc23a;--green-bg:#16300f;--gray-bg:#262628;
+:root{--bg:#060a14;--surface:#0e1525;--surface2:#151f35;--ink:#e8edf7;--muted:#8c97ad;--line:#22304b;--accent:#ff6a1a;--accent-soft:#2b1709;
+  --red:#ef4444;--red-bg:#341319;--amber:#f59e0b;--amber-bg:#33250a;--green:#22c55e;--green-bg:#0d2a1b;--gray-bg:#1b2539;
   --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;padding-bottom:env(safe-area-inset-bottom)}
@@ -113,6 +113,31 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 .hrz .z{height:30px;border-radius:7px;background:var(--zc);color:#000;font-weight:800;display:grid;place-items:center;font-size:13px}
 .hrz small{display:block;color:var(--muted);font-size:12px}
 @media (prefers-reduced-motion:no-preference){.chip,.five button,.rpe button{transition:background .15s,border-color .15s}}
+/* ===== tema profesional ===== */
+body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),transparent 60%),radial-gradient(600px 500px at -20% 10%,rgba(59,130,246,.14),transparent 60%),var(--bg);background-attachment:fixed}
+.top{background:linear-gradient(115deg,rgba(10,17,34,.95),rgba(16,26,51,.95) 60%,rgba(27,20,48,.95));border-bottom:1px solid var(--line)}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,#3b82f6,#22c55e 35%,#f59e0b 65%,#ef4444)}
+.card,.tile{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)),var(--surface);border-color:var(--line);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 26px rgba(0,0,0,.3)}
+.btn{background:linear-gradient(135deg,#ff7a2e,#ff5310);color:#fff;box-shadow:0 6px 16px rgba(255,90,20,.28)}
+.btn.ghost{background:var(--surface2);box-shadow:none}
+.tabs{background:rgba(14,21,37,.92);backdrop-filter:blur(8px)}
+.tabs button[aria-selected="true"]{background:linear-gradient(135deg,#ff7a2e,#ff5310);color:#fff;box-shadow:0 6px 16px rgba(255,90,20,.3)}
+.tile{border-top:0;position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--tc,var(--accent));box-shadow:0 0 16px var(--tc,var(--accent))}
+.chip,.five button,.rpe button,input[type=number]{background:var(--surface2)}
+.acwrcard{display:flex;flex-direction:column;gap:6px}
+.achead{display:flex;align-items:center;gap:12px;padding:2px 0 6px}
+.achead .acv{font-family:var(--display);font-size:46px;font-weight:700;line-height:1;color:var(--zc,var(--muted));text-shadow:0 0 22px color-mix(in srgb,var(--zc,#000) 45%,transparent)}
+.achead b{display:block;font-size:18px;color:var(--zc,var(--ink))}.achead small{color:var(--muted);font-size:13px}
+.acl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;align-items:center;padding:8px 11px;border-radius:10px;background:color-mix(in srgb,var(--zc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--zc) 28%,transparent);opacity:.6}
+.acl b{display:block;font-size:13px;color:var(--zc);text-transform:uppercase;letter-spacing:.04em}.acl small{color:var(--muted);font-size:12px}
+.acl .acr{font-family:var(--display);font-size:17px;font-weight:700}
+.acl.on{opacity:1;background:linear-gradient(90deg,color-mix(in srgb,var(--zc) 40%,var(--surface)),color-mix(in srgb,var(--zc) 12%,var(--surface)));border-color:var(--zc);box-shadow:0 0 20px color-mix(in srgb,var(--zc) 30%,transparent)}
+.acl.on small{color:var(--ink)}
+.acme{grid-column:1/-1;justify-self:start;background:var(--zc);color:#06101f;font-weight:800;font-size:12px;border-radius:999px;padding:2px 10px}
+.acnote{font-size:13px;margin:4px 0 0}.acnote span{color:var(--muted)}
+.acsrc{font-size:11.5px;color:var(--muted);margin:2px 0 0}
+.acwrcurve{display:block;max-width:100%;height:auto}
 </style>
 </head>
 <body>
@@ -176,6 +201,10 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
     <div id="vDash" hidden style="display:flex;flex-direction:column;gap:14px">
       <div class="card ready" id="dReady"></div>
       <div class="tiles" id="dTiles"></div>
+      <div class="card"><h2>Risiko cedera (ACWR)</h2><div id="dAcwr"></div><div id="dCurve"></div>
+        <p class="note">ACWR = beban 7 hari terakhir dibanding rata-rata 4 minggu. Naikkan beban sedikit demi sedikit agar tetap di zona hijau.</p></div>
+      <div class="card"><h2>Beban harian &amp; ACWR</h2><div class="cv" style="height:250px"><canvas id="cDaily" aria-label="Beban harian dan ACWR"></canvas></div>
+        <p class="note">Batang = beban harian (TSS). Garis biru = ACWR (sumbu kanan); garis merah 0,8 dan 1,3 batas zona optimal, putus-putus 1,5 zona bahaya.</p></div>
       <div class="card">
         <h2>7 hari terakhir</h2>
         <div class="week" id="week" style="height:110px"></div>
@@ -203,6 +232,7 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 <script src="norma.js"></script>
 <script src="kesiapan.js"></script>
 <script src="impor.js"></script>
+<script src="acwr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
@@ -387,6 +417,7 @@ function pmc(){
 const CH={};
 const hasChart=()=>typeof window.Chart==="function";
 const zones={id:"zones",beforeDatasetsDraw(ch){const z=ch.options.plugins.zones;if(!z)return;const{ctx,chartArea:a,scales:{y}}=ch;ctx.save();z.forEach(r=>{const y1=y.getPixelForValue(r.y[1]),y2=y.getPixelForValue(r.y[0]);ctx.fillStyle=r.c;ctx.fillRect(a.left,Math.max(a.top,y1),a.width,Math.min(a.bottom,y2)-Math.max(a.top,y1))});ctx.restore()}};
+const hlines={id:"hlines",afterDatasetsDraw(ch){const H=ch.options.plugins.hlines;if(!H)return;const{ctx,chartArea:a,scales}=ch;ctx.save();H.forEach(h=>{const sc=scales[h.axis||"y"];if(!sc)return;const y=sc.getPixelForValue(h.v);if(y<a.top||y>a.bottom)return;ctx.strokeStyle=h.c;ctx.lineWidth=h.w||1.5;ctx.setLineDash(h.dash||[]);ctx.beginPath();ctx.moveTo(a.left,y);ctx.lineTo(a.right,y);ctx.stroke()});ctx.restore()}};
 const vline={id:"vline",afterDatasetsDraw(ch){const r=ch.options.plugins.vline;if(!r)return;const{ctx,chartArea:a,scales:{x}}=ch;const p=x.getPixelForValue(r.value);ctx.save();ctx.strokeStyle=r.color||"#bbb";ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(p,a.top);ctx.lineTo(p,a.bottom);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=r.color||"#bbb";ctx.font="600 11px Barlow,sans-serif";ctx.fillText(r.label,Math.min(p+4,a.right-60),a.top+10);ctx.restore()}};
 function chart(id,cfg){
   const el=document.getElementById(id);if(!el)return;if(CH[id]){CH[id].destroy();delete CH[id]}
@@ -394,7 +425,7 @@ function chart(id,cfg){
   Chart.defaults.color="#a8a8a8";Chart.defaults.font.family='"Barlow",system-ui,sans-serif';
   cfg.options=Object.assign({responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:"index",intersect:false}},cfg.options||{});
   cfg.options.plugins=Object.assign({legend:{display:false},tooltip:{backgroundColor:"#f4f4f4",titleColor:"#000",bodyColor:"#000"}},cfg.options.plugins||{});
-  CH[id]=new Chart(el,{...cfg,plugins:[zones,vline]});
+  CH[id]=new Chart(el,{...cfg,plugins:[zones,vline,hlines]});
 }
 const ax=x=>Object.assign({grid:{color:"#2a2a2d",drawTicks:false},border:{display:false},ticks:{color:"#a8a8a8",padding:5}},x||{});
 const fD=t=>parse(t).toLocaleDateString("id-ID",{day:"numeric",month:"short"});
@@ -417,7 +448,15 @@ function renderDash(){
   let cpN=0,cpOk=0;for(let k=1;k<=28;k++){const t=addDays(TODAY,-k);const pt=(D.rencana||[]).filter(p=>p.tanggal===t).reduce((x,p)=>x+planTss(p),0);if(!pt)continue;cpN++;const r=dayTss(entri(t))/pt;if(r>=.8&&r<=1.2)cpOk++}
   const tile=(l,v,s,c)=>`<div class="tile" style="--tc:${c}"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
   $("#dTiles").innerHTML=tile("Fitness",now?Math.round(now.ctl):"–","kebugaran 6 minggu","#ffd400")+tile("Fatigue",now?Math.round(now.atl):"–","kelelahan 1 minggu","#ff4b42")+tile("Form",now?sgn(now.form):"–",fz?fz[2]:"–",fz?fz[3]:"#a8a8a8")+tile("Ramp rate",ramp!=null?(ramp>0?"+":"")+dec(ramp):"–","naik fitness / minggu",ramp==null?"#a8a8a8":ramp>7?"#ff4b42":ramp>5?"#ffc000":"#5cc23a")+tile("Beban 7 hari",tss7,"TSS","#5aa9ff")+tile("Sesuai rencana",cpN?Math.round(cpOk/cpN*100)+"%":"–",cpN?cpOk+" dari "+cpN+" hari (4 minggu)":"belum ada rencana","#3fb950");
+  /* ACWR */
+  const lBy={};D.entri.forEach(e=>{if(e.tanggal<=TODAY)lBy[e.tanggal]=(lBy[e.tanggal]||0)+dayTss(e)});
+  const dser=window.ACWR?ACWR.seri(lBy,addDays(TODAY,-59),TODAY):[];const acNow=dser.length?dser[dser.length-1].acwr:null;
+  if(window.ACWR){$("#dAcwr").innerHTML=ACWR.kartu(acNow,ACWR.naikMingguan(lBy,TODAY));$("#dCurve").innerHTML=acNow!=null?ACWR.kurva([{v:acNow,label:"Kamu"}]):""}
   if(VIEW.v!=="dash")return;
+  if(dser.length)chart("cDaily",{type:"bar",data:{labels:dser.map(d=>fD(d.t)),datasets:[{type:"bar",label:"TSS",data:dser.map(d=>d.load),backgroundColor:"rgba(20,184,166,.85)",yAxisID:"y",order:2},{type:"line",label:"ACWR",data:dser.map(d=>d.acwr),borderColor:"#60a5fa",borderWidth:2.2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:1}]},
+    options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({beginAtZero:true,ticks:{maxTicksLimit:5,color:"#a8a8a8"}}),y1:ax({position:"right",min:0.2,max:Math.max(1.8,Math.ceil(Math.max(0,...dser.map(d=>d.acwr||0))*5)/5),grid:{display:false},ticks:{stepSize:0.4,color:"#a8a8a8",callback:v=>dec(v,1)}})},
+      plugins:{legend:{display:true,labels:{boxWidth:12,boxHeight:8,color:"#f4f4f4"}},hlines:[{axis:"y1",v:0.8,c:"#ef4444"},{axis:"y1",v:1.0,c:"rgba(232,237,247,.6)",w:1.2},{axis:"y1",v:1.3,c:"#ef4444"},{axis:"y1",v:1.5,c:"#ef4444",dash:[6,4]}],tooltip:{callbacks:{label:it=>it.dataset.label==="ACWR"?(it.raw==null?"ACWR: data belum cukup":"ACWR "+dec(it.raw,2)+" · "+ACWR.zona(it.raw).label):"TSS "+it.raw}}}}});
+  else{const c=$("#cDaily");if(c)c.parentElement.innerHTML='<p class="note">Grafik muncul setelah kamu mencatat sesi latihan.</p>'}
   /* grafik fitness & form */
   const w0=Math.max(0,ti-83);const win=P.slice(w0);const lab=win.map(d=>fD(d.t));
   const dash={borderDash:c=>win[c.p1DataIndex]&&win[c.p1DataIndex].proj?[5,4]:undefined};
@@ -426,8 +465,8 @@ function renderDash(){
   else{
     chart("cPmc",{type:"bar",data:{labels:lab,datasets:[{type:"bar",label:"TSS harian",data:win.map(d=>d.tss),backgroundColor:win.map(d=>d.proj?"rgba(190,225,255,.3)":"rgba(190,225,255,.8)"),order:3},{type:"line",label:"Fitness",data:win.map(d=>d.ctl),borderColor:"#ffd400",borderWidth:2,pointRadius:0,tension:.25,segment:dash,order:1},{type:"line",label:"Fatigue",data:win.map(d=>d.atl),borderColor:"#ff4b42",borderWidth:2,pointRadius:0,tension:.25,segment:dash,order:2}]},
       options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({beginAtZero:true,ticks:{maxTicksLimit:5,color:"#a8a8a8"}})},plugins:{vline:today,legend:{display:true,labels:{boxWidth:12,boxHeight:3,color:"#f4f4f4"}}}}});
-    chart("cForm",{type:"line",data:{labels:lab,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#000",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash}]},
-      options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({min:-50,max:30,grid:{display:false},ticks:{stepSize:10,color:"#a8a8a8"}})},plugins:{vline:today?{...today,color:"#000"}:null,zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]})),tooltip:{callbacks:{label:it=>"Form "+sgn(it.raw)+" · "+formZone(it.raw)[2]}}}}});
+    chart("cForm",{type:"line",data:{labels:lab,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#f8fafc",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash}]},
+      options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({min:-50,max:30,grid:{display:false},ticks:{stepSize:10,color:"#a8a8a8"}})},plugins:{vline:today?{...today,color:"#cbd5e1"}:null,zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]+"40"})),tooltip:{callbacks:{label:it=>"Form "+sgn(it.raw)+" · "+formZone(it.raw)[2]}}}}});
   }
   $("#formLeg").innerHTML=FORMZ.map(z=>`<span><i style="background:${z[3]}"></i>${z[2]}</span>`).join("");
   /* beban mingguan per jenis */

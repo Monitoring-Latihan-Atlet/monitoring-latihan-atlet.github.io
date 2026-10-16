@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monitoring Latihan Atlet</title>
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#0a1122">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,10 +12,11 @@
 <style>
 /* Layout: ruang kendali sport science — bilah atas berwarna, ringkasan status, grid grafik 2 kolom, tabel prioritas, panel detail atlet */
 :root{
-  /* Satu tema gelap, mengikuti dashboard Excel: latar hitam, panel bergaris putih, aksen oranye */
-  --bg:#000000;--surface:#0e0e0f;--surface2:#19191b;--ink:#f4f4f4;--muted:#a8a8a8;--line:#3b3b3e;
-  --brand:#000000;--brand-ink:#ffffff;--accent:#ff5b0a;--accent-soft:#3b1a08;--accent2:#8d8d8d;
-  --red:#ff4b42;--red-bg:#3e1311;--amber:#ffc000;--amber-bg:#3b2f00;--green:#5cc23a;--green-bg:#16300f;--lime-bg:#1f3313;--gray-bg:#262628;
+  /* Tema "performance lab": navy gelap, kartu bercahaya halus, aksen oranye; zona ACWR biru-hijau-oranye-merah */
+  --bg:#060a14;--surface:#0e1525;--surface2:#151f35;--ink:#e8edf7;--muted:#8c97ad;--line:#22304b;
+  --brand:#0a1122;--brand-ink:#ffffff;--accent:#ff6a1a;--accent-soft:#2b1709;--accent2:#7d889e;
+  --red:#ef4444;--red-bg:#341319;--amber:#f59e0b;--amber-bg:#33250a;--green:#22c55e;--green-bg:#0d2a1b;--lime-bg:#132a17;--gray-bg:#1b2539;
+  --blue:#3b82f6;--blue-bg:#0f2142;--teal:#14b8a6;
   --c1:#e5393a;--c2:#ffb020;--c3:#8a8a8a;--c4:#7cc94f;--c5:#2fa84f;
   --tile:#4ea72e;--label:#ffc000;--panel-line:#e6e6e6;
   --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif;
@@ -330,6 +331,29 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .hfoot-in .logo{gap:8px;font-weight:600}
 .hfoot-in .logo .mark{width:30px;height:30px;border-radius:9px;box-shadow:none;border:1px solid var(--line)}
 .hfoot-in .logo .mark svg{width:24px;height:24px}
+/* ===== Halaman depan: tema gelap profesional (override) ===== */
+.home{--bg:#060a14;--surface:#0e1525;--surface2:#151f35;--ink:#e8edf7;--muted:#93a0b8;--line:#22304b;--accent:#ff6a1a;--accent-soft:#2b1709;
+  --red:#ef4444;--red-bg:#341319;--amber:#f59e0b;--amber-bg:#33250a;--green:#22c55e;--green-bg:#0d2a1b;--gray-bg:#1b2539;color-scheme:dark;
+  background:radial-gradient(900px 600px at 88% -8%,rgba(255,106,26,.24),transparent 60%),radial-gradient(800px 640px at -5% 18%,rgba(59,130,246,.20),transparent 60%),radial-gradient(760px 520px at 60% 95%,rgba(34,197,94,.10),transparent 60%),#060a14}
+.home::before{background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 50% 0%,#000 25%,transparent 72%);-webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 25%,transparent 72%)}
+.home .hnav,.home .hfoot{background:rgba(6,10,20,.65);border-color:var(--line)}
+.home .logo .mark{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 10px 30px rgba(255,106,26,.25)}
+.home .hbadge span{background:rgba(255,255,255,.05);border-color:var(--line);color:#c9d3e6}
+.home .kicker{background:rgba(255,106,26,.10);border-color:rgba(255,106,26,.45);color:#ffb487;box-shadow:0 0 30px rgba(255,106,26,.15)}
+.home .hero-t{color:#fff;text-shadow:0 10px 40px rgba(0,0,0,.4)}
+.home .lead{color:#b8c3d9}
+.home .hstats div,.home .preview,.home .fcard,.home .flow li{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)),#0e1525;border-color:var(--line);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.home .hstats b{text-shadow:0 0 24px color-mix(in srgb,var(--d) 50%,transparent)}
+.home .pv-h em{background:var(--surface2);border-color:var(--line)}
+.home .login{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0)),#0e1525;color:var(--ink);border-color:var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.home .rolepick button{background:#151f35}
+.home .rolepick button:hover{background:#1b2742}
+.home .fcard .ic{background:color-mix(in srgb,var(--d) 18%,#0e1525)}
+.home .fcard:hover{box-shadow:0 22px 50px rgba(0,0,0,.5),0 0 0 1px color-mix(in srgb,var(--d) 45%,transparent)}
+.home .hsec-h p,.home .lnk{color:#ff9a5c}
+.home .alert b{color:#fbbf24}
+.home .hfoot-in .logo .mark{border-color:var(--line)}
+.home .pv-s div{border:1px solid rgba(255,255,255,.06)}
 .tb-brand{display:flex;align-items:center;gap:12px}
 .tb-mark{width:42px;height:42px;border-radius:12px;background:#fff;display:grid;place-items:center;flex:none}
 .tb-mark svg{width:34px;height:34px}
@@ -449,6 +473,70 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .five button .d{font-size:10px}
 }
 @media (prefers-reduced-motion:no-preference){.row,.kpi,.chip,.five button,.ladder button{transition:background .15s,border-color .15s}}
+/* ===== Tema profesional (override) ===== */
+body{background:radial-gradient(900px 500px at 85% -10%,rgba(255,106,26,.10),transparent 60%),radial-gradient(800px 600px at -10% 10%,rgba(59,130,246,.10),transparent 60%),var(--bg);background-attachment:fixed}
+.topbar{background:linear-gradient(115deg,#0a1122 0%,#0f1a33 55%,#1b1430 100%);border-bottom:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35);position:relative}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--blue),var(--green) 35%,var(--amber) 65%,var(--red))}
+.tb-mark{box-shadow:0 0 0 1px rgba(255,255,255,.15),0 8px 24px rgba(255,106,26,.25)}
+h1{letter-spacing:.02em}
+.eyebrow{color:#ff9a5c;opacity:1}
+.tabs{gap:4px;padding-bottom:10px}
+.tabs button{border-radius:999px;padding:8px 16px;opacity:.75;font-size:14.5px}
+.tabs button:hover{opacity:1;background:rgba(255,255,255,.06)}
+.tabs button[aria-selected="true"]{background:linear-gradient(135deg,#ff7a2e,#ff5310);color:#fff;box-shadow:0 6px 18px rgba(255,90,20,.35)}
+.uchip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.card,.list,.kpi,.xs,.xpanel,.xhead{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0)) ,var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 28px rgba(0,0,0,.28)}
+.card{padding:18px}
+h2{font-weight:700;letter-spacing:.01em}
+h3{color:#a9b4ca;letter-spacing:.09em}
+.kpi .n{font-size:44px}
+.kpi::before{width:100%;height:3px;bottom:auto;right:0}
+.kpi.red{box-shadow:0 0 0 1px rgba(239,68,68,.15),0 12px 28px rgba(239,68,68,.10)}
+.btn{background:linear-gradient(135deg,#ff7a2e,#ff5310);color:#fff;box-shadow:0 6px 16px rgba(255,90,20,.25)}
+.btn.ghost{background:var(--surface2);box-shadow:none}
+select,input[type=text],input[type=tel],input[type=number],input[type=date],input[type=search],textarea{background:var(--surface2);border-color:var(--line)}
+.chip{background:var(--surface2)}
+.row.head{background:rgba(255,255,255,.03)}
+.row:not(.head):hover{background:rgba(59,130,246,.06)}
+.banner{border:1px solid rgba(255,106,26,.35);background:linear-gradient(90deg,rgba(255,106,26,.14),rgba(255,106,26,.04))}
+.dlg{background:var(--surface);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+/* panel atlet: dari kotak putih ala spreadsheet ke kartu profil */
+.xhead{padding:18px 20px;gap:24px}
+.xl{background:none;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;padding:0}
+.xc{display:none}
+.xf{grid-template-columns:96px minmax(0,1fr) 22px}
+.xv{background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:4px 9px;font-weight:600}
+.xv.req{color:var(--muted)}
+.xu,.xbmi{color:var(--ink)}
+.xtile b{border-radius:12px 12px 0 0;font-size:36px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
+.xtile span{border-radius:0 0 12px 12px;background:var(--surface2);color:var(--muted);font-size:11.5px;padding:5px 4px}
+.xtile b{background:linear-gradient(160deg,var(--tc,#22c55e),color-mix(in srgb,var(--tc,#22c55e) 60%,#000))}
+.xtile.alt b{background:linear-gradient(160deg,#0ea5e9,#0369a1)}
+.xpanel{padding:16px 18px}
+.xpanel h3{color:#a9b4ca}
+.xs{border-top:0;position:relative;overflow:hidden;padding:11px 12px}
+.xs::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--sc,var(--accent));box-shadow:0 0 18px var(--sc,var(--accent))}
+.xs b{font-size:30px}
+.rpeleg .rl{background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+.rpeleg .re{background:var(--surface2);border-color:var(--line);border-radius:6px}
+.rpeleg .rn{border-radius:6px}
+.hrz .zc{border-color:#0b1220;box-shadow:0 0 14px color-mix(in srgb,currentColor 0%,transparent)}
+/* kartu & kurva ACWR */
+.acwrcard{display:flex;flex-direction:column;gap:6px}
+.achead{display:flex;align-items:center;gap:14px;padding:6px 0 8px}
+.achead .acv{font-family:var(--display);font-size:48px;font-weight:700;line-height:1;color:var(--zc,var(--muted));text-shadow:0 0 24px color-mix(in srgb,var(--zc,#000) 45%,transparent)}
+.achead b{display:block;font-size:18px;color:var(--zc,var(--ink))}.achead small{color:var(--muted);font-size:13px}
+.acl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--zc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--zc) 28%,transparent);opacity:.6;position:relative}
+.acl b{display:block;font-size:14px;color:var(--zc);text-transform:uppercase;letter-spacing:.04em}.acl small{color:var(--muted);font-size:12px}
+.acl .acr{font-family:var(--display);font-size:18px;font-weight:700;color:var(--ink)}
+.acl.on{opacity:1;background:linear-gradient(90deg,color-mix(in srgb,var(--zc) 40%,var(--surface)),color-mix(in srgb,var(--zc) 12%,var(--surface)));border-color:var(--zc);box-shadow:0 0 22px color-mix(in srgb,var(--zc) 30%,transparent)}
+.acl.on small{color:var(--ink)}
+.acme{grid-column:1/-1;justify-self:start;background:var(--zc);color:#06101f;font-weight:800;font-size:12px;border-radius:999px;padding:2px 10px}
+.acnote{font-size:13px;margin:4px 0 0;color:var(--ink)}.acnote span{color:var(--muted)}
+.acsrc{font-size:11.5px;color:var(--muted);margin:2px 0 0}
+.acwrcurve{display:block;max-width:100%;height:auto}
+.acwrgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.acwrgrid{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div id="report" hidden></div>
@@ -456,7 +544,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <div id="home" class="home">
   <header class="hnav">
     <div class="hnav-in">
-      <div class="logo"><span class="mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span><span class="wm"><b>Monitoring <span>Latihan Atlet</span></b><small>Sport science · Atlet pelajar</small></span></div>
+      <div class="logo"><span class="mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span><span class="wm"><b>Monitoring <span>Latihan Atlet</span></b><small>Sport science · Performa atlet</small></span></div>
       <button type="button" class="btn sm btn-install" hidden>Pasang aplikasi</button>
       <div class="hbadge"><span style="--d:#2f80ed">Kalender</span><span style="--d:#0fb5ae">Beban latihan</span><span style="--d:#7a5af8">Wellness</span><span style="--d:#22b35e">Tes fisik</span></div>
     </div>
@@ -464,31 +552,28 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   <div class="home-in">
     <section class="hero">
-      <span class="kicker"><i></i>Sistem monitoring atlet pelajar</span>
+      <span class="kicker"><i></i>Platform monitoring performa atlet</span>
       <h1 class="hero-t">Monitoring <span>Latihan Atlet</span></h1>
-      <p class="lead">Pantau beban latihan, kondisi harian, dan perkembangan fisik setiap atlet dalam satu tempat, dengan peringatan dini sebelum kelelahan berubah menjadi cedera.</p>
+      <p class="lead">Pantau beban latihan, kesiapan harian, dan risiko cedera setiap atlet — klub, sekolah, hingga atlet perorangan — dengan model ACWR, fitness–fatigue, dan wellness yang dipakai tim profesional.</p>
       <div class="hstats">
-        <div style="--d:#0fb5ae"><b>5</b><span>indikator wellness harian</span></div>
-        <div style="--d:#7a5af8"><b>9</b><span>tes kondisi fisik per semester</span></div>
-        <div style="--d:#ff5b0a"><b>3</b><span>tingkat status risiko otomatis</span></div>
+        <div style="--d:#22c55e"><b>0,8–1,3</b><span>zona ACWR optimal untuk performa &amp; pencegahan cedera</span></div>
+        <div style="--d:#3b82f6"><b>0–100</b><span>skor kesiapan harian tiap atlet</span></div>
+        <div style="--d:#ff6a1a"><b>4</b><span>zona risiko cedera otomatis</span></div>
       </div>
       <div class="preview" aria-hidden="true">
-        <div class="pv-h"><span>Ringkasan kelas · hari ini</span><em>Ilustrasi</em></div>
+        <div class="pv-h"><span>Beban · performa · risiko cedera</span><em>Ilustrasi</em></div>
         <div class="pv-s">
           <div style="background:var(--red-bg);color:var(--red)"><b>2</b><span>Merah · perlu tindakan</span></div>
           <div style="background:var(--amber-bg);color:var(--amber)"><b>4</b><span>Kuning · waspada</span></div>
           <div style="background:var(--green-bg);color:var(--green)"><b>8</b><span>Hijau · siap latihan</span></div>
         </div>
-        <div class="pv-bars">
-          <i style="height:52%;background:var(--green)"></i><i style="height:60%;background:var(--green)"></i><i style="height:48%;background:var(--green)"></i><i style="height:82%;background:var(--amber)"></i><i style="height:55%;background:var(--green)"></i><i style="height:96%;background:var(--red)"></i><i style="height:44%;background:var(--green)"></i><i style="height:63%;background:var(--green)"></i><i style="height:30%;background:var(--amber)"></i><i style="height:57%;background:var(--green)"></i><i style="height:78%;background:var(--amber)"></i><i style="height:50%;background:var(--green)"></i><i style="height:92%;background:var(--red)"></i><i style="height:80%;background:var(--amber)"></i>
-        </div>
-        <div class="pv-f"><span>ACWR per siswa</span><span>Zona aman 0,8 – 1,3</span></div>
+        <div id="heroCurve"></div>
       </div>
     </section>
     <section class="login card" aria-live="polite">
       <h2>Masuk</h2>
       <div id="loginBody"><p class="sub">Memeriksa akun…</p></div>
-      <p class="fine"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Data siswa bersifat rahasia dan hanya dipakai untuk pembinaan atlet. Akses diberikan oleh pengelola program.</span></p>
+      <p class="fine"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Data atlet bersifat rahasia dan hanya dipakai untuk pembinaan atlet. Akses diberikan oleh pengelola program.</span></p>
     </section>
   </div>
 
@@ -498,9 +583,9 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <article class="fcard" style="--d:#ff5b0a"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><h3>Beban latihan</h3><p>Beban TSS, ACWR, dan monotony dihitung otomatis dari RPE dan durasi setiap sesi.</p></article>
       <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg></span><h3>Kalender &amp; rencana latihan</h3><p>Pelatih menyusun sesi di kalender, atlet mencatat realisasinya, dan kepatuhan terhadap rencana terlihat per hari.</p></article>
       <article class="fcard" style="--d:#f5b301"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><path d="M3 21h18"/><path d="M12 8V3"/></svg></span><h3>Fitness, fatigue &amp; form</h3><p>Model CTL/ATL/TSB, ramp rate, dan proyeksi form dari rencana minggu-minggu ke depan.</p></article>
-      <article class="fcard" style="--d:#ef4136"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><h3>Wellness harian</h3><p>Tidur, energi, otot, stres, mood, nadi istirahat, dan HRV dibandingkan dengan baseline tiap siswa.</p></article>
+      <article class="fcard" style="--d:#ef4136"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span><h3>Wellness harian</h3><p>Tidur, energi, otot, stres, mood, nadi istirahat, dan HRV dibandingkan dengan baseline tiap atlet.</p></article>
       <article class="fcard" style="--d:#7a5af8"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg></span><h3>Tes kondisi fisik</h3><p>9 tes per semester, T-score per jenis kelamin, dan progres antar-sesi.</p></article>
-      <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Atlet isi sendiri dari HP</h3><p>Tautan pribadi tiap atlet, bisa dipasang seperti aplikasi dan tetap jalan saat sinyal lemah. Pelatih dan guru melihat data sesuai haknya.</p></article>
+      <article class="fcard" style="--d:#2f80ed"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Atlet isi sendiri dari HP</h3><p>Tautan pribadi tiap atlet, bisa dipasang seperti aplikasi dan tetap jalan saat sinyal lemah. Pelatih dan pengamat melihat data sesuai haknya.</p></article>
     </div>
   </section>
 
@@ -513,7 +598,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </ol>
   </section>
 
-  <footer class="hfoot"><div class="hfoot-in"><span class="logo"><span class="mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span>© 2026 Monitoring Latihan Atlet</span><span>Sport science untuk pembinaan atlet pelajar</span></div></footer>
+  <footer class="hfoot"><div class="hfoot-in"><span class="logo"><span class="mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span>© 2026 Monitoring Latihan Atlet</span><span>Sport science untuk pembinaan atlet</span></div></footer>
 </div>
 
 <div id="app" hidden>
@@ -521,7 +606,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="in">
     <div class="brandrow">
       <div class="tb-brand"><span class="tb-mark"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g stroke-width="7" stroke-linecap="round"><path d="M10 38A22 22 0 0 1 15.15 23.86" stroke="#2f80ed"/><path d="M16.72 22.17A22 22 0 0 1 35.82 16.33" stroke="#22b35e"/><path d="M38.06 16.85A22 22 0 0 1 48.35 23.28" stroke="#f5b301"/><path d="M49.8 25.07A22 22 0 0 1 54 38" stroke="#ef4136"/></g><path d="M6 46h12l4-7 5 12 6-27 5 22h20" stroke="#161a2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="3.6" fill="#ff5b0a" stroke="#fff" stroke-width="1.6"/></svg></span><div>
-        <p class="eyebrow">Sport science · Atlet pelajar</p>
+        <p class="eyebrow">Sport science · Performa atlet</p>
         <h1>Monitoring Latihan Atlet</h1>
       </div></div>
       <div class="who-bar"><span class="date" id="today"></span><span class="uchip" id="uchip"></span><button type="button" class="out btn-install" hidden>Pasang aplikasi</button><button type="button" class="out" id="btnOut">Keluar</button></div>
@@ -529,10 +614,10 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="tabs" role="tablist">
       <button role="tab" aria-selected="true" data-tab="atlet" id="tab-atlet">Dashboard atlet</button>
       <button role="tab" aria-selected="false" data-tab="kal" id="tab-kal">Kalender latihan</button>
-      <button role="tab" aria-selected="false" data-tab="dash" id="tab-dash">Ringkasan kelas</button>
+      <button role="tab" aria-selected="false" data-tab="dash" id="tab-dash">Ringkasan tim</button>
       <button role="tab" aria-selected="false" data-tab="input" id="tab-input">Input harian</button>
       <button role="tab" aria-selected="false" data-tab="tes" id="tab-tes">Tes fisik</button>
-      <button role="tab" aria-selected="false" data-tab="siswa" id="tab-siswa">Data siswa</button>
+      <button role="tab" aria-selected="false" data-tab="siswa" id="tab-siswa">Data atlet</button>
       <button role="tab" aria-selected="false" data-tab="akses" id="tab-akses" hidden>Pengguna</button>
     </div>
   </div>
@@ -624,7 +709,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
     <div class="g3">
       <div class="card">
-        <div class="ch"><h3>Matriks risiko</h3><span class="note">Tiap titik = satu siswa</span></div>
+        <div class="ch"><h3>Matriks risiko</h3><span class="note">Tiap titik = satu atlet</span></div>
         <div class="cv tall"><canvas id="cRisk" aria-label="Matriks risiko ACWR terhadap wellness"></canvas></div>
         <div class="legend"><span><i style="background:var(--green-bg);outline:1px solid var(--green)"></i>Zona aman: ACWR 0,8–1,3 dan z ≥ −1</span><span><i style="background:var(--red-bg);outline:1px solid var(--red)"></i>Zona bahaya: ACWR &gt; 1,5 atau z &lt; −2</span></div>
       </div>
@@ -636,19 +721,24 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
     <div class="g2">
       <div class="card">
-        <div class="ch"><h3>Rata-rata beban harian kelas</h3><span class="note">TSS, 28 hari</span></div>
-        <div class="cv"><canvas id="cLoad" aria-label="Rata-rata beban harian kelas"></canvas></div>
+        <div class="ch"><h3>Rata-rata beban harian tim</h3><span class="note">TSS, 28 hari</span></div>
+        <div class="cv"><canvas id="cLoad" aria-label="Rata-rata beban harian tim"></canvas></div>
       </div>
       <div class="card">
-        <div class="ch"><h3>Rata-rata wellness kelas</h3><span class="note">Skor 5–25, 28 hari</span></div>
-        <div class="cv"><canvas id="cWell" aria-label="Rata-rata skor wellness kelas"></canvas></div>
+        <div class="ch"><h3>Rata-rata wellness tim</h3><span class="note">Skor 5–25, 28 hari</span></div>
+        <div class="cv"><canvas id="cWell" aria-label="Rata-rata skor wellness tim"></canvas></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="ch"><h3>ACWR seluruh siswa</h3><span class="note">Hijau 0,8–1,3 aman · kuning waspada · merah &gt; 1,5 bahaya. Klik batang untuk profil.</span></div>
+      <div class="ch"><h3>ACWR seluruh atlet</h3><span class="note">Biru &lt; 0,8 underload · hijau 0,8–1,29 optimal · oranye 1,3–1,49 risiko meningkat · merah ≥ 1,5 bahaya. Klik batang untuk profil.</span></div>
       <div class="cv" id="acwrBox"><canvas id="cAcwrAll" aria-label="ACWR tiap siswa"></canvas></div>
       <p class="note" id="acwrNote"></p>
+    </div>
+
+    <div class="card">
+      <div class="ch"><h3>Hubungan beban – performa – cedera</h3><span class="note">Tiap bulatan = satu atlet pada posisi ACWR-nya hari ini</span></div>
+      <div class="acwrgrid"><div id="teamCurve"></div><div class="acwrcard" id="teamZones"></div></div>
     </div>
 
     <div class="card">
@@ -736,7 +826,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
       <aside class="card summary">
         <h3>Ringkasan entri</h3>
-        <div id="sumWho" class="sub">Belum memilih siswa</div>
+        <div id="sumWho" class="sub">Belum memilih atlet</div>
         <svg class="gauge" id="gauge" viewBox="0 0 240 140" role="img" aria-label="Skor wellness"></svg>
         <div class="sumrow"><span>Beban sesi (TSS)</span><b id="sumLoad">–</b></div>
         <div class="sumrow"><span>Nyeri</span><b id="sumNyeri">0/10</b></div>
@@ -773,31 +863,31 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <p class="note" id="rankNote"></p>
         </div>
         <div class="card">
-          <div class="ch"><h3>Sebaran kategori per tes</h3><span class="note">% siswa di tiap skala norma</span></div>
+          <div class="ch"><h3>Sebaran kategori per tes</h3><span class="note">% atlet di tiap skala norma</span></div>
           <div class="cv tall"><canvas id="cKomp" aria-label="Sebaran kategori per tes"></canvas></div>
         </div>
       </div>
 
       <div class="card">
-        <div class="ch"><h3>Matriks kategori kondisi fisik</h3><span class="note">Tes terakhir tiap siswa: nilai dan skala (S1–S5). Klik nama untuk profil.</span></div>
+        <div class="ch"><h3>Matriks kategori kondisi fisik</h3><span class="note">Tes terakhir tiap atlet: nilai dan skala (S1–S5). Klik nama untuk profil.</span></div>
         <div class="hmwrap"><table class="tm" id="tesMatrix"></table></div>
         <div class="legend"><span><i class="k1"></i>Skala 1 · kurang sekali</span><span><i class="k2"></i>Skala 2 · kurang</span><span><i class="k3"></i>Skala 3 · sedang</span><span><i class="k4"></i>Skala 4 · baik</span><span><i class="k5"></i>Skala 5 · baik sekali</span></div>
       </div>
 
       <div class="card" id="tesProfil"></div>
 
-      <p class="rules"><b>Cara membaca.</b> Setiap hasil diberi skala 1–5 menurut norma tes fisik (putra dan putri berbeda; sit-up, wall sit, dan sit and reach sama). Half squat, bench press, dan deadlift dinilai sebagai kelipatan berat badan. Performa fisik = rata-rata skala ÷ 5 × 100%. Estimasi VO₂max dari Yo-Yo IR1 memakai rumus Bangsbo: jarak × 0,0084 + 36,4. Sebagian norma (terutama 1RM) disusun untuk atlet dewasa sehingga terasa berat bagi siswa SMA.</p>
+      <p class="rules"><b>Cara membaca.</b> Setiap hasil diberi skala 1–5 menurut norma tes fisik (putra dan putri berbeda; sit-up, wall sit, dan sit and reach sama). Half squat, bench press, dan deadlift dinilai sebagai kelipatan berat badan. Performa fisik = rata-rata skala ÷ 5 × 100%. Estimasi VO₂max dari Yo-Yo IR1 memakai rumus Bangsbo: jarak × 0,0084 + 36,4. Sebagian norma (terutama 1RM) disusun untuk atlet dewasa sehingga terasa berat bagi atlet usia sekolah.</p>
     </div>
 
     <form id="formTes" class="card" novalidate hidden>
       <h2>Input hasil tes</h2>
       <div class="two" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-        <label class="fl">Nama siswa<select id="tsSiswa"></select></label>
+        <label class="fl">Nama atlet<select id="tsSiswa"></select></label>
         <label class="fl">Tanggal tes<input type="date" id="tsTgl"></label>
         <label class="fl">Sesi<select id="tsSesi"></select></label>
         <label class="fl">Berat badan saat tes (kg)<input type="number" id="tsBb" min="25" max="200" step="0.1" inputmode="decimal" placeholder="untuk tes 1RM"></label>
       </div>
-      <p class="note" id="tsPrev">Pilih siswa untuk melihat hasil tes sebelumnya. Isi hanya tes yang dilakukan; kolom kosong dilewati. Untuk tes dengan beberapa percobaan, isi hasil terbaik.</p>
+      <p class="note" id="tsPrev">Pilih atlet untuk melihat hasil tes sebelumnya. Isi hanya tes yang dilakukan; kolom kosong dilewati. Untuk tes dengan beberapa percobaan, isi hasil terbaik.</p>
       <div class="tgrid" id="tsFields"></div>
       <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
         <button class="btn" type="submit">Simpan hasil tes</button>
@@ -810,31 +900,31 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <section id="v-akses" hidden style="display:flex;flex-direction:column;gap:16px">
     <div class="card">
       <h2>Pengguna &amp; peran</h2>
-      <p class="note">Pelatih dan guru mendaftar sendiri lewat halaman masuk (tombol <b>Daftar</b>) memakai email mereka. Akun baru berstatus <b>menunggu</b> sampai Anda menetapkan perannya di sini. Pelatih hanya melihat dan mengisi data siswa dari cabor yang Anda pilih.</p>
+      <p class="note">Pelatih dan pengamat mendaftar sendiri lewat halaman masuk (tombol <b>Daftar</b>) memakai email mereka. Akun baru berstatus <b>menunggu</b> sampai Anda menetapkan perannya di sini. Pelatih hanya melihat dan mengisi data atlet dari cabor yang Anda pilih.</p>
       <p class="sub" id="aPending"></p>
       <p class="msg" id="msgAkses" role="status"></p>
     </div>
     <div class="list" id="aList"></div>
-    <p class="rules"><b>Keamanan.</b> Peran juga diterapkan di database: pelatih tidak bisa membaca data siswa di luar cabornya, dan guru tidak bisa mengubah data apa pun, meskipun mencoba lewat cara lain.</p>
+    <p class="rules"><b>Keamanan.</b> Peran juga diterapkan di database: pelatih tidak bisa membaca data atlet di luar cabornya, dan pengamat tidak bisa mengubah data apa pun, meskipun mencoba lewat cara lain.</p>
   </section>
 
   <!-- SISWA -->
   <section id="v-siswa" hidden style="display:flex;flex-direction:column;gap:16px">
     <form class="card" id="formSiswa" novalidate>
-      <h2 id="siswaFormTitle">Tambah siswa</h2>
+      <h2 id="siswaFormTitle">Tambah atlet</h2>
       <div class="two" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
         <label class="fl">Nama lengkap<input type="text" id="sNama" autocomplete="off"></label>
         <label class="fl">Cabang olahraga<input type="text" id="sCabor" list="caborList" autocomplete="off"></label>
         <label class="fl">Pelatih<input type="text" id="sPelatih" autocomplete="off" placeholder="Nama pelatih cabor"></label>
         <label class="fl">No. WhatsApp atlet<input type="tel" id="sHp" autocomplete="off" inputmode="tel" placeholder="opsional, mis. 0812…"></label>
-        <label class="fl">Kelas<input type="text" id="sKelas" placeholder="mis. X-KKO" autocomplete="off"></label>
+        <label class="fl">Tim / kelompok<input type="text" id="sKelas" placeholder="mis. Tim U-17 / Klub A" autocomplete="off"></label>
         <label class="fl">Gender<select id="sJk"><option value="">Pilih…</option><option value="L">Pria</option><option value="P">Wanita</option></select></label>
         <label class="fl">Tanggal lahir<input type="date" id="sLahir"></label>
         <label class="fl">Berat badan (kg)<input type="number" id="sBb" min="25" max="200" step="0.1" inputmode="decimal"></label>
         <label class="fl">Tinggi badan (m)<input type="number" id="sTb" min="1" max="2.3" step="0.01" inputmode="decimal" placeholder="mis. 1,68"></label>
       </div>
       <datalist id="caborList"></datalist>
-      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit" id="siswaSubmit">Tambah siswa</button><button class="btn ghost" type="button" id="siswaCancel" hidden>Batal</button></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit" id="siswaSubmit">Tambah atlet</button><button class="btn ghost" type="button" id="siswaCancel" hidden>Batal</button></div>
       <p class="msg" id="msgSiswa" role="status"></p>
     </form>
     <div class="list" id="siswaList"></div>
@@ -847,12 +937,13 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <script src="norma.js"></script>
 <script src="kesiapan.js"></script>
 <script src="impor.js"></script>
+<script src="acwr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s);
-const WELL=[["tidur","Kualitas tidur","Semalam",["Sangat buruk","Buruk","Biasa","Nyenyak","Sangat nyenyak"]],["lelah","Tingkat energi","Rasa lelah",["Sangat lelah","Lelah","Biasa","Segar","Sangat segar"]],["otot","Kondisi otot","Pegal / kaku",["Sangat pegal","Pegal","Biasa","Ringan","Tidak pegal"]],["stres","Tingkat stres","Sekolah & rumah",["Sangat stres","Stres","Biasa","Tenang","Sangat tenang"]],["mood","Suasana hati","Hari ini",["Sangat buruk","Kurang","Biasa","Baik","Sangat baik"]]];
+const WELL=[["tidur","Kualitas tidur","Semalam",["Sangat buruk","Buruk","Biasa","Nyenyak","Sangat nyenyak"]],["lelah","Tingkat energi","Rasa lelah",["Sangat lelah","Lelah","Biasa","Segar","Sangat segar"]],["otot","Kondisi otot","Pegal / kaku",["Sangat pegal","Pegal","Biasa","Ringan","Tidak pegal"]],["stres","Tingkat stres","Kerja, sekolah & rumah",["Sangat stres","Stres","Biasa","Tenang","Sangat tenang"]],["mood","Suasana hati","Hari ini",["Sangat buruk","Kurang","Biasa","Baik","Sangat baik"]]];
 const RPE=["Istirahat","Intensitas sangat ringan","Intensitas sangat ringan","Intensitas ringan","Intensitas ringan","Intensitas sedang","Intensitas sedang","Intensitas berat","Intensitas berat","Intensitas maksimal","Intensitas maksimal"];
 const RPE_EMO=["","😄","😊","😌","😔","😐","😬","😧","🥴","😵‍💫","🤮"];
 const TSS_JAM=[0,20,30,40,50,60,70,80,100,120,140];
@@ -898,7 +989,7 @@ function makeDemo(){
   const r=mulberry(11);
   const nm=[["Raka Pratama","Sepak bola","X"],["Alya Putri","Bola voli","X"],["Dimas Saputra","Atletik","X"],["Nadia Rahma","Bulu tangkis","X"],["Bagas Wicaksono","Pencak silat","X"],["Salsa Aulia","Renang","X"],["Fikri Hidayat","Sepak bola","XI"],["Galih Ramadhan","Bola voli","XI"],["Citra Lestari","Atletik","XI"],["Rizky Ananda","Sepak bola","XI"],["Intan Permata","Bulu tangkis","XI"],["Yoga Firmansyah","Pencak silat","XI"],["Dewi Anggraini","Renang","XII"],["Arif Kurniawan","Bola voli","XII"]];
   const PUTRI=["Alya","Nadia","Salsa","Citra","Intan","Dewi"];
-  const siswa=nm.map((x,i)=>({id:"demo"+i,nama:x[0]+" (contoh)",cabor:x[1],kelas:x[2]+"-KKO",jk:PUTRI.includes(x[0].split(" ")[0])?"P":"L"}));
+  const siswa=nm.map((x,i)=>({id:"demo"+i,nama:x[0]+" (contoh)",cabor:x[1],kelas:{X:"Tim U-16",XI:"Tim U-17",XII:"Tim U-19"}[x[2]],jk:PUTRI.includes(x[0].split(" ")[0])?"P":"L"}));
   const entri=[];const r3=mulberry(47);
   const REF="2024-01-01";/* Senin acuan untuk pola mingguan */
   const planFor=t=>{const dow=parse(t).getDay();if(dow===0)return null;const wk=Math.floor(diffDays(t,REF)/7);
@@ -1033,6 +1124,7 @@ const LABEL={merah:"Merah",kuning:"Kuning",hijau:"Hijau",kosong:"Tanpa data"};
 function tok(){const cs=getComputedStyle(document.documentElement);const g=n=>cs.getPropertyValue(n).trim();return{ink:g("--ink"),muted:g("--muted"),line:g("--line"),surface:g("--surface"),accent:g("--accent"),accentSoft:g("--accent-soft"),accent2:g("--accent2"),red:g("--red"),redBg:g("--red-bg"),amber:g("--amber"),amberBg:g("--amber-bg"),green:g("--green"),greenBg:g("--green-bg"),gray:g("--gray-bg"),cat:[g("--c1"),g("--c2"),g("--c3"),g("--c4"),g("--c5")]}}
 const refLine={id:"refLine",afterDatasetsDraw(ch){const r=ch.options.plugins.refLine;if(!r)return;const{ctx,chartArea:a,scales}=ch;const sc=scales[r.axis||"x"];const p=sc.getPixelForValue(r.value);ctx.save();ctx.strokeStyle=r.color;ctx.setLineDash([4,3]);ctx.lineWidth=1.5;ctx.beginPath();if((r.axis||"x")==="x"){ctx.moveTo(p,a.top);ctx.lineTo(p,a.bottom)}else{ctx.moveTo(a.left,p);ctx.lineTo(a.right,p)}ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=r.color;ctx.font='600 11px Barlow,sans-serif';ctx.textAlign="left";ctx.fillText(r.label,(r.axis||"x")==="x"?Math.min(p+4,a.right-70):a.left+4,(r.axis||"x")==="x"?a.top+10:p-4);ctx.restore()}};
 const hasChart=()=>typeof window.Chart==="function";
+const hlinePlugin={id:"hlines",afterDatasetsDraw(ch){const H=ch.options.plugins.hlines;if(!H)return;const{ctx,chartArea:a,scales}=ch;ctx.save();H.forEach(h=>{const sc=scales[h.axis||"y"];if(!sc)return;const y=sc.getPixelForValue(h.v);if(y<a.top||y>a.bottom)return;ctx.strokeStyle=h.c;ctx.lineWidth=h.w||1.5;ctx.setLineDash(h.dash||[]);ctx.beginPath();ctx.moveTo(a.left,y);ctx.lineTo(a.right,y);ctx.stroke();if(h.label){ctx.setLineDash([]);ctx.fillStyle=h.c;ctx.font="600 10.5px Barlow,sans-serif";ctx.textAlign="right";ctx.fillText(h.label,a.right-4,y-4)}});ctx.restore()}};
 const zonePlugin={id:"zones",beforeDatasetsDraw(ch,_,o){const z=ch.options.plugins.zones;if(!z)return;const{ctx,chartArea:a,scales:{x,y}}=ch;ctx.save();ctx.beginPath();ctx.rect(a.left,a.top,a.width,a.height);ctx.clip();z.forEach(r=>{const x1=r.x?x.getPixelForValue(r.x[0]):a.left,x2=r.x?x.getPixelForValue(r.x[1]):a.right,y1=r.y?y.getPixelForValue(r.y[1]):a.top,y2=r.y?y.getPixelForValue(r.y[0]):a.bottom;ctx.fillStyle=r.c;ctx.fillRect(Math.min(x1,x2),Math.min(y1,y2),Math.abs(x2-x1),Math.abs(y2-y1))});ctx.restore()}};
 function mkChart(id,cfg){
   const el=document.getElementById(id);if(!el)return;
@@ -1045,7 +1137,7 @@ function mkChart(id,cfg){
   cfg.options.animation=matchMedia("(prefers-reduced-motion: reduce)").matches?false:{duration:400};
   cfg.options.plugins=Object.assign({tooltip:{backgroundColor:T.ink,titleColor:T.surface,bodyColor:T.surface,padding:10,cornerRadius:8,displayColors:true,boxPadding:4}},cfg.options.plugins||{});
   if(cfg.options.plugins.legend===undefined)cfg.options.plugins.legend={display:false};
-  S.charts[id]=new Chart(el,{...cfg,plugins:[zonePlugin,refLine]});
+  S.charts[id]=new Chart(el,{...cfg,plugins:[zonePlugin,refLine,hlinePlugin]});
 }
 const axis=(T,extra)=>Object.assign({grid:{color:T.line,drawTicks:false},border:{display:false},ticks:{padding:6,color:T.muted}},extra||{});
 
@@ -1053,8 +1145,8 @@ const axis=(T,extra)=>Object.assign({grid:{color:T.line,drawTicks:false},border:
 function banner(){
   const b=$("#banner");
   if(S.mode==="loading"){b.hidden=false;b.textContent="Memuat data…";return}
-  if(S.mode==="demo"){b.hidden=false;b.textContent="Mode contoh: aplikasi belum terhubung ke database, jadi yang tampil adalah 14 siswa contoh. Entri baru hanya bertahan sampai halaman ditutup.";return}
-  if(!S.live.siswa.length){b.hidden=false;b.textContent="Belum ada siswa terdaftar, jadi dashboard menampilkan data contoh. Begitu siswa pertama ditambahkan di tab Data siswa, semua grafik memakai data asli.";return}
+  if(S.mode==="demo"){b.hidden=false;b.textContent="Mode contoh: aplikasi belum terhubung ke database, jadi yang tampil adalah 14 atlet contoh. Entri baru hanya bertahan sampai halaman ditutup.";return}
+  if(!S.live.siswa.length){b.hidden=false;b.textContent="Belum ada atlet terdaftar, jadi dashboard menampilkan data contoh. Begitu atlet pertama ditambahkan di tab Data atlet, semua grafik memakai data asli.";return}
   if(S.noRencana){b.hidden=false;b.textContent="Kalender latihan belum aktif: tabel rencana belum ada di database. Jalankan ulang setup.sql di Supabase (aman untuk data yang sudah ada).";return}
   b.hidden=true;
 }
@@ -1067,7 +1159,7 @@ function renderDash(){
   const cabs=[...new Set(all.map(x=>x.s.cabor))].sort();
   $("#fCabor").innerHTML='<option value="">Semua cabor</option>'+cabs.map(c=>`<option ${c===S.cabor?"selected":""}>${esc(c)}</option>`).join("");
   const pool=all.filter(x=>!S.cabor||x.s.cabor===S.cabor);
-  $("#scopeTitle").textContent=S.cabor?"Ringkasan "+S.cabor:"Ringkasan seluruh kelas";
+  $("#scopeTitle").textContent=S.cabor?"Ringkasan "+S.cabor:"Ringkasan seluruh tim";
   renderKpis(pool);renderPengingat(pool);renderRisk(pool);renderCabor(all);renderClass(pool);renderAcwrAll(pool);renderHeat(pool);renderList(pool);
   renderDetail(all.find(x=>x.s.id===S.sel));
 }
@@ -1092,14 +1184,14 @@ function renderPengingat(pool){
   h+=`<div class="ch"><h3>Belum mengisi kondisi pagi hari ini</h3><span class="note">${belum.length} dari ${pool.length} atlet</span></div>`;
   h+=belum.length?`<div class="remind">${belum.map(({s})=>{const n=waNo(s.hp);return`<span>${esc(s.nama)}${n?`<a href="https://wa.me/${n}?text=${encodeURIComponent(pesan(s))}" target="_blank" rel="noopener" title="Kirim pengingat lewat WhatsApp">WA</a>`:""}</span>`}).join("")}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn sm" href="https://wa.me/?text=${encodeURIComponent(PG.teks)}" target="_blank" rel="noopener">Kirim pengingat ke grup WhatsApp</a><button type="button" class="btn ghost sm" id="pgCopy">Salin daftar</button></div>
-    <p class="note">Tombol <b style="color:#25d366">WA</b> muncul jika nomor WhatsApp atlet diisi di tab Data siswa; pesannya sudah berisi tautan pribadi atlet.</p>`:'<p class="note" style="color:var(--green)">Semua atlet sudah mengisi kondisi pagi hari ini ✓</p>';
+    <p class="note">Tombol <b style="color:#25d366">WA</b> muncul jika nomor WhatsApp atlet diisi di tab Data atlet; pesannya sudah berisi tautan pribadi atlet.</p>`:'<p class="note" style="color:var(--green)">Semua atlet sudah mengisi kondisi pagi hari ini ✓</p>';
   $("#pengingat").innerHTML=h;
 }
 $("#pengingat").addEventListener("click",async e=>{
   const b=e.target.closest("[data-pid]");if(b){S.sel=b.dataset.pid;renderDash();scrollDetail();return}
   if(e.target.closest("#pgCopy")){const ok=await copyText(PG.teks);e.target.textContent=ok?"Disalin ✓":"Gagal menyalin";setTimeout(()=>{const x=$("#pgCopy");if(x)x.textContent="Salin daftar"},2000)}
 });
-function updateBadge(){const n=computeRows().filter(x=>x.a.status==="merah").length;$("#tab-dash").innerHTML="Ringkasan kelas"+(n?`<span class="badge" aria-label="${n} atlet perlu tindakan">${n}</span>`:"")}
+function updateBadge(){const n=computeRows().filter(x=>x.a.status==="merah").length;$("#tab-dash").innerHTML="Ringkasan tim"+(n?`<span class="badge" aria-label="${n} atlet perlu tindakan">${n}</span>`:"")}
 function renderRisk(pool){
   const T=tok();const col={merah:T.red,kuning:T.amber,hijau:T.green,kosong:T.accent2};
   const pts=pool.filter(x=>x.a.acwr!=null&&x.a.z!=null).map(x=>({x:+x.a.acwr.toFixed(2),y:+Math.max(-3.4,Math.min(2.4,x.a.z)).toFixed(2),n:x.s.nama.replace(" (contoh)",""),st:x.a.status,id:x.s.id}));
@@ -1131,7 +1223,7 @@ function renderHeat(pool){
   const rows=[...pool].sort((a,b)=>ORDER[a.a.status]-ORDER[b.a.status]||a.s.nama.localeCompare(b.s.nama));
   const days=pool[0]?pool[0].a.days.slice(-14):[];
   const h=$("#heat");h.style.gridTemplateColumns=`minmax(120px,170px) repeat(14,minmax(26px,1fr))`;
-  if(!rows.length){h.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada siswa.</div>';return}
+  if(!rows.length){h.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada atlet.</div>';return}
   h.innerHTML='<div></div>'+days.map(d=>`<div class="dh">${parse(d.t).getDate()}</div>`).join("")+rows.map(({s,a})=>`<div class="lbl" title="${esc(s.nama)}">${esc(s.nama.replace(" (contoh)",""))}</div>`+a.days.slice(-14).map(d=>`<div class="c ${cls(d.well)}" title="${esc(s.nama.replace(" (contoh)",""))} · ${fmtD(d.t)} · ${d.well==null?"tidak mengisi":"wellness "+d.well+"/25"}">${d.well??""}</div>`).join("")).join("");
 }
 function spark(days){
@@ -1143,36 +1235,40 @@ function acwrGauge(v,big){
   const W=big?220:116,H=big?40:24,x0=3,x1=W-3,lo=0.4,hi=2.0;
   const X=x=>x0+(Math.min(hi,Math.max(lo,x))-lo)/(hi-lo)*(x1-x0);
   const by=big?12:8,bh=big?10:7;
-  const z=[[lo,0.8,"var(--amber-bg)"],[0.8,1.3,"var(--green-bg)"],[1.3,1.5,"var(--amber-bg)"],[1.5,hi,"var(--red-bg)"]];
+  const z=[[lo,0.8,"var(--blue-bg)"],[0.8,1.3,"var(--green-bg)"],[1.3,1.5,"var(--amber-bg)"],[1.5,hi,"var(--red-bg)"]];
   let g=z.map(([a,b,c],i)=>`<rect x="${X(a).toFixed(1)}" y="${by}" width="${(X(b)-X(a)).toFixed(1)}" height="${bh}" fill="${c}" ${i===0?'rx="3"':""}/>`).join("");
   g+=`<rect x="${x0}" y="${by}" width="${x1-x0}" height="${bh}" rx="3" fill="none" stroke="var(--line)"/>`;
   if(big)g+=[0.8,1.3,1.5].map(t=>`<text x="${X(t).toFixed(1)}" y="${by+bh+12}" font-size="10" fill="var(--muted)" text-anchor="middle">${String(t).replace(".",",")}</text>`).join("");
   let label;
   if(v==null){g+=`<text x="${W/2}" y="${by+bh-1}" font-size="${big?11:9}" fill="var(--muted)" text-anchor="middle">data belum cukup</text>`;label="ACWR: data belum cukup (butuh ±3 minggu)"}
-  else{const col=v>1.5?"var(--red)":(v>1.3||v<0.8)?"var(--amber)":"var(--green)";const cx=X(v).toFixed(1),cy=by+bh/2;
+  else{const col=v>=1.5?"var(--red)":v>=1.3?"var(--amber)":v<0.8?"var(--blue)":"var(--green)";const cx=X(v).toFixed(1),cy=by+bh/2;
     g+=`<line x1="${cx}" x2="${cx}" y1="${by-3}" y2="${by+bh+3}" stroke="${col}" stroke-width="${big?3:2.5}" stroke-linecap="round"/><circle cx="${cx}" cy="${by-4}" r="${big?5:3.5}" fill="${col}" stroke="var(--surface)" stroke-width="1.5"/>`;
-    label="ACWR "+dec(v)+" · "+(v>1.5?"zona bahaya":v>1.3?"zona waspada":v<0.8?"beban rendah":"zona aman")}
+    label="ACWR "+dec(v)+" · "+ACWR.zona(v).label.toLowerCase()}
   return `<svg class="ag" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}"><title>${label}</title>${g}</svg>`;
 }
 function renderAcwrAll(pool){
   const T=tok();const rs=pool.filter(x=>x.a.acwr!=null).map(x=>({n:x.s.nama.replace(" (contoh)",""),v:+x.a.acwr.toFixed(2),id:x.s.id})).sort((a,b)=>b.v-a.v);
   const miss=pool.length-rs.length;
   $("#acwrBox").style.height=Math.max(180,rs.length*24+70)+"px";
-  $("#acwrNote").textContent=miss?miss+" siswa belum punya data cukup (butuh sekitar 3 minggu entri) sehingga tidak tampil.":"";
-  if(!rs.length){if(S.charts.cAcwrAll){S.charts.cAcwrAll.destroy();delete S.charts.cAcwrAll}return}
-  const col=v=>v>1.5?T.red:(v>1.3||v<0.8)?T.amber:T.green;
+  $("#acwrNote").textContent=miss?miss+" atlet belum punya data cukup (butuh sekitar 3 minggu entri) sehingga tidak tampil.":"";
+  if(!rs.length){if(S.charts.cAcwrAll){S.charts.cAcwrAll.destroy();delete S.charts.cAcwrAll}$("#teamCurve").innerHTML=ACWR.kurva([]);$("#teamZones").innerHTML='<p class="note">ACWR muncul setelah ±3 minggu data latihan.</p>';return}
+  const col=v=>ACWR.zona(v).warna;
   mkChart("cAcwrAll",{type:"bar",data:{labels:rs.map(r=>r.n),datasets:[{data:rs.map(r=>r.v),backgroundColor:rs.map(r=>col(r.v)),borderRadius:4,borderSkipped:false,barThickness:14}]},
     options:{indexAxis:"y",onClick:(e,els)=>{if(els.length){S.sel=rs[els[0].index].id;renderDash();scrollDetail()}},
       scales:{x:axis(T,{min:0,max:Math.max(2,Math.ceil(Math.max(...rs.map(r=>r.v))*5)/5),ticks:{stepSize:0.25,color:T.muted,callback:v=>[0.8,1.3,1.5,0,2].includes(+v.toFixed(2))?dec(v,1):""},title:{display:true,text:"ACWR",color:T.muted}}),y:axis(T,{grid:{display:false},ticks:{color:T.ink,autoSkip:false}})},
-      plugins:{zones:[{x:[0.8,1.3],c:T.greenBg},{x:[1.3,1.5],c:T.amberBg},{x:[1.5,4],c:T.redBg}],tooltip:{callbacks:{label:it=>{const v=it.raw;return"ACWR "+dec(v)+" · "+(v>1.5?"zona bahaya":v>1.3?"zona waspada":v<0.8?"beban rendah":"zona aman")}}}}}});
+      plugins:{zones:[{x:[0,0.8],c:"rgba(59,130,246,.10)"},{x:[0.8,1.3],c:"rgba(34,197,94,.12)"},{x:[1.3,1.5],c:"rgba(245,158,11,.14)"},{x:[1.5,4],c:"rgba(239,68,68,.14)"}],tooltip:{callbacks:{label:it=>{const z=ACWR.zona(it.raw);return"ACWR "+dec(it.raw)+" · "+z.label+" · "+z.risk}}}}}});
+  /* posisi tim di kurva beban–performa–cedera */
+  $("#teamCurve").innerHTML=ACWR.kurva(pool.filter(x=>x.a.acwr!=null).map(x=>({v:x.a.acwr,label:x.s.nama.replace(" (contoh)",""),inisial:initials(x.s.nama.replace(" (contoh)",""))})));
+  const cnt=ACWR.Z.map(z=>({z,n:pool.filter(x=>x.a.acwr!=null&&ACWR.zona(x.a.acwr).k===z.k).length}));
+  $("#teamZones").innerHTML=cnt.map(({z,n})=>`<div class="acl${n?" on":""}" style="--zc:${z.warna}"><div><b>${z.label}</b><small>${z.risk}</small></div><span class="acr">${n} <small>atlet</small></span></div>`).join("")+'<p class="acsrc">Jaga ACWR di 0,8–1,3 · Gabbett, Br J Sports Med 2016</p>';
 }
 function renderList(pool){
   let view=pool;
   if(S.filter==="hari")view=pool.filter(x=>!x.a.todayIn);else if(S.filter!=="semua")view=pool.filter(x=>x.a.status===S.filter);
   view=[...view].sort((a,b)=>ORDER[a.a.status]-ORDER[b.a.status]||(b.a.acwr||0)-(a.a.acwr||0));
-  $("#listTitle").textContent=S.filter==="semua"?"Daftar prioritas":S.filter==="hari"?"Belum mengisi hari ini":"Siswa berstatus "+LABEL[S.filter].toLowerCase();
-  const head=`<div class="row head"><span>Siswa</span><span>Status</span><span class="num" title="Skor kesiapan hari ini (0–100)">Siap</span><span>Alasan</span><span>ACWR</span><span class="num">Wellness</span><span class="num">Beban 7h</span><span class="num sp">14 hari</span></div>`;
-  $("#list").innerHTML=head+(view.length?view.map(({s,a})=>`<button class="row ${S.sel===s.id?"sel":""}" data-id="${s.id}"><span class="nm">${esc(s.nama)}<small>${esc(s.cabor)} · ${esc(s.kelas||"")}</small></span><span><span class="pill p-${a.status}">${LABEL[a.status]}</span></span><span class="rdy num" title="${a.rdy?"Kesiapan: "+a.rdy.label:"Belum mengisi kondisi pagi hari ini"}">${a.rdy?`<b style="color:${a.rdy.warna}">${a.rdy.skor}</b>`:"–"}</span><span class="why">${a.reasons.map(esc).join(" · ")}</span><span class="agc">${acwrGauge(a.acwr)}</span><span class="num">${a.wt!=null?a.wt+"/25":"–"}</span><span class="num">${a.acute.toLocaleString("id-ID")}</span><span class="sp">${spark(a.days)}</span></button>`).join(""):`<div class="empty">${S.filter==="hari"?"Semua siswa sudah mengisi hari ini.":"Tidak ada siswa di kategori ini."}</div>`);
+  $("#listTitle").textContent=S.filter==="semua"?"Daftar prioritas":S.filter==="hari"?"Belum mengisi hari ini":"Atlet berstatus "+LABEL[S.filter].toLowerCase();
+  const head=`<div class="row head"><span>Atlet</span><span>Status</span><span class="num" title="Skor kesiapan hari ini (0–100)">Siap</span><span>Alasan</span><span>ACWR</span><span class="num">Wellness</span><span class="num">Beban 7h</span><span class="num sp">14 hari</span></div>`;
+  $("#list").innerHTML=head+(view.length?view.map(({s,a})=>`<button class="row ${S.sel===s.id?"sel":""}" data-id="${s.id}"><span class="nm">${esc(s.nama)}<small>${esc(s.cabor)} · ${esc(s.kelas||"")}</small></span><span><span class="pill p-${a.status}">${LABEL[a.status]}</span></span><span class="rdy num" title="${a.rdy?"Kesiapan: "+a.rdy.label:"Belum mengisi kondisi pagi hari ini"}">${a.rdy?`<b style="color:${a.rdy.warna}">${a.rdy.skor}</b>`:"–"}</span><span class="why">${a.reasons.map(esc).join(" · ")}</span><span class="agc">${acwrGauge(a.acwr)}</span><span class="num">${a.wt!=null?a.wt+"/25":"–"}</span><span class="num">${a.acute.toLocaleString("id-ID")}</span><span class="sp">${spark(a.days)}</span></button>`).join(""):`<div class="empty">${S.filter==="hari"?"Semua atlet sudah mengisi hari ini.":"Tidak ada atlet di kategori ini."}</div>`);
 }
 function renderDetail(x){
   const el=$("#detail");if(!x){el.hidden=true;["dLoad","dAcwr","dWell","dRadar"].forEach(k=>{if(S.charts[k]){S.charts[k].destroy();delete S.charts[k]}});return}
@@ -1238,7 +1334,7 @@ function renderTes(){
   const pcts=C.rows.map(r=>r.pct).filter(v=>v!=null);
   const attn=C.rows.filter(r=>Object.values(r.sk).filter(v=>v===1).length>=3).length;
   const lastSesi=lastD?(C.rows.find(r=>r.m._last&&r.m._last.tanggal===lastD).m._last.sesi||""):"";
-  const K=[["Rata-rata performa fisik","green",pcts.length?Math.round(mean(pcts))+"<small>%</small>":"–",pcts.length?`${pcts.length} siswa, skala rata-rata ÷ 5`:"Belum ada data tes"],
+  const K=[["Rata-rata performa fisik","green",pcts.length?Math.round(mean(pcts))+"<small>%</small>":"–",pcts.length?`${pcts.length} atlet, skala rata-rata ÷ 5`:"Belum ada data tes"],
     ["Sudah dites (sesi terakhir)","",`${tested}<small>/${C.pool.length}</small>`,lastD?`Sesi ${esc(lastSesi).toLowerCase()} · ${fmtD(lastD)}`:"Belum ada data tes"],
     ["Skala naik dari tes sebelumnya","green",pairs?Math.round(up/pairs*100)+"<small>%</small>":"–",pairs?`${up} naik · ${down} turun dari ${pairs} hasil`:"Butuh minimal 2 sesi tes"],
     ["Perlu program khusus","amber",String(attn),"≥ 3 tes berskala 1 (kurang sekali)"]];
@@ -1265,8 +1361,8 @@ function renderSebaran(C,T){
 }
 function renderMatrix(C){
   const rows=[...C.rows].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
-  const head=`<thead><tr><th class="nmh">Siswa</th>${TESTS.map(t=>`<th title="${t.label}">${t.short}<br><span style="text-transform:none;font-weight:400">${t.rel?"kg":t.unit}</span></th>`).join("")}<th>Performa</th></tr></thead>`;
-  const body=rows.length?rows.map(r=>`<tr><td class="nmc"><button data-ts="${r.s.id}">${esc(r.s.nama.replace(" (contoh)",""))}</button><br><span class="sub" style="font-size:12px">${esc(r.s.cabor)}${r.s.jk?" · "+(r.s.jk==="P"?"Pi":"Pa"):""}</span></td>${TESTS.map(t=>{const x=r.m[t.key];const k=r.sk[t.key];return x?`<td class="${k?CAT[k-1][1]:"k3"}" title="${t.label}: ${fmtV(t,x.v)} ${t.unit}${t.rel&&r.rel[t.key]!=null?" ("+fmtR(r.rel[t.key])+" BB)":""}${k?" · skala "+k+" "+SKALA[k]:""}">${fmtV(t,x.v)}<small>${k?"S"+k:""}${t.rel&&r.rel[t.key]!=null?" · "+fmtR(r.rel[t.key]):""}</small></td>`:`<td class="k0">–</td>`}).join("")}<td class="${r.pct==null?"k0":CAT[Math.max(0,Math.min(4,Math.round(r.pct/20)-1))][1]}"><b>${r.pct!=null?Math.round(r.pct)+"%":"–"}</b></td></tr>`).join(""):`<tr><td colspan="${TESTS.length+2}" class="empty">Belum ada siswa di filter ini.</td></tr>`;
+  const head=`<thead><tr><th class="nmh">Atlet</th>${TESTS.map(t=>`<th title="${t.label}">${t.short}<br><span style="text-transform:none;font-weight:400">${t.rel?"kg":t.unit}</span></th>`).join("")}<th>Performa</th></tr></thead>`;
+  const body=rows.length?rows.map(r=>`<tr><td class="nmc"><button data-ts="${r.s.id}">${esc(r.s.nama.replace(" (contoh)",""))}</button><br><span class="sub" style="font-size:12px">${esc(r.s.cabor)}${r.s.jk?" · "+(r.s.jk==="P"?"Pi":"Pa"):""}</span></td>${TESTS.map(t=>{const x=r.m[t.key];const k=r.sk[t.key];return x?`<td class="${k?CAT[k-1][1]:"k3"}" title="${t.label}: ${fmtV(t,x.v)} ${t.unit}${t.rel&&r.rel[t.key]!=null?" ("+fmtR(r.rel[t.key])+" BB)":""}${k?" · skala "+k+" "+SKALA[k]:""}">${fmtV(t,x.v)}<small>${k?"S"+k:""}${t.rel&&r.rel[t.key]!=null?" · "+fmtR(r.rel[t.key]):""}</small></td>`:`<td class="k0">–</td>`}).join("")}<td class="${r.pct==null?"k0":CAT[Math.max(0,Math.min(4,Math.round(r.pct/20)-1))][1]}"><b>${r.pct!=null?Math.round(r.pct)+"%":"–"}</b></td></tr>`).join(""):`<tr><td colspan="${TESTS.length+2}" class="empty">Belum ada atlet di filter ini.</td></tr>`;
   $("#tesMatrix").innerHTML=head+"<tbody>"+body+"</tbody>";
 }
 function renderTesProfil(C,T){
@@ -1307,7 +1403,7 @@ function renderTesProfil(C,T){
 function renderTesForm(){
   const D=inputData();const cur=$("#tsSiswa").value;
   const grp={};D.siswa.forEach(s=>(grp[s.cabor]=grp[s.cabor]||[]).push(s));
-  $("#tsSiswa").innerHTML=D.siswa.length?'<option value="">Pilih nama…</option>'+Object.keys(grp).sort().map(c=>`<optgroup label="${esc(c)}">${grp[c].sort((a,b)=>a.nama.localeCompare(b.nama)).map(s=>`<option value="${s.id}">${esc(s.nama)}</option>`).join("")}</optgroup>`).join(""):'<option value="">Belum ada siswa, tambahkan di tab Data siswa</option>';
+  $("#tsSiswa").innerHTML=D.siswa.length?'<option value="">Pilih nama…</option>'+Object.keys(grp).sort().map(c=>`<optgroup label="${esc(c)}">${grp[c].sort((a,b)=>a.nama.localeCompare(b.nama)).map(s=>`<option value="${s.id}">${esc(s.nama)}</option>`).join("")}</optgroup>`).join(""):'<option value="">Belum ada atlet, tambahkan di tab Data atlet</option>';
   if(cur)$("#tsSiswa").value=cur;
   if(!$("#tsSesi").options.length)$("#tsSesi").innerHTML=SESI.map(s=>`<option>${s}</option>`).join("");
   if(!$("#tsFields").children.length){
@@ -1334,7 +1430,7 @@ $("#tsSiswa").addEventListener("change",()=>{$("#tsBb").value="";updateTesPrev()
 $("#formTes").addEventListener("submit",async e=>{
   e.preventDefault();
   const sid=$("#tsSiswa").value,tgl=$("#tsTgl").value,sesi=$("#tsSesi").value;
-  if(!sid)return msg("#msgTes","Pilih nama siswa dulu.");
+  if(!sid)return msg("#msgTes","Pilih nama atlet dulu.");
   if(!tgl||tgl>TODAY)return msg("#msgTes","Tanggal tes tidak boleh kosong atau di masa depan.");
   const rec={};
   for(const t of TESTS){const v=$("#ts_"+t.key).value;if(v==="")continue;const n=+v;if(!isFinite(n)||n<t.min||n>t.max)return msg("#msgTes",`${t.label} di luar rentang wajar (${t.min}–${t.max} ${t.unit}). Periksa lagi angkanya.`);rec[t.key]=n}
@@ -1362,7 +1458,7 @@ $("#tesMatrix").addEventListener("click",e=>{const b=e.target.closest("button[da
 $("#btnCsvTes").addEventListener("click",async()=>{
   const D=data();const nm={};D.siswa.forEach(s=>nm[s.id]=s);
   const q=v=>{const s=String(v??"");return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-  const head=["tanggal","sesi","nama","jenis_kelamin","cabor","kelas","bb_kg",...TESTS.flatMap(t=>[t.key+"_"+t.unit,t.key+"_skala"]),"performa_persen"];
+  const head=["tanggal","sesi","nama","jenis_kelamin","cabor","tim","bb_kg",...TESTS.flatMap(t=>[t.key+"_"+t.unit,t.key+"_skala"]),"performa_persen"];
   const rows=[...(D.tes||[])].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(t=>{const s=nm[t.siswaId]||{};const bb=t.bb||s.bb;const sks=TESTS.map(x=>t[x.key]!=null?skalaOf(x,t[x.key],s.jk,bb):null);const v=sks.filter(x=>x!=null);
     return[t.tanggal,t.sesi,s.nama,s.jk,s.cabor,s.kelas,bb??"",...TESTS.flatMap((x,i)=>[t[x.key]??"",sks[i]??""]),v.length?Math.round(mean(v)/5*100):""].map(q).join(",")});
   downloadText("tes-fisik-latihan-atlet-"+TODAY+".csv","﻿"+head.join(",")+"\n"+rows.join("\n"))
@@ -1389,7 +1485,7 @@ const formZone=f=>FORMZ.find(z=>f>=z[0]&&f<z[1])||(f<-30?FORMZ[0]:FORMZ[3]);
 function renderAtlet(){
   const D=data();const list=[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama));
   const box=$("#atletBody");
-  if(!list.length){box.innerHTML='<div class="empty">Belum ada siswa. Tambahkan di tab Data siswa.</div>';$("#atPick").innerHTML="";return}
+  if(!list.length){box.innerHTML='<div class="empty">Belum ada atlet. Tambahkan di tab Data atlet.</div>';$("#atPick").innerHTML="";return}
   if(!list.some(s=>s.id===AT.sel))AT.sel=list[0].id;
   const grp={};list.forEach(s=>(grp[s.cabor]=grp[s.cabor]||[]).push(s));
   $("#atPick").innerHTML=Object.keys(grp).map(c=>`<optgroup label="${esc(c)}">${grp[c].map(s=>`<option value="${s.id}" ${s.id===AT.sel?"selected":""}>${esc(s.nama)}</option>`).join("")}</optgroup>`).join("");
@@ -1408,6 +1504,8 @@ function renderAtlet(){
   const fut=p.filter(d=>d.proj);const pk=fut.length?fut[fut.length-1]:null;
   const sx=(v,l,sub,c)=>`<div class="xs" style="--sc:${c||"var(--accent)"}"><span>${l}</span><b>${v}</b><small>${sub}</small></div>`;
   const rdy=kesiapanAt(ent,TODAY,p);
+  const lBy={};ent.forEach(e=>{if(e.tanggal<=TODAY)lBy[e.tanggal]=(lBy[e.tanggal]||0)+loadRaw(e)});
+  const dser=ACWR.seri(lBy,addDays(TODAY,-89),TODAY);const acNow=dser.length?dser[dser.length-1].acwr:null;const acNaik=ACWR.naikMingguan(lBy,TODAY);
   const strip=`<div class="xstrip">${sx(rdy?rdy.skor:"–","Kesiapan hari ini",rdy?rdy.label+" · "+rdy.parts.map(x=>x.nama.split(" ")[0].toLowerCase()+" "+x.nilai).join(", "):"belum mengisi kondisi pagi",rdy?rdy.warna:null)}${sx(last?Math.round(last.ctl):"–","Fitness (CTL)","rata-rata beban 42 hari","#ffd400")}${sx(last?Math.round(last.atl):"–","Fatigue (ATL)","rata-rata beban 7 hari","#ff2a2a")}${sx(last?(last.form>0?"+":"")+Math.round(last.form):"–","Form (TSB)",fz?fz[2]:"–",fz?fz[3]:null)}${sx(ramp!=null?(ramp>0?"+":"")+dec(ramp,1):"–","Ramp rate","perubahan fitness 7 hari",ramp==null?null:ramp>7?"var(--red)":ramp>5?"var(--amber)":"var(--green)")}${sx(tss7!=null?tss7:"–","TSS 7 hari",pk?"proyeksi form "+fmtD(pk.t)+": "+(pk.form>0?"+":"")+Math.round(pk.form):"belum ada rencana ke depan","#5aa9ff")}${sx(cpN?Math.round(cpOk/cpN*100)+"%":"–","Kepatuhan rencana",cpN?cpOk+" dari "+cpN+" sesi sesuai (28 hari)":"belum ada rencana","#3fb950")}</div>`;
   const fld=(l,v,u)=>`<div class="xf"><span class="xl">${l}</span><span class="xc">:</span><span class="xv${v?"":" req"}">${v?esc(v):"Wajib diisi"}</span>${u?`<span class="xu">${u}</span>`:""}</div>`;
   box.innerHTML=`
@@ -1422,10 +1520,12 @@ function renderAtlet(){
     </div>
   </div>
   ${strip}
+  <div class="xpanel"><div class="ch" style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><h3>Beban harian &amp; ACWR · 90 hari</h3><span class="note">Batang = TSS harian · garis = ACWR (sumbu kanan) · garis merah 0,8 &amp; 1,3 · putus-putus 1,5</span></div><div class="cv tall"><canvas id="atDaily" aria-label="Beban harian dan ACWR"></canvas></div></div>
+  <div class="xpanel"><h3>Zona risiko cedera (ACWR)</h3><div class="acwrgrid"><div>${ACWR.kurva(acNow!=null?[{v:acNow,label:s.nama.replace(" (contoh)","").split(" ")[0]}]:[])}</div>${ACWR.kartu(acNow,acNaik)}</div></div>
   <div class="xgrid">
     <div class="xpanel"><h3>Performa fisik per tes · ${esc(s.nama.replace(" (contoh)",""))}</h3><div class="cv"><canvas id="atPerf" aria-label="Persentase performa per tes"></canvas></div></div>
     <div class="xpanel"><h3>Training Stress Score · Fitness · Fatigue</h3><div class="cv"><canvas id="atPmc" aria-label="TSS, fitness dan fatigue"></canvas></div></div>
-    <div class="xpanel"><h3>Rata-rata kelas per tes · ${s.jk==="P"?"putri":"putra"}</h3><div class="cv"><canvas id="atAvg" aria-label="Rata-rata kelas per tes"></canvas></div></div>
+    <div class="xpanel"><h3>Rata-rata tim per tes · ${s.jk==="P"?"putri":"putra"}</h3><div class="cv"><canvas id="atAvg" aria-label="Rata-rata tim per tes"></canvas></div></div>
     <div class="xpanel"><h3>Form (fitness − fatigue)</h3><div class="cv"><canvas id="atForm" aria-label="Form dan zona risiko"></canvas></div>
       <div class="legend">${FORMZ.map(z=>`<span><i style="background:${z[3]}"></i>${z[2]} (${z[0]<=-60?"< "+z[1]:z[1]>=40?"> "+z[0]:z[0]+" s/d "+z[1]})</span>`).join("")}</div></div>
   </div>
@@ -1451,9 +1551,13 @@ function renderAtlet(){
   const projT=it=>win[it[0].dataIndex]&&win[it[0].dataIndex].proj?it[0].label+" · proyeksi rencana":it[0].label;
   mkChart("atPmc",{type:"bar",data:{labels,datasets:[{type:"bar",label:"Training Stress Score",data:win.map(d=>d.tss),backgroundColor:win.map(d=>d.proj?"rgba(190,225,255,.3)":"rgba(190,225,255,.85)"),borderRadius:2,order:3},{type:"line",label:"Fitness",data:win.map(d=>d.ctl),borderColor:"#ffd400",borderWidth:2,pointRadius:0,tension:.25,order:1,segment:dash},{type:"line",label:"Fatigue",data:win.map(d=>d.atl),borderColor:"#ff2a2a",borderWidth:2,pointRadius:0,tension:.25,order:2,segment:dash}]},
     options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{beginAtZero:true,ticks:{maxTicksLimit:6,color:T.muted}})},plugins:{refLine:today,legend:{display:true,position:"top",labels:{boxWidth:12,boxHeight:3,color:T.ink}},tooltip:{callbacks:{title:projT}}}}});
-  mkChart("atForm",{type:"line",data:{labels,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#000",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash}]},
+  mkChart("atForm",{type:"line",data:{labels,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#f8fafc",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash}]},
     options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:8,maxRotation:0,color:T.muted}}),y:axis(T,{min:-50,max:30,grid:{display:false},ticks:{stepSize:10,color:T.muted}})},
-      plugins:{refLine:today?{...today,color:"#000"}:undefined,zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]})),tooltip:{callbacks:{title:projT,label:it=>{const z=formZone(it.raw);return"Form "+(it.raw>0?"+":"")+it.raw+" · "+z[2]}}}}}});
+      plugins:{refLine:today?{...today,color:"#cbd5e1"}:undefined,zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]+"40"})),tooltip:{callbacks:{title:projT,label:it=>{const z=formZone(it.raw);return"Form "+(it.raw>0?"+":"")+it.raw+" · "+z[2]}}}}}});
+  /* beban harian & ACWR (gaya "Daily TL") */
+  mkChart("atDaily",{type:"bar",data:{labels:dser.map(d=>fmtD(d.t)),datasets:[{type:"bar",label:"TSS harian",data:dser.map(d=>d.load),backgroundColor:"rgba(20,184,166,.85)",borderRadius:2,yAxisID:"y",order:2},{type:"line",label:"ACWR",data:dser.map(d=>d.acwr),borderColor:"#60a5fa",backgroundColor:"#60a5fa",borderWidth:2.2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:1}]},
+    options:{interaction:{mode:"index",intersect:false},scales:{x:axis(T,{grid:{display:false},ticks:{maxTicksLimit:9,maxRotation:0,color:T.muted}}),y:axis(T,{beginAtZero:true,ticks:{maxTicksLimit:6,color:T.muted},title:{display:true,text:"TSS",color:T.muted}}),y1:axis(T,{position:"right",min:0.2,max:Math.max(1.8,Math.ceil(Math.max(0,...dser.map(d=>d.acwr||0))*5)/5),grid:{display:false},ticks:{stepSize:0.2,color:T.muted,callback:v=>dec(v,1)},title:{display:true,text:"ACWR",color:T.muted}})},
+      plugins:{legend:{display:true,position:"top",labels:{boxWidth:12,boxHeight:8,color:T.ink}},hlines:[{axis:"y1",v:0.8,c:"#ef4444",label:"0,8"},{axis:"y1",v:1.0,c:"rgba(232,237,247,.7)",w:1.2},{axis:"y1",v:1.3,c:"#ef4444",label:"1,3"},{axis:"y1",v:1.5,c:"#ef4444",dash:[6,4],label:"1,5"}],tooltip:{callbacks:{label:it=>it.dataset.label==="ACWR"?(it.raw==null?"ACWR: data belum cukup":"ACWR "+dec(it.raw)+" · "+ACWR.zona(it.raw).label):"TSS "+it.raw}}}}});
   /* beban mingguan per jenis: aktual (≤ hari ini) dan rencana (> hari ini) */
   const wk0=addDays(monday(TODAY),-77);const NW=16;const weeks=[...Array(NW)].map((_,i)=>addDays(wk0,i*7));
   const aggA={},aggP={};const put=(g,j,i,v)=>{(g[j]=g[j]||weeks.map(()=>0))[i]+=v};
@@ -1491,7 +1595,7 @@ function renderKal(){
   const D=data();const list=athletes(D);const box=$("#kalBody");
   $("#kalAdd").hidden=!canPlan()||!list.length;
   const md=parse(KAL.m);$("#kalTitle").textContent=md.toLocaleDateString("id-ID",{month:"long",year:"numeric"});
-  if(!list.length){box.innerHTML='<div class="empty">Belum ada siswa. Tambahkan di tab Data siswa.</div>';$("#kalPick").innerHTML="";return}
+  if(!list.length){box.innerHTML='<div class="empty">Belum ada atlet. Tambahkan di tab Data atlet.</div>';$("#kalPick").innerHTML="";return}
   if(!list.some(s=>s.id===AT.sel))AT.sel=list[0].id;
   $("#kalPick").innerHTML=athleteOpts(list);
   const s=list.find(x=>x.id===AT.sel);
@@ -1622,13 +1726,13 @@ kb.addEventListener("drop",e=>{const d=e.target.closest(".kd");if(!d||!KAL.drag)
 kb.addEventListener("dragend",()=>{KAL.drag=null;kb.querySelectorAll(".kd.drop").forEach(x=>x.classList.remove("drop"))});
 
 
-/* ---------- siswa ---------- */
+/* ---------- atlet ---------- */
 const SE={edit:null};
 function renderSiswa(){
   const D=inputData();
   $("#caborList").innerHTML=["Sepak bola","Bola voli","Bola basket","Atletik","Bulu tangkis","Pencak silat","Renang","Sepak takraw","Futsal","Karate","Taekwondo","Rugby"].map(c=>`<option value="${c}">`).join("");
   const ro=ME.role==="guru";
-  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Kelas · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${ro?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada siswa. Tambahkan lewat formulir di atas.</div>`;
+  $("#siswaList").innerHTML=D.siswa.length?`<div class="row head" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px"><span>Nama</span><span>Cabor</span><span>Tim · BB · TB</span><span></span></div>`+[...D.siswa].sort((a,b)=>a.cabor.localeCompare(b.cabor)||a.nama.localeCompare(b.nama)).map(s=>`<div class="row" style="grid-template-columns:minmax(0,1fr) 120px 150px 150px;cursor:default"><span class="nm" style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:32px;height:32px;font-size:14px">${esc(initials(s.nama))}</span><span>${esc(s.nama)}<small>${esc(s.pelatih||"Pelatih belum diisi")}${ageOf(s)!=null?" · "+ageOf(s)+" th":""}</small></span></span><span>${esc(s.cabor)}</span><span>${esc(s.kelas||"–")}${s.jk?" · "+(s.jk==="P"?"Pi":"Pa"):""} · ${s.bb?dec(+s.bb,1)+" kg":"BB –"} · ${s.tb?dec(+s.tb,2)+" m":"TB –"}</span><span style="display:flex;gap:6px;flex-wrap:wrap">${ro?"":`<button type="button" class="btn ghost sm" data-edit="${s.id}">Ubah</button><button type="button" class="btn ghost sm" data-link="${s.id}">Tautan</button>`}</span></div>`).join(""):`<div class="empty">Belum ada atlet. Tambahkan lewat formulir di atas.</div>`;
 }
 $("#siswaList").addEventListener("click",e=>{
   const lk=e.target.closest("button[data-link]");if(lk){openLink(lk.dataset.link);return}
@@ -1654,7 +1758,7 @@ function renderPicker(){
   const cabs=[...new Set(D.siswa.map(s=>s.cabor))].sort();
   $("#inCabor").innerHTML=cabs.length?[`<button type="button" class="chip small" data-c="" aria-pressed="${!F.cabor}">Semua</button>`].concat(cabs.map(c=>`<button type="button" class="chip small" data-c="${esc(c)}" aria-pressed="${F.cabor===c}">${esc(c)}</button>`)).join(""):"";
   const list=D.siswa.filter(s=>(!F.cabor||s.cabor===F.cabor)&&(!q||s.nama.toLowerCase().includes(q))).sort((a,b)=>a.nama.localeCompare(b.nama));
-  $("#inSiswa").innerHTML=D.siswa.length?(list.length?list.map(s=>`<button type="button" class="chip" data-s="${s.id}" aria-pressed="${F.sid===s.id}">${esc(s.nama)}</button>`).join(""):'<span class="note">Tidak ada nama yang cocok.</span>'):'<span class="note">Belum ada siswa. Tambahkan dulu di tab Data siswa.</span>';
+  $("#inSiswa").innerHTML=D.siswa.length?(list.length?list.map(s=>`<button type="button" class="chip" data-s="${s.id}" aria-pressed="${F.sid===s.id}">${esc(s.nama)}</button>`).join(""):'<span class="note">Tidak ada nama yang cocok.</span>'):'<span class="note">Belum ada atlet. Tambahkan dulu di tab Data atlet.</span>';
 }
 function gauge(v){
   const T=tok();const cx=120,cy=118,r=92;
@@ -1732,7 +1836,7 @@ function msg(id,t,ok){const m=$(id);m.textContent=t;m.className="msg "+(ok?"ok":
 $("#formEntri").addEventListener("submit",async e=>{
   e.preventDefault();
   const tgl=$("#inTgl").value;
-  if(!F.sid)return msg("#msgEntri","Pilih nama siswa dulu.");
+  if(!F.sid)return msg("#msgEntri","Pilih nama atlet dulu.");
   if(!tgl||tgl>TODAY)return msg("#msgEntri","Tanggal tidak boleh kosong atau di masa depan.");
   const nW=WELL.filter(([k])=>F.w[k]).length;
   if(nW>0&&nW<5){const miss=WELL.filter(([k])=>!F.w[k]);return msg("#msgEntri","Lengkapi kondisi pagi: "+miss.map(m=>m[1].toLowerCase()).join(", ")+".")}
@@ -1767,7 +1871,7 @@ const extOf=a=>({id:"jam_"+a.mulai.getTime(),hr:a.hr||null,hrmax:a.hrmax||null,k
 function clearImpor(){F.ext=null;IMP.list=[];$("#imporBox").innerHTML=""}
 $("#inFile").addEventListener("change",async e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
-  if(!F.sid){msg("#msgEntri","Pilih nama siswa dulu, lalu impor file.");return}
+  if(!F.sid){msg("#msgEntri","Pilih nama atlet dulu, lalu impor file.");return}
   const s=inputData().siswa.find(x=>x.id===F.sid);const hm=hrmaxOf(s);
   let acts;try{acts=await IMPOR.baca(f)}catch(err){$("#imporBox").innerHTML=`<p class="msg err">${esc(err.message)}</p>`;return}
   acts=acts.filter(a=>a.tanggal<=TODAY);
@@ -1876,12 +1980,12 @@ $("#lkNew").addEventListener("click",async()=>{const s=inputData().siswa.find(x=
   const kode=uid();try{await DB.update("siswa",s.id,{kode})}catch(err){return msg("#lkMsg","Gagal membuat tautan baru. Pastikan Anda berhak mengubah data atlet ini.")}
   s.kode=kode;openLink(s.id);msg("#lkMsg","Tautan baru dibuat. Kirim ulang ke atlet.",true)});
 
-/* ---------- tambah siswa ---------- */
+/* ---------- tambah atlet ---------- */
 $("#formSiswa").addEventListener("input",()=>$("#msgSiswa").textContent="");
 $("#formSiswa").addEventListener("submit",async e=>{
   e.preventDefault();
   const nama=$("#sNama").value.trim(),cabor=$("#sCabor").value.trim(),kelas=$("#sKelas").value.trim(),jk=$("#sJk").value,pelatih=$("#sPelatih").value.trim(),tglLahir=$("#sLahir").value,bb=$("#sBb").value,tb=$("#sTb").value;
-  if(nama.length<2)return msg("#msgSiswa","Isi nama lengkap siswa.");
+  if(nama.length<2)return msg("#msgSiswa","Isi nama lengkap atlet.");
   if(!cabor)return msg("#msgSiswa","Isi cabang olahraga.");
   if(!jk)return msg("#msgSiswa","Pilih gender. Norma tes fisik putra dan putri berbeda.");
   if(tglLahir&&(tglLahir>TODAY||diffDays(TODAY,tglLahir)<365*8))return msg("#msgSiswa","Tanggal lahir tidak wajar. Periksa lagi.");
@@ -1901,7 +2005,7 @@ $("#formSiswa").addEventListener("submit",async e=>{
 /* ---------- CSV ---------- */
 $("#btnCsv").addEventListener("click",async()=>{
   const D=data();const nm={};D.siswa.forEach(s=>nm[s.id]=s);
-  const head=["tanggal","nama","cabor","kelas",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","jumlah_sesi","rpe_rata2","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
+  const head=["tanggal","nama","cabor","tim",...WELL.map(w=>w[0]),"wellness_total","nyeri","area_nyeri","jumlah_sesi","rpe_rata2","durasi_menit","beban_tss","jenis","hr_istirahat","hrv","tinggi_cm"];
   const q=v=>{const s=String(v??"");return /[",\n;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
   const rows=[...D.entri].sort((a,b)=>a.tanggal<b.tanggal?-1:1).map(e=>{const s=nm[e.siswaId]||{};return[e.tanggal,s.nama,s.cabor,s.kelas,...WELL.map(w=>e[w[0]]),wellOf(e)??"",e.nyeri??"",(e.area||[]).join(" / "),sesiOf(e).length,e.rpe??"",e.durasi??"",loadOf(e),e.jenis??"",e.hrIstirahat??"",e.hrv??"",e.tinggi??""].map(q).join(",")});
   downloadText("monitoring-latihan-atlet-"+TODAY+".csv","﻿"+head.join(",")+"\n"+rows.join("\n"))
@@ -1958,8 +2062,8 @@ function downloadText(filename,text){
 }
 
 /* ---------- masuk & peran ---------- */
-const ROLE_LABEL={admin:"Pengelola",pelatih:"Pelatih",guru:"Guru",menunggu:"Menunggu"};
-const ROLE_DESC={admin:"Akses penuh, termasuk mengatur pengguna",pelatih:"Input dan analisis siswa cabor sendiri",guru:"Melihat dashboard dan hasil tes"};
+const ROLE_LABEL={admin:"Pengelola",pelatih:"Pelatih",guru:"Pengamat",menunggu:"Menunggu"};
+const ROLE_DESC={admin:"Akses penuh, termasuk mengatur pengguna",pelatih:"Input dan analisis atlet cabor sendiri",guru:"Hanya melihat dashboard dan hasil tes"};
 S.entered=false;S.profil=[];
 const LG={mode:"masuk",busy:false,info:""};
 const ssGet=k=>{try{return sessionStorage.getItem(k)}catch(_){return null}};
@@ -1971,7 +2075,7 @@ function loginForm(){
   $(".login h2").textContent=title;
   const f=[];
   if(m==="daftar")f.push('<label class="fl">Nama lengkap<input type="text" id="lgNama" autocomplete="name"></label>');
-  if(m!=="reset")f.push('<label class="fl">Email<input type="email" id="lgEmail" autocomplete="email" placeholder="nama@sekolah.sch.id"></label>');
+  if(m!=="reset")f.push('<label class="fl">Email<input type="email" id="lgEmail" autocomplete="email" placeholder="nama@email.com"></label>');
   if(m==="masuk"||m==="daftar"||m==="reset")f.push(`<label class="fl">${m==="reset"?"Kata sandi baru":"Kata sandi"}<input type="password" id="lgPass" autocomplete="${m==="masuk"?"current-password":"new-password"}"></label>`);
   if(m==="daftar"||m==="reset")f.push('<label class="fl">Ulangi kata sandi<input type="password" id="lgPass2" autocomplete="new-password"></label>');
   const btn={masuk:"Masuk",daftar:"Daftar",lupa:"Kirim tautan atur ulang",reset:"Simpan kata sandi"}[m];
@@ -1984,7 +2088,7 @@ function renderLogin(){
   if(S.mode==="demo"){
     $(".login h2").textContent="Mode contoh";
     b.innerHTML=`<p class="sub" style="margin:0">Aplikasi belum terhubung ke database, jadi login belum aktif. Pilih peran untuk mencoba tampilan dengan data contoh.</p>
-    <div class="rolepick">${[["admin","","Pengelola / sport scientist"],["pelatih","Sepak bola","Pelatih sepak bola"],["guru","","Guru / wali kelas"]].map(([r,c,l])=>`<button type="button" data-demo-role="${r}" data-demo-cabor="${c}"><b>${l}</b><span>${r==="pelatih"?"Hanya siswa sepak bola":ROLE_DESC[r]}</span></button>`).join("")}</div>`;
+    <div class="rolepick">${[["admin","","Pengelola / sport scientist"],["pelatih","Sepak bola","Pelatih sepak bola"],["guru","","Pengamat (orang tua, manajer, guru)"]].map(([r,c,l])=>`<button type="button" data-demo-role="${r}" data-demo-cabor="${c}"><b>${l}</b><span>${r==="pelatih"?"Hanya atlet sepak bola":ROLE_DESC[r]}</span></button>`).join("")}</div>`;
     return;
   }
   if(ME.state==="signedout"){b.innerHTML=loginForm();const first=b.querySelector("input");if(first&&!LG.info)first.focus();return}
@@ -1994,7 +2098,7 @@ function renderLogin(){
   const av=document.createElement("div");av.className="avatar";av.textContent=initials(ME.name||ME.email||"?");box.appendChild(av);
   const t=document.createElement("div");t.style.minWidth="0";const n=document.createElement("div");n.className="n";n.textContent=ME.name||"Pengguna";const e=document.createElement("div");e.className="e";e.textContent=ME.email||"";t.append(n,e);box.appendChild(t);b.appendChild(box);
   if(ME.state==="pending"){
-    const a=document.createElement("div");a.className="alert";a.innerHTML="<b>Akun menunggu persetujuan.</b> Pengelola program perlu menetapkan peran Anda (pelatih atau guru) sebelum dashboard bisa dibuka. Muat ulang halaman setelah disetujui.";b.appendChild(a);
+    const a=document.createElement("div");a.className="alert";a.innerHTML="<b>Akun menunggu persetujuan.</b> Pengelola program perlu menetapkan peran Anda (pelatih atau pengamat) sebelum dashboard bisa dibuka. Muat ulang halaman setelah disetujui.";b.appendChild(a);
   }else{
     const info=document.createElement("div");info.className="sumrow";info.style.borderTop="0";
     info.innerHTML=`<span>Peran</span><span class="pill r-${ME.role}">${ROLE_LABEL[ME.role]}${ME.role==="pelatih"&&ME.cabor.length?" · "+esc(ME.cabor.join(", ")):""}</span>`;b.appendChild(info);
@@ -2097,11 +2201,11 @@ function renderAkses(){
     const row=document.createElement("div");row.className="prow";if(r.role==="menunggu")row.style.background="var(--amber-bg)";
     const who=document.createElement("span");who.className="p";const av=document.createElement("span");av.className="avatar";av.style.cssText="width:32px;height:32px;font-size:13px;flex:none";av.textContent=initials(r.nama||r.email||"?");
     const d=document.createElement("div");const nb=document.createElement("b");nb.textContent=r.nama||"(tanpa nama)";const sm=document.createElement("small");sm.textContent=r.email||"";d.append(nb,sm);who.append(av,d);
-    const sel=document.createElement("select");sel.setAttribute("aria-label","Peran");[["menunggu","Menunggu persetujuan"],["pelatih","Pelatih"],["guru","Guru / wali kelas"],["admin","Pengelola"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;if(st.role===v)o.selected=true;sel.appendChild(o)});
+    const sel=document.createElement("select");sel.setAttribute("aria-label","Peran");[["menunggu","Menunggu persetujuan"],["pelatih","Pelatih"],["guru","Pengamat (orang tua, manajer, guru)"],["admin","Pengelola"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;if(st.role===v)o.selected=true;sel.appendChild(o)});
     if(r.id===ME.id)sel.disabled=true;
     sel.onchange=()=>{st.role=sel.value;renderAkses()};
     const cab=document.createElement("span");cab.className="chips";
-    if(st.role==="pelatih"){if(!caborAll.length)cab.innerHTML='<span class="note">Tambahkan siswa dulu</span>';caborAll.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="chip small";b.textContent=c;b.setAttribute("aria-pressed",st.cabor.includes(c));b.onclick=()=>{st.cabor=st.cabor.includes(c)?st.cabor.filter(x=>x!==c):st.cabor.concat(c);b.setAttribute("aria-pressed",st.cabor.includes(c))};cab.appendChild(b)})}
+    if(st.role==="pelatih"){if(!caborAll.length)cab.innerHTML='<span class="note">Tambahkan atlet dulu</span>';caborAll.forEach(c=>{const b=document.createElement("button");b.type="button";b.className="chip small";b.textContent=c;b.setAttribute("aria-pressed",st.cabor.includes(c));b.onclick=()=>{st.cabor=st.cabor.includes(c)?st.cabor.filter(x=>x!==c):st.cabor.concat(c);b.setAttribute("aria-pressed",st.cabor.includes(c))};cab.appendChild(b)})}
     else{const n=document.createElement("span");n.className="sub";n.textContent=st.role==="menunggu"?"–":"Semua cabor";cab.appendChild(n)}
     const act=document.createElement("span");
     if(r.id!==ME.id){const sv=document.createElement("button");sv.type="button";sv.className="btn sm";sv.textContent="Simpan";
@@ -2136,6 +2240,8 @@ renderLogin();
   try{await afterSignIn(true)}catch(_){ME.state="signedout";renderLogin()}
 })();
 })();
+/* ---------- ilustrasi kurva di halaman depan ---------- */
+try{const h=document.getElementById("heroCurve");if(h&&window.ACWR)h.innerHTML=ACWR.kurva([{v:0.68,inisial:"RA",label:"Raka"},{v:1.02,inisial:"AP",label:"Alya"},{v:1.16,inisial:"DS",label:"Dimas"},{v:1.24,inisial:"NR",label:"Nadia"},{v:1.38,inisial:"BW",label:"Bagas"},{v:1.66,inisial:"SA",label:"Salsa"}])}catch(_){}
 /* ---------- aplikasi terpasang (PWA) ---------- */
 if("serviceWorker" in navigator&&location.protocol!=="file:")addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 (function(){let ev=null;const btns=()=>document.querySelectorAll(".btn-install");

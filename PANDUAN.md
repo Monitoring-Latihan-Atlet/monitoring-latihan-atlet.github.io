@@ -8,6 +8,7 @@ Isi folder:
 - `norma.js` — norma tes kondisi fisik (dipakai halaman pelatih dan atlet).
 - `kesiapan.js` — rumus skor kesiapan harian.
 - `impor.js` — pembaca file aktivitas dari jam dan Strava.
+- `acwr.js` — zona risiko ACWR, kartu risiko, dan kurva beban–performa–cedera.
 - `sw.js`, `manifest*.json`, `icon-*.png` — agar web bisa dipasang seperti aplikasi.
 - `setup.sql` — skema database dan aturan akses.
 - `PANDUAN.md` — panduan ini.
@@ -76,15 +77,15 @@ update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 
 4. Masuk ke web. Anda sekarang berperan sebagai **Pengelola**.
 
-## 6. Menambahkan pelatih dan guru
+## 6. Menambahkan pelatih dan pengamat
 
 1. Minta mereka membuka web dan **Daftar** dengan email masing-masing.
 2. Setelah mereka konfirmasi email, buka tab **Pengguna**. Akun baru muncul di urutan teratas dengan status *menunggu*.
 3. Pilih perannya, lalu klik **Simpan**:
    - **Pelatih**: pilih juga cabor yang dipegang.
-   - **Guru / wali kelas**: hanya bisa melihat.
+   - **Pengamat** (orang tua, manajer tim, guru, dokter tim): hanya bisa melihat.
 
-Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di luar cabornya, dan guru tidak bisa mengubah data, meskipun mencoba lewat cara lain.
+Peran diterapkan langsung di database. Pelatih tidak bisa membaca data atlet di luar cabornya, dan pengamat tidak bisa mengubah data, meskipun mencoba lewat cara lain.
 
 ## 7. Supaya sepenuhnya tampil atas nama program Anda
 
@@ -99,7 +100,7 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
   - Pelatih dan pengelola klik sebuah hari untuk menambah rencana sesi: jenis, judul, durasi, target RPE, dan deskripsi. Bisa juga memakai *Templat cepat*.
   - Centang **Terapkan juga ke semua atlet …** untuk memberi sesi yang sama ke satu cabor sekaligus.
   - Kartu rencana bisa **diseret** ke hari lain. Tombol **Salin rencana ke minggu depan** menyalin satu minggu.
-  - Guru hanya bisa melihat.
+  - Pengamat hanya bisa melihat.
 - **Kepatuhan rencana.** Warna kartu rencana dihitung dari TSS aktual ÷ TSS rencana: hijau 80–120%, kuning 50–79% atau 121–150%, oranye di luar itu, merah jika tidak dilakukan.
 - **Input harian** menampilkan rencana pelatih untuk hari itu. Tombol **Isi sesuai rencana** mengisi durasi, RPE, dan jenis latihan. Ada juga kolom opsional *denyut nadi istirahat* dan *HRV* pagi.
 - **Dashboard atlet** kini menampilkan:
@@ -112,7 +113,7 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
 
 ## 9. Atlet mengisi sendiri, aplikasi di HP, dan beberapa sesi per hari
 
-- **Tautan pribadi atlet.** Di tab *Data siswa*, tekan **Tautan** di baris atlet. Salin atau kirim lewat WhatsApp.
+- **Tautan pribadi atlet.** Di tab *Data atlet*, tekan **Tautan** di baris atlet. Salin atau kirim lewat WhatsApp.
   - Atlet membuka tautan itu di HP, tanpa daftar dan tanpa kata sandi.
   - Atlet mengisi **kondisi pagi** dan **sesi latihan**, melihat rencana pelatih, dan melihat beban 7 hari terakhir.
   - Tautan hanya bisa membaca dan mengisi data atlet itu sendiri. Jika tautan tersebar, tekan **Buat tautan baru**; tautan lama langsung tidak berlaku.
@@ -137,11 +138,11 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
   - HRV (20%) dan nadi istirahat (15%) dibanding rata-rata 4 minggu, bila diisi,
   - dikurangi 4 poin per angka nyeri.
   ≥70 **siap latihan**, 50–69 **waspada**, <50 **perlu pemulihan**. Tampil di daftar prioritas (kolom *Siap*), profil atlet, dashboard atlet, laporan, dan halaman atlet. Rumusnya ada di `kesiapan.js` dan ambangnya perlu dikalibrasi dengan pengalaman pelatih.
-- **Pengingat & peringatan** (tab *Ringkasan kelas*):
+- **Pengingat & peringatan** (tab *Ringkasan tim*):
   - kotak merah berisi atlet yang perlu tindakan, beserta alasannya (klik nama untuk membuka profil);
   - daftar atlet yang **belum mengisi kondisi pagi hari ini**, dengan tombol **Kirim pengingat ke grup WhatsApp** dan **Salin daftar**;
-  - tombol **WA** di samping nama atlet yang nomor WhatsApp-nya diisi di *Data siswa*. Pesannya sudah berisi tautan pribadi atlet;
-  - angka merah di tab *Ringkasan kelas* menunjukkan jumlah atlet berstatus merah.
+  - tombol **WA** di samping nama atlet yang nomor WhatsApp-nya diisi di *Data atlet*. Pesannya sudah berisi tautan pribadi atlet;
+  - angka merah di tab *Ringkasan tim* menunjukkan jumlah atlet berstatus merah.
 - **Laporan mingguan.** Di *Dashboard atlet*, tekan **Laporan mingguan**, pilih minggu, pilih atlet ini saja atau semua atlet satu cabor, tulis catatan pelatih, lalu **Tampilkan laporan** → **Cetak / simpan PDF**. Isinya: ringkasan minggu, grafik beban harian dibanding rencana, tabel per hari (rencana, latihan, TSS, wellness, nyeri, kesiapan), status terkini, dan catatan pelatih.
 - **Impor dari jam / Strava.** Tombol **⌚ Impor dari jam / Strava** ada di *Input harian* (pelatih) dan di halaman atlet.
   - Format yang dibaca: file **.fit** (Garmin, Coros, Polar, Suunto, Wahoo), **.gpx**, **.tcx**, versi **.gz**-nya, **activities.csv** dari ekspor data Strava, dan **Activities.csv** dari Garmin Connect.
@@ -151,12 +152,28 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
   - File dibaca langsung di HP/komputer dan tidak diunggah ke mana pun.
   - Cara mendapat file: Garmin Connect → aktivitas → ⚙ → *Ekspor Asli* (.fit) atau *Ekspor GPX*; Strava → aktivitas → ⋯ → *Ekspor GPX*, atau Pengaturan → *Akun Saya* → *Unduh atau hapus akun Anda* → *Minta arsip* (berisi activities.csv).
 
+## 11. Untuk umum dan zona risiko ACWR
+
+- **Untuk semua atlet.** Aplikasi bisa dipakai klub, sekolah, akademi, maupun atlet perorangan. Kolom *Tim / kelompok* bebas diisi (misalnya *Tim U-17*, *Klub A*, *Senior*). Peran **Pengamat** cocok untuk orang tua, manajer tim, guru, atau dokter tim — hanya bisa melihat.
+- **Zona risiko cedera (ACWR)** mengikuti Gabbett (2016):
+
+  | ACWR | Zona | Arti |
+  |---|---|---|
+  | < 0,80 | Underload (biru) | beban terlalu rendah, risiko penurunan kondisi |
+  | 0,80–1,29 | Optimal (hijau) | risiko cedera rendah |
+  | 1,30–1,49 | Risiko meningkat (oranye) | risiko cedera ±2–3× lebih tinggi |
+  | ≥ 1,50 | Zona bahaya (merah) | risiko cedera ±4–5× lebih tinggi |
+
+- **Beban harian & ACWR** (Dashboard atlet dan halaman atlet): batang = beban harian, garis biru = ACWR dengan garis batas 0,8 / 1,0 / 1,3 / 1,5.
+- **Kurva beban–performa–cedera**: posisi atlet (★) pada kurva performa dan risiko cedera. Di *Ringkasan tim* semua atlet tampil sebagai bulatan berinisial, beserta jumlah atlet di tiap zona.
+- **Perubahan beban mingguan**: kenaikan beban dibanding minggu lalu; usahakan ≤ 10–15% per minggu.
+
 **Wajib:** setelah memperbarui ke versi ini, jalankan ulang seluruh `setup.sql` di Supabase. Skrip ini menambah kode tautan atlet, kolom `sesi`, dan dua fungsi khusus halaman atlet.
 
 ## Hal penting lain
 
 - **Proyek gratis bisa dijeda.** Di paket gratis Supabase, proyek yang tidak dipakai beberapa hari bisa dijeda otomatis. Cukup buka dashboard Supabase dan klik *Restore*. Kalau web dipakai setiap hari, ini jarang terjadi.
-- **Cadangan data.** Gunakan tombol **Unduh CSV** (Ringkasan kelas dan Tes fisik) secara berkala. Supabase juga menyediakan ekspor data di **Database → Backups**.
-- **Data contoh.** Sebelum ada siswa yang didaftarkan, dashboard menampilkan 14 siswa contoh. Data contoh itu otomatis hilang begitu siswa pertama ditambahkan.
+- **Cadangan data.** Gunakan tombol **Unduh CSV** (Ringkasan tim dan Tes fisik) secara berkala. Supabase juga menyediakan ekspor data di **Database → Backups**.
+- **Data contoh.** Sebelum ada atlet yang didaftarkan, dashboard menampilkan 14 atlet contoh. Data contoh itu otomatis hilang begitu atlet pertama ditambahkan.
 - **Mode contoh.** Kalau `index.html` dibuka tanpa konfigurasi, web berjalan dalam mode contoh, berguna untuk demonstrasi.
-- **Siswa di bawah umur.** Data siswa termasuk data pribadi anak. Pastikan ada izin sekolah dan orang tua, serta berikan akses hanya kepada pelatih dan guru yang berhak.
+- **Atlet di bawah umur.** Data atlet di bawah 18 tahun termasuk data pribadi anak. Pastikan ada izin orang tua (dan sekolah/klub bila perlu), serta berikan akses hanya kepada pelatih dan guru yang berhak.
