@@ -183,7 +183,16 @@ update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 
 ## 13. Peringatan otomatis dan monotony–strain
 
-**Perlu perhatian hari ini.** Di bagian paling atas tab **Ringkasan tim** ada daftar atlet yang perlu perhatian. Daftar yang sama muncul sebagai jendela **sekali sehari** saat aplikasi pertama kali dibuka. Jumlahnya juga tampil sebagai angka merah di tab Ringkasan tim.
+**Susunan tab Ringkasan tim.** Dari atas ke bawah:
+1. **Strip angka**: Segera ditangani · Perlu dipantau · Aman · Sudah isi kondisi pagi. Klik angkanya untuk menyaring daftar atlet.
+2. **Perlu perhatian hari ini**: daftar tindakan. Yang "segera" selalu tampil, yang "pantau" bisa dibuka. Di bawahnya ada pengingat *Belum mengisi kondisi pagi* dengan tombol WhatsApp.
+3. **Semua atlet**: tabel status, kesiapan, ACWR, wellness, dan tren 14 hari. Klik nama untuk profil.
+4. **Analisis tim** dalam tab: Risiko · ACWR per atlet · Kurva beban–cedera · Tren tim · Peta wellness · Per cabor.
+5. **Cara membaca status & ambang**, bisa dibuka bila perlu.
+
+Status atlet (merah/kuning/hijau), angka di strip, dan daftar perhatian memakai **satu aturan yang sama**, jadi angkanya selalu konsisten.
+
+**Perlu perhatian hari ini.** Daftar ini ada di tab **Ringkasan tim**. Daftar yang sama muncul sebagai jendela **sekali sehari** saat aplikasi pertama kali dibuka. Jumlahnya juga tampil sebagai angka merah di tab Ringkasan tim.
 
 | Tanda | Kapan muncul | Tingkat |
 |---|---|---|
