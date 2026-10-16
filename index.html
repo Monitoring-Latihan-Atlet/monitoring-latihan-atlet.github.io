@@ -724,7 +724,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
         <label class="fl">Judul sesi<input type="text" id="pJudul" placeholder="mis. Interval lari 6 × 400 m" autocomplete="off"></label>
         <div class="two" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
           <label class="fl">Durasi (menit)<input type="number" id="pDur" min="0" max="400" inputmode="numeric"></label>
-          <label class="fl">Target RPE<select id="pRpe"></select></label>
+          <label class="fl">Target RPE (0–10)<select id="pRpe"></select></label>
         </div>
         <label class="fl">Deskripsi / isi sesi (opsional)<textarea id="pDesk" rows="3" placeholder="Pemanasan 15 mnt, inti 6 × 400 m (istirahat 90 dtk), pendinginan 10 mnt"></textarea></label>
         <label class="ck" id="pAllBox"><input type="checkbox" id="pAll"> <span id="pAllLbl">Terapkan juga ke semua atlet di cabor ini</span></label>
@@ -1903,7 +1903,7 @@ async function copyWeek(w){
   renderKal();
 }
 $("#pJenis").innerHTML=JENIS.map(([j])=>`<option>${j}</option>`).join("");
-$("#pRpe").innerHTML=RPE.map((t,i)=>`<option value="${i}">${i} · ${t} (${TSS_JAM[i]} TSS/jam)</option>`).join("");
+$("#pRpe").innerHTML=RPE.map((t,i)=>`<option value="${i}">${i}</option>`).join("");
 $("#pfTitle").insertAdjacentHTML("afterend",'<div style="display:flex;flex-direction:column;gap:6px"><span class="note">Templat cepat</span><div class="chips" id="pLib">'+LIB.map((l,i)=>`<button type="button" class="chip small" data-lib="${i}" style="border-left:4px solid ${jColor(l[0])}">${esc(l[1])}</button>`).join("")+"</div></div>");
 $("#pLib").addEventListener("click",e=>{const b=e.target.closest("[data-lib]");if(!b)return;const l=LIB[+b.dataset.lib];$("#pJenis").value=l[0];$("#pJudul").value=l[1];$("#pDur").value=l[2];$("#pRpe").value=l[3];$("#pDesk").value=l[4];updPTss()});
 ["#pDur","#pRpe"].forEach(x=>$(x).addEventListener("input",updPTss));
@@ -1974,7 +1974,7 @@ $("#siswaCancel").addEventListener("click",()=>{resetSiswaForm();$("#msgSiswa").
 const F={sid:"",cabor:"",w:{},nyeri:0,area:[],rpe:null,jenis:null,ext:null};
 function buildInput(){
   $("#wellBox").innerHTML=WELL.map(([k,l,sub,d])=>`<div class="wrow"><div class="q">${l}<small>${sub}</small></div><div class="five" role="group" aria-label="${l}">${d.map((t,i)=>`<button type="button" data-k="${k}" data-v="${i+1}" aria-pressed="false"><span class="v">${i+1}</span><span class="d">${t}</span></button>`).join("")}</div></div>`).join("");
-  $("#inRpe").innerHTML=RPE.map((t,i)=>`<button type="button" data-v="${i}" style="--rc:${i?rpeColor(i):"#444"}" aria-pressed="false"><b>${i}</b><span>${RPE_EMO[i]} ${t}${i?` <small style="opacity:.75">· ${TSS_JAM[i]} TSS/jam</small>`:""}</span></button>`).join("");
+  $("#inRpe").innerHTML=RPE.map((t,i)=>`<button type="button" data-v="${i}" style="--rc:${i?rpeColor(i):"#444"}" aria-pressed="false"><b>${i}</b><span>${RPE_EMO[i]} ${t}</span></button>`).join("");
   $("#inJenis").innerHTML=JENIS.map(([j,c])=>`<button type="button" class="chip small" data-j="${j}" aria-pressed="false" style="border-left:4px solid ${c}">${j}</button>`).join("");
   $("#inArea").innerHTML=AREAS.map(a=>`<button type="button" class="chip small" data-a="${a}" aria-pressed="false">${a}</button>`).join("");
   $("#durQuick").innerHTML=[30,45,60,90,120].map(v=>`<button type="button" class="chip small" data-q="${v}">${v} mnt</button>`).join("");
