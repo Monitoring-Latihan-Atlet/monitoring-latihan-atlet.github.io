@@ -283,6 +283,16 @@ Sejak Juni 2026, membuat aplikasi API Strava **memerlukan langganan Strava** pad
 
 **Batas dari Strava:** aplikasi Strava yang baru dibuat biasanya hanya boleh dihubungkan oleh **1 atlet** (pemilik aplikasi). Untuk banyak atlet, ajukan penambahan kuota lewat formulir *Developer Program* di halaman https://www.strava.com/settings/api. Sambil menunggu, atlet lain tetap bisa memakai **Impor dari file jam**. Patuhi juga ketentuan API Strava, termasuk meminta persetujuan atlet sebelum datanya dilihat pelatih.
 
+## 15. PDF dashboard dan statistik
+
+- **Ringkasan tim → tombol "PDF & statistik"**: laporan siap cetak untuk tim atau cabor yang sedang dipilih. Isinya:
+  1. **Ringkasan**: angka segera/pantau/aman, daftar perlu perhatian, dan tabel semua atlet (kesiapan, ACWR, EWMA, form %, monotony, strain, wellness, z, TSS 7 hari, kepatuhan).
+  2. **Statistik deskriptif** (n, rata-rata, SD, min, median, maks) untuk indikator pemantauan, profil atlet (usia, BB, TB, BMI), rekap per cabor, dan tes fisik (hasil terakhir tiap atlet serta sebaran skala 1–5).
+  3. **Grafik**: matriks risiko, ACWR per atlet, kurva beban–cedera, tren beban dan wellness, status per cabor, dan peta wellness.
+- **Dashboard atlet → tombol "PDF dashboard"**: angka utama, semua grafik, **statistik 28 hari** (beban harian, durasi, RPE, wellness dan tiap butirnya, nyeri, nadi istirahat, HRV), serta hasil tes fisik terakhir.
+- Di jendela cetak, pilih **Simpan sebagai PDF** dan centang **Grafik latar belakang** (*Background graphics*) agar warnanya ikut tercetak. Di HP Android: menu ⋮ → Bagikan → Cetak → Simpan sebagai PDF.
+- Untuk olah data lanjutan (SPSS/Excel), gunakan **Unduh CSV** di Ringkasan tim.
+
 ## Hal penting lain
 
 - **Proyek gratis bisa dijeda.** Di paket gratis Supabase, proyek yang tidak dipakai beberapa hari bisa dijeda otomatis. Cukup buka dashboard Supabase dan klik *Restore*. Kalau web dipakai setiap hari, ini jarang terjadi.

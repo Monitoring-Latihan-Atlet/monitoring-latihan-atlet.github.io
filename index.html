@@ -124,6 +124,15 @@ details.rules p{margin:8px 0 0}
 .rp .note-box{border:1px solid #e5e0d8;border-radius:8px;padding:10px 12px;min-height:90px;font-size:13px;white-space:pre-wrap;background:repeating-linear-gradient(#fff 0 27px,#eee 27px 28px)}
 .rp .pill2{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;color:#fff}
 .rp .ft{font-size:11px;color:#8a8f9c;display:flex;justify-content:space-between}
+.rp .r{text-align:right;font-variant-numeric:tabular-nums}
+.rp table.t2{font-size:10.5px}.rp table.t2 th,.rp table.t2 td{padding:4px 3px}
+.rp .blk{display:flex;flex-direction:column;gap:6px;break-inside:avoid}
+.rp-img{width:100%;display:block;border-radius:6px}
+.rp .g2i{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rp-dark{background:#111a2e;color:#e8edf7;border-radius:8px;padding:10px;overflow:hidden}
+.rp-dark .hmwrap{overflow:visible}
+.rp .muted{color:#8a8f9c}
+#report{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media print{
   @page{size:A4;margin:12mm}
   body{background:#fff!important}
@@ -674,7 +683,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
 
   <!-- DASHBOARD ATLET -->
   <section id="v-atlet" style="display:flex;flex-direction:column;gap:12px">
-    <div class="atbar"><h2>Dashboard atlet</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost sm" id="btnRep">Laporan mingguan</button><select id="atPick" aria-label="Pilih atlet"></select></div></div>
+    <div class="atbar"><h2>Dashboard atlet</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn ghost sm" id="btnRep">Laporan mingguan</button><button type="button" class="btn ghost sm" id="btnPdfAt">PDF dashboard</button><select id="atPick" aria-label="Pilih atlet"></select></div></div>
     <div id="atletBody" style="display:flex;flex-direction:column;gap:12px"></div>
   </section>
 
@@ -754,6 +763,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
       <h2 id="scopeTitle">Ringkasan hari ini</h2>
       <div class="r">
         <select id="fCabor" aria-label="Filter cabang olahraga"></select>
+        <button class="btn ghost sm" id="btnPdfTim">PDF &amp; statistik</button>
         <button class="btn ghost sm" id="btnCsv" hidden>Unduh CSV</button>
       </div>
     </div>
@@ -1235,7 +1245,7 @@ function mkChart(id,cfg){
   Chart.defaults.font.family='"Barlow",system-ui,sans-serif';Chart.defaults.font.size=12;Chart.defaults.color=T.muted;
   cfg.options=cfg.options||{};
   cfg.options.responsive=true;cfg.options.maintainAspectRatio=false;
-  cfg.options.animation=matchMedia("(prefers-reduced-motion: reduce)").matches?false:{duration:400};
+  cfg.options.animation=S.cetak||matchMedia("(prefers-reduced-motion: reduce)").matches?false:{duration:400};
   cfg.options.plugins=Object.assign({tooltip:{backgroundColor:T.ink,titleColor:T.surface,bodyColor:T.surface,padding:10,cornerRadius:8,displayColors:true,boxPadding:4}},cfg.options.plugins||{});
   if(cfg.options.plugins.legend===undefined)cfg.options.plugins.legend={display:false};
   S.charts[id]=new Chart(el,{...cfg,plugins:[zonePlugin,refLine,hlinePlugin,ptLabelPlugin]});
@@ -2146,6 +2156,110 @@ function reportPage(s,w0,note,row){
   <div class="ft"><span>Monitoring Latihan Atlet</span><span>Kesiapan: ≥70 siap · 50–69 waspada · &lt;50 perlu pemulihan</span></div>
 </section>`;
 }
+
+/* ---------- PDF: dashboard tim + statistik deskriptif, dan dashboard atlet ---------- */
+const STAT=v=>{const a=v.filter(x=>x!=null&&x!==""&&isFinite(x)).map(Number).sort((x,y)=>x-y);if(!a.length)return null;
+  const h=a.length>>1;return{n:a.length,m:mean(a),sd:a.length>1?sd(a):null,min:a[0],med:a.length%2?a[h]:(a[h-1]+a[h])/2,max:a[a.length-1]}};
+const statHead='<tr><th>Variabel</th><th class="r">n</th><th class="r">Rata-rata</th><th class="r">SD</th><th class="r">Min</th><th class="r">Median</th><th class="r">Maks</th></tr>';
+const statRow=(l,v,d=1,u)=>{const x=STAT(v);return`<tr><td><b>${l}</b>${u?` <span class="muted">${u}</span>`:""}</td>${x?[x.n,dec(x.m,d),x.sd!=null?dec(x.sd,d):"–",dec(x.min,d),dec(x.med,d),dec(x.max,d)].map(c=>`<td class="r">${c}</td>`).join(""):'<td colspan="6" class="muted">belum ada data</td>'}</tr>`};
+const stepDec=T=>T.step<0.1?2:T.step<1?1:0;
+const STC={merah:"#e5383b",kuning:"#d99a00",hijau:"#1f9d55",kosong:"#8a8f9c"};
+const pill=st=>`<span class="pill2" style="background:${STC[st]}">${LABEL[st]}</span>`;
+/* gambar grafik dari layar (latar gelap seperti di aplikasi) */
+function snapCanvas(id){
+  const c=document.getElementById(id);if(!c||!c.width||!c.height)return"";
+  const o=document.createElement("canvas");o.width=c.width;o.height=c.height;const x=o.getContext("2d");
+  x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue("--surface").trim()||"#111a2e";x.fillRect(0,0,o.width,o.height);x.drawImage(c,0,0);
+  return`<img class="rp-img" src="${o.toDataURL("image/png")}" alt="">`;
+}
+function bukaLaporan(html){
+  $("#report").innerHTML=`<div class="rp-bar"><button type="button" class="btn" id="rpPrint">Cetak / simpan PDF</button><button type="button" class="btn ghost" id="rpBack" style="color:#161a2b;background:#fff">Kembali</button><span>Di jendela cetak, pilih printer “Simpan sebagai PDF”. Centang “Grafik latar belakang” agar warna ikut tercetak.</span></div>`+html;
+  $("#app").hidden=true;$("#report").hidden=false;window.scrollTo(0,0);
+}
+const tglCetak=()=>new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+const nm0=s=>s.nama.replace(" (contoh)","");
+function pdfTim(){
+  const all=computeRows();const pool=all.filter(x=>!S.cabor||x.s.cabor===S.cabor).sort((a,b)=>b.a.lvl-a.a.lvl||a.s.nama.localeCompare(b.s.nama));
+  if(!pool.length)return;
+  /* gambar semua grafik analisis (tab dibuka satu per satu tanpa animasi) */
+  const keep=S.an||"risiko";const g={};S.cetak=true;
+  const ids={risiko:["cRisk"],acwr:["cAcwrAll"],tren:["cLoad","cWell"],cabor:["cCabor"]};
+  try{for(const t of Object.keys(ids)){S.an=t;renderAnalisis();g[t]=ids[t].map(snapCanvas)}
+    S.an="kurva";renderAnalisis();g.kurva=$("#teamCurve").innerHTML;S.an="peta";renderAnalisis();g.peta=$("#heat").parentElement.outerHTML}
+  finally{S.cetak=false;S.an=keep;renderAnalisis()}
+  const cnt=l=>pool.filter(x=>x.a.lvl===l).length;const isi=pool.filter(x=>hasW(x.a.byDate[TODAY])).length;
+  const box=(v,l,c)=>`<div><b${c?` style="color:${c}"`:""}>${v}</b><span>${l}</span></div>`;
+  const ph=pool.filter(x=>x.a.perhatian.length);
+  const ac=x=>x.a.acwr;const bmi=s=>s.bb&&s.tb?s.bb/(s.tb*s.tb):null;
+  const cabs=[...new Set(pool.map(x=>x.s.cabor))].sort();
+  const M=latestMap((data().tes||[]));const tesRows=TESTS.map(T=>({T,v:pool.map(x=>M[x.s.id]&&M[x.s.id][T.key]?M[x.s.id][T.key].v:null),k:pool.map(x=>{const m=M[x.s.id]&&M[x.s.id][T.key];return m?skalaOf(T,m.v,x.s.jk,m.bb||x.s.bb):null})})).filter(r=>r.v.some(v=>v!=null));
+  const judul=S.cabor||"Seluruh tim";
+  const hd=sub=>`<div class="hd"><div><h3>${sub}</h3><h1>${esc(judul)}</h1><small>${pool.length} atlet · data per ${fmtLong(TODAY)}</small></div><div style="text-align:right"><h3>Monitoring Latihan Atlet</h3><small>Dicetak ${tglCetak()}</small></div></div>`;
+  const ft=`<div class="ft"><span>Monitoring Latihan Atlet</span><span>Merah = segera ditangani · Kuning = pantau · Hijau = aman</span></div>`;
+  bukaLaporan(`<section class="rp">${hd("Laporan ringkasan tim")}
+    <div class="sm">${box(cnt(2),"segera ditangani",STC.merah)}${box(cnt(1),"perlu dipantau",STC.kuning)}${box(cnt(0),"aman berlatih",STC.hijau)}${box(isi+" / "+pool.length,"sudah isi kondisi pagi")}</div>
+    <div class="blk"><h3>Perlu perhatian hari ini</h3>${ph.length?`<table><tr><th>Atlet</th><th>Cabor</th><th>Tingkat</th><th>Alasan</th></tr>${ph.map(({s,a})=>`<tr><td><b>${esc(nm0(s))}</b></td><td>${esc(s.cabor)}</td><td>${pill(a.lvl===2?"merah":"kuning")}</td><td>${a.perhatian.map(f=>esc(f.txt)).join("<br>")}</td></tr>`).join("")}</table>`:'<p class="muted" style="margin:0">Tidak ada atlet yang perlu perhatian khusus.</p>'}</div>
+    <div class="blk"><h3>Semua atlet</h3><table class="t2"><tr><th>Atlet</th><th>Cabor</th><th>Status</th><th class="r">Siap</th><th class="r">ACWR</th><th class="r">EWMA</th><th class="r">Form</th><th class="r">Mono</th><th class="r">Strain×</th><th class="r">Well</th><th class="r">z</th><th class="r">TSS 7h</th><th class="r">Isi 28h</th></tr>
+      ${pool.map(({s,a})=>`<tr><td><b>${esc(nm0(s))}</b></td><td>${esc(s.cabor)}</td><td>${pill(a.status)}</td><td class="r">${a.rdy?a.rdy.skor:"–"}</td><td class="r">${dec(a.acwr)}</td><td class="r">${dec(a.acwrE)}</td><td class="r">${a.formPct!=null?(a.formPct>0?"+":"")+a.formPct+"%":"–"}</td><td class="r">${dec(a.mono)}</td><td class="r">${dec(a.fo.rasio)}</td><td class="r">${a.wt!=null?a.wt:"–"}</td><td class="r">${dec(a.z)}</td><td class="r">${a.acute}</td><td class="r">${Math.round(a.compliance*100)}%</td></tr>`).join("")}</table>
+      <p class="muted" style="margin:0;font-size:10.5px">Siap = skor kesiapan hari ini (0–100) · ACWR = rolling 7:28 · EWMA = fatigue ÷ fitness · Form = (fitness − fatigue) ÷ fitness · Mono = monotony 7 hari · Strain× = strain dibanding rata-rata 12 minggu · Well = wellness terakhir (5–25) · Isi 28h = hari dengan entri dalam 28 hari.</p></div>
+    </section>
+  <section class="rp">${hd("Statistik deskriptif")}
+    <div class="blk"><h3>Indikator pemantauan (nilai terkini tiap atlet)</h3><table>${statHead}
+      ${statRow("Skor kesiapan",pool.map(x=>x.a.rdy&&x.a.rdy.skor),1,"0–100")}${statRow("ACWR rolling 7:28",pool.map(ac),2)}${statRow("ACWR EWMA",pool.map(x=>x.a.acwrE),2)}${statRow("Form %",pool.map(x=>x.a.formPct),1,"%")}
+      ${statRow("Monotony",pool.map(x=>x.a.mono),2)}${statRow("Strain vs biasanya",pool.map(x=>x.a.fo.rasio),2,"×")}${statRow("Wellness terakhir",pool.map(x=>x.a.wt),1,"5–25")}${statRow("z-wellness",pool.map(x=>x.a.z),2)}
+      ${statRow("Beban 7 hari",pool.map(x=>x.a.acute),0,"TSS")}${statRow("Kepatuhan isi 28 hari",pool.map(x=>x.a.compliance*100),0,"%")}</table></div>
+    <div class="blk"><h3>Profil atlet</h3><table>${statHead}${statRow("Usia",pool.map(x=>ageOf(x.s)),1,"tahun")}${statRow("Berat badan",pool.map(x=>x.s.bb),1,"kg")}${statRow("Tinggi badan",pool.map(x=>x.s.tb),2,"m")}${statRow("BMI",pool.map(x=>bmi(x.s)),1,"kg/m²")}</table></div>
+    <div class="blk"><h3>Per cabang olahraga</h3><table><tr><th>Cabor</th><th class="r">n</th><th class="r">Merah</th><th class="r">Kuning</th><th class="r">Hijau</th><th class="r">Tanpa data</th><th class="r">Rata-rata siap</th><th class="r">Rata-rata ACWR</th><th class="r">Rata-rata TSS 7h</th></tr>
+      ${cabs.map(c=>{const r=pool.filter(x=>x.s.cabor===c);const k=st=>r.filter(x=>x.a.status===st).length;const av=v=>{const q=STAT(v);return q?q.m:null};return`<tr><td><b>${esc(c)}</b></td><td class="r">${r.length}</td><td class="r">${k("merah")}</td><td class="r">${k("kuning")}</td><td class="r">${k("hijau")}</td><td class="r">${k("kosong")}</td><td class="r">${dec(av(r.map(x=>x.a.rdy&&x.a.rdy.skor)),0)}</td><td class="r">${dec(av(r.map(ac)))}</td><td class="r">${dec(av(r.map(x=>x.a.acute)),0)}</td></tr>`}).join("")}</table></div>
+    <div class="blk"><h3>Tes fisik (hasil terakhir tiap atlet)</h3>${tesRows.length?`<table>${statHead.replace("<th>Variabel</th>","<th>Tes</th>")}${tesRows.map(r=>statRow(esc(r.T.label),r.v,stepDec(r.T),r.T.unit)).join("")}</table>
+      <table style="margin-top:6px"><tr><th>Tes</th><th class="r">Rata-rata skala (1–5)</th>${[5,4,3,2,1].map(k=>`<th class="r">${SKALA[k]}</th>`).join("")}</tr>${tesRows.map(r=>{const k=r.k.filter(v=>v!=null);return`<tr><td>${esc(r.T.label)}</td><td class="r">${k.length?dec(mean(k),2):"–"}</td>${[5,4,3,2,1].map(n=>`<td class="r">${k.filter(v=>v===n).length}</td>`).join("")}</tr>`}).join("")}</table>`:'<p class="muted" style="margin:0">Belum ada hasil tes.</p>'}</div>
+    <p class="muted" style="margin:0;font-size:10.5px">SD = simpangan baku sampel (n − 1). Nilai kosong tidak dihitung. Data contoh ditandai "(contoh)" di aplikasi.</p>
+    </section>
+  <section class="rp">${hd("Grafik analisis tim")}
+    <div class="blk"><h3>Matriks risiko · ACWR × z-wellness</h3>${g.risiko.join("")}</div>
+    <div class="blk"><h3>ACWR per atlet</h3>${g.acwr.join("")}</div>
+    <div class="blk"><h3>Kurva beban – performa – cedera</h3><div class="rp-dark">${g.kurva}</div></div>
+    <div class="blk"><h3>Rata-rata beban harian &amp; wellness tim (28 hari)</h3><div class="g2i">${g.tren.join("")}</div></div>
+    <div class="blk"><h3>Status per cabor</h3>${g.cabor.join("")}</div>
+    <div class="blk"><h3>Peta wellness 14 hari</h3><div class="rp-dark">${g.peta}</div></div>
+    ${ft}</section>`);
+}
+$("#btnPdfTim").addEventListener("click",pdfTim);
+function pdfAtlet(){
+  const D=data();const s=D.siswa.find(x=>x.id===AT.sel);if(!s)return;
+  S.cetak=true;try{renderAtlet()}finally{S.cetak=false}
+  const g=["atDaily","atPmc","atForm","atMono","atWeek","atHrv","atPerf"].reduce((o,id)=>(o[id]=snapCanvas(id),o),{});
+  const row=computeRows().find(x=>x.s.id===s.id);const a=row?row.a:null;
+  const ent=D.entri.filter(e=>e.siswaId===s.id);const pl=(D.rencana||[]).filter(p=>p.siswaId===s.id);
+  const P=pmc(ent,pl,TODAY);const now=P.find(d=>d.t===TODAY)||P[P.length-1]||null;
+  const e28=ent.filter(e=>e.tanggal<=TODAY&&diffDays(TODAY,e.tanggal)<28);const ss=e28.flatMap(sesiOf);
+  const lBy={};e28.forEach(e=>lBy[e.tanggal]=(lBy[e.tanggal]||0)+loadRaw(e));const daily=[...Array(28)].map((_,k)=>lBy[addDays(TODAY,-k)]||0);
+  const ws=e28.filter(hasW);const age=ageOf(s);
+  const box=(v,l,c)=>`<div><b${c?` style="color:${c}"`:""}>${v}</b><span>${l}</span></div>`;
+  const M=latestMap(D.tes||[])[s.id]||{};
+  const tes=TESTS.filter(T=>M[T.key]).map(T=>{const m=M[T.key];const k=skalaOf(T,m.v,s.jk,m.bb||s.bb);return`<tr><td>${esc(T.label)}</td><td class="r">${dec(m.v,stepDec(T))} ${esc(T.unit)}</td><td class="r">${m.prev!=null?dec(m.prev,stepDec(T)):"–"}</td><td>${k?k+" · "+SKALA[k]:"–"}</td><td>${fmtD(m.tgl)}</td></tr>`}).join("");
+  const fz=now?formZone(now.formPct):null;
+  bukaLaporan(`<section class="rp">
+    <div class="hd"><div><h3>Dashboard atlet</h3><h1>${esc(nm0(s))}</h1><small>${esc(s.cabor)}${s.kelas?" · "+esc(s.kelas):""}${age!=null?" · "+age+" tahun":""}${s.bb?" · "+dec(+s.bb,1)+" kg":""}${s.tb?" · "+dec(+s.tb,2)+" m":""}${s.pelatih?" · Pelatih: "+esc(s.pelatih):""}</small></div><div style="text-align:right"><h3>Data per</h3><b>${fmtLong(TODAY)}</b><small>Dicetak ${tglCetak()}</small></div></div>
+    ${a?`<p style="margin:0;font-size:13px">${pill(a.status)} ${a.reasons.map(esc).join(" · ")}</p>`:""}
+    <div class="sm">${box(a&&a.rdy?a.rdy.skor:"–","kesiapan hari ini",a&&a.rdy?a.rdy.warna:null)}${box(now?Math.round(now.ctl):"–","fitness (CTL)")}${box(now?Math.round(now.atl):"–","fatigue (ATL)")}${box(now&&now.formPct!=null?(now.formPct>0?"+":"")+now.formPct+"%":"–","form % "+(fz?"· "+fz.id:""),fz?fz.warna:null)}
+      ${box(a?dec(a.acwr):"–","ACWR rolling 7:28")}${box(a?dec(a.acwrE):"–","ACWR EWMA")}${box(a?dec(a.mono):"–","monotony 7 hari")}${box(a&&a.fo.rasio!=null?dec(a.fo.rasio)+"×":"–","strain vs biasanya")}</div>
+    <div class="blk"><h3>Beban harian &amp; ACWR (90 hari)</h3>${g.atDaily}</div>
+    <div class="blk"><div class="g2i"><div><h3>TSS · fitness · fatigue</h3>${g.atPmc}</div><div><h3>Form %</h3>${g.atForm}</div></div></div>
+    <div class="ft"><span>Monitoring Latihan Atlet</span><span>${esc(nm0(s))}</span></div></section>
+  <section class="rp">
+    <div class="hd"><div><h3>Dashboard atlet · lanjutan</h3><h1>${esc(nm0(s))}</h1></div><div style="text-align:right"><small>Dicetak ${tglCetak()}</small></div></div>
+    <div class="blk"><h3>Monotony &amp; strain (90 hari)</h3>${g.atMono}</div>
+    <div class="blk"><div class="g2i"><div><h3>Beban mingguan per jenis latihan</h3>${g.atWeek}</div><div><h3>Wellness · nadi istirahat · HRV</h3>${g.atHrv}</div></div></div>
+    <div class="blk"><h3>Statistik deskriptif 28 hari terakhir</h3><table>${statHead}
+      ${statRow("Beban harian (termasuk hari istirahat)",daily,0,"TSS")}${statRow("Durasi per sesi",ss.map(x=>+x.durasi),0,"menit")}${statRow("RPE per sesi",ss.map(x=>+x.rpe),1,"1–10")}
+      ${statRow("Wellness total",ws.map(wellTotal),1,"5–25")}${WELL.map(([k,l])=>statRow(esc(l),ws.map(e=>+e[k]),1,"1–5")).join("")}
+      ${statRow("Nyeri",ws.map(e=>+e.nyeri||0),1,"0–10")}${statRow("Nadi istirahat",e28.map(e=>e.hrIstirahat),0,"bpm")}${statRow("HRV",e28.map(e=>e.hrv),0,"ms")}</table>
+      <p class="muted" style="margin:0;font-size:10.5px">${ss.length} sesi dan ${ws.length} kali isi kondisi pagi dalam 28 hari. SD = simpangan baku sampel.</p></div>
+    <div class="blk"><h3>Tes fisik (hasil terakhir)</h3>${tes?`<table><tr><th>Tes</th><th class="r">Hasil</th><th class="r">Sebelumnya</th><th>Skala</th><th>Tanggal</th></tr>${tes}</table>`:'<p class="muted" style="margin:0">Belum ada hasil tes.</p>'}${g.atPerf?`<div style="margin-top:6px">${g.atPerf}</div>`:""}</div>
+    <div class="ft"><span>Monitoring Latihan Atlet</span><span>Kesiapan: ≥70 siap · 50–69 waspada · &lt;50 perlu pemulihan</span></div></section>`);
+}
+$("#btnPdfAt").addEventListener("click",pdfAtlet);
 
 /* ---------- tautan pribadi atlet ---------- */
 const LK={id:null};
