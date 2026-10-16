@@ -65,27 +65,29 @@ Langkah ini diperlukan agar tautan konfirmasi email dan lupa kata sandi kembali 
 2. Isi **Site URL** dengan alamat web Anda, misalnya `https://monitor-kko.pages.dev`.
 3. Tambahkan alamat yang sama di **Redirect URLs**.
 
-## 5. Jadikan akun Anda pengelola
+## 5. Ruang kerja per akun (data Anda tidak terlihat akun lain)
 
-1. Buka web Anda, klik **Belum punya akun? Daftar**, lalu daftar dengan email Anda.
-2. Buka email konfirmasi dan klik tautannya.
-3. Di Supabase **SQL Editor**, jalankan perintah ini (ganti emailnya):
+1. Buka web Anda, klik **Belum punya akun? Daftar**, lalu daftar dengan email Anda dan konfirmasi lewat email.
+2. Setelah masuk, Anda langsung punya **ruang kerja sendiri**. Atlet yang Anda tambahkan **hanya terlihat oleh Anda** dan orang yang Anda undang.
+3. Siapa pun yang mendaftar kemudian — misalnya pelatih lain — juga mendapat ruang kerja sendiri yang **kosong**. Mereka **tidak bisa** membaca, mengubah, menghapus, atau memindahkan atlet Anda. Aturan ini dijalankan di database, jadi tetap berlaku meskipun seseorang mencoba lewat cara lain.
+4. Saat ruang kerja masih kosong, dashboard menampilkan 14 atlet **contoh (fiktif)**, bukan data milik akun lain.
+5. (Opsional) Jadikan akun Anda **pengelola platform** agar bisa menonaktifkan akun yang menyalahgunakan web. Pengelola **tetap tidak bisa** melihat atlet milik akun lain. Di Supabase **SQL Editor** jalankan:
 
 ```sql
 update public.profil set role = 'admin' where email = 'email-anda@contoh.com';
 ```
 
-4. Masuk ke web. Anda sekarang berperan sebagai **Pengelola**.
+## 6. Mengajak asisten pelatih atau pengamat
 
-## 6. Menambahkan pelatih dan pengamat
+1. Minta orang tersebut **mendaftar** dulu di web dengan emailnya.
+2. Buka tab **Tim & akses** → **Undang anggota tim**: isi emailnya, pilih peran, dan (opsional) batasi ke cabor tertentu.
+   - **Asisten pelatih**: melihat dan mengisi data atlet Anda (hanya cabor yang Anda pilih).
+   - **Pengamat** (orang tua, manajer tim, guru, dokter tim): hanya melihat.
+3. Orang itu membuka tab **Tim & akses** miliknya lalu menekan **Terima**. Akses baru berlaku setelah diterima.
+4. Akses bisa dicabut kapan saja lewat **Cabut akses**. Anggota juga bisa **Keluar dari tim**.
+5. Atlet yang ditambahkan anggota akan masuk ke ruang kerja anggota itu sendiri, bukan ke ruang kerja Anda.
 
-1. Minta mereka membuka web dan **Daftar** dengan email masing-masing.
-2. Setelah mereka konfirmasi email, buka tab **Pengguna**. Akun baru muncul di urutan teratas dengan status *menunggu*.
-3. Pilih perannya, lalu klik **Simpan**:
-   - **Pelatih**: pilih juga cabor yang dipegang.
-   - **Pengamat** (orang tua, manajer tim, guru, dokter tim): hanya bisa melihat.
-
-Peran diterapkan langsung di database. Pelatih tidak bisa membaca data atlet di luar cabornya, dan pengamat tidak bisa mengubah data, meskipun mencoba lewat cara lain.
+**Memperbarui dari versi lama:** saat `setup.sql` versi ini dijalankan pertama kali, semua atlet lama otomatis menjadi milik akun **pengelola pertama** (Anda), dan pelatih/pengamat yang sebelumnya Anda setujui otomatis menjadi anggota tim Anda dengan akses yang sama seperti sebelumnya.
 
 ## 7. Supaya sepenuhnya tampil atas nama program Anda
 
