@@ -780,7 +780,7 @@ select,input[type=text],input[type=tel],input[type=number],input[type=date],inpu
       </div>
       <div class="apane" data-pane="risiko">
         <div class="cv tall" style="position:relative"><canvas id="cRisk" aria-label="Matriks risiko ACWR terhadap wellness"></canvas><div class="cvempty" id="riskEmpty" hidden>Belum ada atlet dengan data cukup.<br><small>Lihat daftar di bawah grafik.</small></div></div>
-        <div class="legend"><span><i style="background:var(--green-bg);outline:1px solid var(--green)"></i>Zona aman: ACWR 0,8–1,29 dan z ≥ −1</span><span><i style="background:var(--red-bg);outline:1px solid var(--red)"></i>Zona bahaya: ACWR ≥ 1,5 atau z &lt; −2</span><span>Warna titik = status atlet · klik titik untuk profil</span></div>
+        <div class="legend"><span><i style="background:var(--green-bg);outline:1px solid var(--green)"></i>Zona aman: ACWR 0,8–1,29 dan z ≥ −1</span><span><i style="background:var(--amber-bg);outline:1px solid var(--amber)"></i>Zona waspada: ACWR &lt; 0,8 (underload) atau 1,3–1,49, atau z −2 s/d −1</span><span><i style="background:var(--red-bg);outline:1px solid var(--red)"></i>Zona bahaya: ACWR ≥ 1,5 atau z &lt; −2</span><span>Warna titik = status atlet · klik titik untuk profil</span></div>
         <div id="riskMiss" class="riskmiss"></div>
       </div>
       <div class="apane" data-pane="acwr">
@@ -1372,7 +1372,8 @@ function renderRisk(pool){
   mkChart("cRisk",{type:"scatter",data:{datasets:[{data:pts,pointRadius:pts.map(p=>p.id===S.sel?9:6.5),pointHoverRadius:10,pointBackgroundColor:pts.map(p=>col[p.st]),pointBorderColor:T.surface,pointBorderWidth:2}]},
     options:{onClick:(e,els)=>{if(els.length){S.sel=pts[els[0].index].id;renderDash();scrollDetail()}},
       scales:{x:axis(T,{min:0.4,max:2.2,title:{display:true,text:"ACWR (beban akut ÷ kronis)",color:T.muted},ticks:{stepSize:0.2,color:T.muted,callback:v=>dec(v,1)}}),y:axis(T,{min:-3.5,max:2.5,title:{display:true,text:"z-wellness (vs baseline sendiri)",color:T.muted},ticks:{stepSize:1,color:T.muted,callback:v=>dec(v,1)}})},
-      plugins:{zones:[{x:[0.8,1.3],y:[-1,2.5],c:T.greenBg},{x:[1.5,2.2],y:[-3.5,2.5],c:T.redBg},{x:[0.4,1.5],y:[-3.5,-2],c:T.redBg}],ptLabels:pts.length<=30?{color:T.ink}:undefined,
+      /* seluruh bidang diwarnai sesuai aturan status: hijau aman, kuning waspada, merah bahaya */
+      plugins:{zones:[{x:[0.8,1.3],y:[-1,2.5],c:T.greenBg},{x:[0.4,0.8],y:[-2,2.5],c:T.amberBg},{x:[1.3,1.5],y:[-2,2.5],c:T.amberBg},{x:[0.8,1.3],y:[-2,-1],c:T.amberBg},{x:[1.5,2.2],y:[-3.5,2.5],c:T.redBg},{x:[0.4,1.5],y:[-3.5,-2],c:T.redBg}],ptLabels:pts.length<=30?{color:T.ink}:undefined,
         tooltip:{callbacks:{title:it=>it[0].raw.n,label:it=>["ACWR "+dec(it.raw.ax),"z-wellness "+dec(it.raw.az),"Status "+LABEL[it.raw.st]]}}}}});
 }
 function renderCabor(all){
