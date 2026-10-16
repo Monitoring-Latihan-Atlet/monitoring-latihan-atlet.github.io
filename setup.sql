@@ -57,6 +57,8 @@ create table if not exists public.siswa (
 -- Kode rahasia untuk tautan pribadi atlet (atlet.html?k=<kode>)
 alter table public.siswa add column if not exists kode uuid not null default gen_random_uuid();
 create unique index if not exists siswa_kode_idx on public.siswa (kode);
+-- Nomor WhatsApp atlet (opsional) untuk tombol pengingat
+alter table public.siswa add column if not exists hp text;
 
 create or replace function public.boleh_lihat_siswa(sid uuid) returns boolean
 language sql stable security definer set search_path = public as $$
@@ -226,8 +228,13 @@ begin
     if coalesce((ns->>'rpe')::int, 0) not between 1 and 10 then raise exception 'RPE harus 1–10'; end if;
     if coalesce((ns->>'durasi')::int, 0) not between 1 and 400 then raise exception 'Durasi harus 1–400 menit'; end if;
     if not exists (select 1 from jsonb_array_elements(ss) x where x->>'id' = ns->>'id') then
-      ss := ss || jsonb_build_array(jsonb_build_object('id', coalesce(ns->>'id', gen_random_uuid()::text),
-              'jenis', ns->>'jenis', 'rpe', (ns->>'rpe')::int, 'durasi', (ns->>'durasi')::int));
+      ss := ss || jsonb_build_array(jsonb_strip_nulls(jsonb_build_object('id', coalesce(ns->>'id', gen_random_uuid()::text),
+              'jenis', ns->>'jenis', 'rpe', (ns->>'rpe')::int, 'durasi', (ns->>'durasi')::int,
+              -- data opsional dari file jam / Strava
+              'hr', case when (ns->>'hr') ~ '^[0-9]+$' and (ns->>'hr')::int between 30 and 240 then (ns->>'hr')::int end,
+              'hrmax', case when (ns->>'hrmax') ~ '^[0-9]+$' and (ns->>'hrmax')::int between 30 and 250 then (ns->>'hrmax')::int end,
+              'km', case when (ns->>'km') ~ '^[0-9]+(\.[0-9]+)?$' and (ns->>'km')::numeric < 1000 then round((ns->>'km')::numeric, 2) end,
+              'sumber', case when ns->>'sumber' in ('jam', 'manual') then ns->>'sumber' end)));
     end if;
   end if;
   if hapus is not null then

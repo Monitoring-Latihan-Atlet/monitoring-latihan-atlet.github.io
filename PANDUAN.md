@@ -6,6 +6,8 @@ Isi folder:
 - `atlet.html` — halaman isian harian untuk atlet (dibuka lewat tautan pribadi).
 - `config.js` — alamat dan kunci database.
 - `norma.js` — norma tes kondisi fisik (dipakai halaman pelatih dan atlet).
+- `kesiapan.js` — rumus skor kesiapan harian.
+- `impor.js` — pembaca file aktivitas dari jam dan Strava.
 - `sw.js`, `manifest*.json`, `icon-*.png` — agar web bisa dipasang seperti aplikasi.
 - `setup.sql` — skema database dan aturan akses.
 - `PANDUAN.md` — panduan ini.
@@ -126,6 +128,28 @@ Peran diterapkan langsung di database. Pelatih tidak bisa membaca data siswa di 
 - **Pasang seperti aplikasi.** Di Android (Chrome), ketuk **Pasang aplikasi** atau menu ⋮ → *Tambahkan ke layar utama*. Di iPhone (Safari), ketuk *Bagikan* → *Tambahkan ke Layar Utama*. Atlet memasang dari tautan pribadinya; setelah itu ikon *Latihan Saya* langsung membuka halamannya.
 - **Saat sinyal lemah.** Halaman atlet tetap terbuka dan isian disimpan di HP, lalu terkirim otomatis saat online. Aplikasi pelatih juga tetap terbuka, tetapi butuh internet untuk memuat dan menyimpan data.
 - **Beberapa sesi per hari.** Kondisi pagi diisi sekali sehari, sedangkan sesi latihan bisa ditambahkan berkali-kali (misalnya pagi dan sore). Beban harian, ACWR, fitness, dan kalender menjumlahkan semua sesi. Entri lama otomatis terbaca sebagai satu sesi.
+
+## 10. Kesiapan, pengingat, laporan, dan impor dari jam
+
+- **Skor kesiapan 0–100.** Dihitung setiap kali atlet mengisi kondisi pagi:
+  - kondisi pagi dibanding kebiasaan atlet sendiri (40%),
+  - form latihan (25%),
+  - HRV (20%) dan nadi istirahat (15%) dibanding rata-rata 4 minggu, bila diisi,
+  - dikurangi 4 poin per angka nyeri.
+  ≥70 **siap latihan**, 50–69 **waspada**, <50 **perlu pemulihan**. Tampil di daftar prioritas (kolom *Siap*), profil atlet, dashboard atlet, laporan, dan halaman atlet. Rumusnya ada di `kesiapan.js` dan ambangnya perlu dikalibrasi dengan pengalaman pelatih.
+- **Pengingat & peringatan** (tab *Ringkasan kelas*):
+  - kotak merah berisi atlet yang perlu tindakan, beserta alasannya (klik nama untuk membuka profil);
+  - daftar atlet yang **belum mengisi kondisi pagi hari ini**, dengan tombol **Kirim pengingat ke grup WhatsApp** dan **Salin daftar**;
+  - tombol **WA** di samping nama atlet yang nomor WhatsApp-nya diisi di *Data siswa*. Pesannya sudah berisi tautan pribadi atlet;
+  - angka merah di tab *Ringkasan kelas* menunjukkan jumlah atlet berstatus merah.
+- **Laporan mingguan.** Di *Dashboard atlet*, tekan **Laporan mingguan**, pilih minggu, pilih atlet ini saja atau semua atlet satu cabor, tulis catatan pelatih, lalu **Tampilkan laporan** → **Cetak / simpan PDF**. Isinya: ringkasan minggu, grafik beban harian dibanding rencana, tabel per hari (rencana, latihan, TSS, wellness, nyeri, kesiapan), status terkini, dan catatan pelatih.
+- **Impor dari jam / Strava.** Tombol **⌚ Impor dari jam / Strava** ada di *Input harian* (pelatih) dan di halaman atlet.
+  - Format yang dibaca: file **.fit** (Garmin, Coros, Polar, Suunto, Wahoo), **.gpx**, **.tcx**, versi **.gz**-nya, **activities.csv** dari ekspor data Strava, dan **Activities.csv** dari Garmin Connect.
+  - Durasi, rata-rata dan maksimal denyut jantung, jarak, dan jenis latihan terisi otomatis. RPE **disarankan** dari denyut jantung (% HRmax menurut usia) dan sebaiknya disesuaikan dengan rasa atlet.
+  - File berisi banyak aktivitas (CSV Strava/Garmin) ditampilkan sebagai daftar untuk dipilih. Aktivitas yang sudah pernah diimpor otomatis dilewati.
+  - Atlet hanya bisa mengimpor aktivitas 7 hari terakhir; pelatih bisa mengimpor tanggal berapa pun.
+  - File dibaca langsung di HP/komputer dan tidak diunggah ke mana pun.
+  - Cara mendapat file: Garmin Connect → aktivitas → ⚙ → *Ekspor Asli* (.fit) atau *Ekspor GPX*; Strava → aktivitas → ⋯ → *Ekspor GPX*, atau Pengaturan → *Akun Saya* → *Unduh atau hapus akun Anda* → *Minta arsip* (berisi activities.csv).
 
 **Wajib:** setelah memperbarui ke versi ini, jalankan ulang seluruh `setup.sql` di Supabase. Skrip ini menambah kode tautan atlet, kolom `sesi`, dan dua fungsi khusus halaman atlet.
 

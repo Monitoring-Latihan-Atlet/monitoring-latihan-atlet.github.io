@@ -77,6 +77,15 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 .week em{width:9px;height:9px;border-radius:50%;background:var(--gray-bg);font-style:normal}
 .week .today{color:var(--ink);font-weight:700}
 .empty{color:var(--muted);text-align:center;padding:30px 10px}
+.filebtn{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--line);background:var(--surface2);border-radius:10px;padding:11px;font-weight:600;cursor:pointer}
+.score{display:flex;align-items:center;gap:14px}
+.score .ring{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--rc) calc(var(--v)*1%),var(--gray-bg) 0);flex:none}
+.score .ring b{width:62px;height:62px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-family:var(--display);font-size:28px;color:var(--rc)}
+.parts{display:flex;flex-wrap:wrap;gap:5px}.parts span{font-size:12px;background:var(--surface2);border-radius:999px;padding:3px 9px;color:var(--muted)}
+.imp{display:flex;flex-direction:column;gap:6px}
+.imp label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:14px}
+.imp label small{display:block;color:var(--muted);font-size:12px}
+.imp input{width:20px;height:20px;accent-color:var(--accent);flex:none}
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;position:sticky;top:59px;z-index:4}
 .tabs button{border:0;background:none;border-radius:9px;padding:10px;font-weight:700;font-size:15px;color:var(--muted);cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--accent);color:#000}
@@ -149,6 +158,8 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
       <h2><span class="n" id="n2">2</span>Sesi latihan</h2>
       <div id="sesiList" style="display:flex;flex-direction:column;gap:6px"></div>
       <form id="fSesi" novalidate style="display:flex;flex-direction:column;gap:12px">
+        <label class="filebtn">⌚ Impor dari jam / Strava<input type="file" id="fileImp" accept=".fit,.gpx,.tcx,.csv,.gz" hidden></label>
+        <div id="impBox" class="imp"></div>
         <button type="button" class="btn ghost" id="pakaiRencana" hidden>Isi sesuai rencana pelatih</button>
         <div style="display:flex;flex-direction:column;gap:6px"><span class="note">Jenis latihan</span><div class="chips" id="jenis"></div></div>
         <div style="display:flex;flex-direction:column;gap:6px"><span class="note">Durasi latihan (menit)</span>
@@ -190,6 +201,8 @@ input[type=number]{background:var(--surface2);border:1px solid var(--line);borde
 
 <script src="config.js"></script>
 <script src="norma.js"></script>
+<script src="kesiapan.js"></script>
+<script src="impor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
@@ -300,6 +313,13 @@ function build(){
   $("#rpe").innerHTML=RPE.map((t,i)=>i?`<button type="button" data-r="${i}" style="--rc:${RC(i)}" aria-pressed="false"><b>${i}</b><span>${EMO[i]} ${t}</span></button>`:"").reverse().join("");
 }
 const entri=t=>A.data&&A.data.entri.find(e=>e.tanggal===t);
+/* Skor kesiapan 0–100 (lihat kesiapan.js) */
+function kesiapan(t,form){
+  const e=entri(t);if(!hasW(e)||!window.KESIAPAN)return null;
+  const riw=A.data.entri.filter(x=>x.tanggal<t&&x.tanggal>=addDays(t,-28)).map(x=>({w:hasW(x)?wTot(x):null,hr:x.hr_istirahat,hrv:x.hrv}));
+  if(form===undefined){const P=pmc();const d=P.find(x=>x.t===t);form=d?d.form:null}
+  return KESIAPAN.hitung({w:wTot(e),hr:e.hr_istirahat,hrv:e.hrv,nyeri:e.nyeri},riw,form);
+}
 function render(){
   if(!A.data)return;
   $("#loading").hidden=true;$("#err").hidden=true;$("#app").hidden=false;
@@ -314,11 +334,11 @@ function render(){
   const wd=hasW(e)&&!A.editWell;
   $("#n1").className="n"+(hasW(e)?" ok":"");$("#n1").textContent=hasW(e)?"✓":"1";
   $("#wellDone").hidden=!wd;$("#fWell").hidden=wd;
-  if(wd){const v=wTot(e);$("#wellDone").innerHTML=`<div class="done"><span><b>Sudah diisi</b> · wellness ${v}/25${+e.nyeri?" · nyeri "+e.nyeri+"/10":""}${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" id="ubahWell">Ubah</button></div>`}
+  if(wd){const v=wTot(e);const k=kesiapan(t);$("#wellDone").innerHTML=`<div class="done"><span><b>Sudah diisi</b> · wellness ${v}/25${+e.nyeri?" · nyeri "+e.nyeri+"/10":""}${k?` · kesiapan <b style="color:${k.warna}">${k.skor}</b>`:""}${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" id="ubahWell">Ubah</button></div>`}
   /* sesi */
   const ss=sesiOf(e);
   $("#n2").className="n"+(ss.length?" ok":"");$("#n2").textContent=ss.length?"✓":"2";
-  $("#sesiList").innerHTML=ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><span><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${sTss(x)} TSS</small>${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" data-del="${esc(x.id)}">Hapus</button></div>`).join("");
+  $("#sesiList").innerHTML=ss.map(x=>`<div class="wo" style="--jc:${jColor(x.jenis)}"><span><b>${esc(x.jenis||"Latihan")}</b><small>${x.durasi} mnt · RPE ${x.rpe} · ${sTss(x)} TSS${x.km?" · "+String(x.km).replace(".",",")+" km":""}${x.hr?" · ♥ "+x.hr:""}</small>${e._pend?' <span class="pend">menunggu dikirim</span>':""}</span><button type="button" class="btn ghost" data-del="${esc(x.id)}">Hapus</button></div>`).join("");
   $("#bSesi").textContent=ss.length?"Simpan sesi tambahan":"Simpan sesi";
   $("#pakaiRencana").hidden=!ps.length;
   /* minggu */
@@ -337,7 +357,7 @@ function fillWell(){
   document.querySelectorAll("#areas button").forEach(b=>b.setAttribute("aria-pressed",A.area.includes(b.dataset.a)));
   $("#hr").value=e&&e.hr_istirahat?e.hr_istirahat:"";$("#hrv").value=e&&e.hrv?e.hrv:"";
 }
-function resetSesi(){A.jenis=null;A.rpe=null;$("#dur").value="";document.querySelectorAll("#jenis button,#rpe button").forEach(b=>b.setAttribute("aria-pressed","false"))}
+function resetSesi(){A.jenis=null;A.rpe=null;A.ext=null;const ib=document.getElementById("impBox");if(ib)ib.innerHTML="";$("#dur").value="";document.querySelectorAll("#jenis button,#rpe button").forEach(b=>b.setAttribute("aria-pressed","false"))}
 const setJenis=j=>{A.jenis=j;document.querySelectorAll("#jenis button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.j===j))};
 const setRpe=r=>{A.rpe=r;document.querySelectorAll("#rpe button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.r===r))};
 
@@ -384,13 +404,13 @@ function renderDash(){
   const eT=entri(TODAY);const wl=D.entri.filter(e=>hasW(e)&&e.tanggal<TODAY&&e.tanggal>=addDays(TODAY,-28)).map(wTot);
   const wt=hasW(eT)?wTot(eT):null;const z=wt!=null&&wl.length>=7?(wt-avg(wl))/Math.max(1,sd(wl)):null;
   /* kesiapan hari ini */
-  let rc="#a8a8a8",big,txt;
-  if(wt==null){big="Belum mengisi kondisi pagi";txt="Isi kondisi pagi dulu supaya kesiapanmu hari ini terlihat.";rc="#ff5b0a"}
-  else if(wt<=10||(z!=null&&z<-2)||+eT.nyeri>=6||(now&&now.form<-30)){rc="#ff4b42";big="Perlu pemulihan";txt="Tubuhmu sedang sangat lelah atau ada keluhan. Sampaikan ke pelatih; latihan hari ini mungkin perlu diringankan."}
-  else if(wt<=13||(z!=null&&z<-1)||+eT.nyeri>=3){rc="#ffc000";big="Waspada";txt="Kondisimu sedikit di bawah biasanya. Perhatikan tidur, makan, dan minum, dan beri tahu pelatih bila terasa berat."}
-  else{rc="#5cc23a";big="Siap latihan";txt=now&&now.form<-10?"Kamu sedang dalam fase latihan yang padat. Kondisi pagi baik, jaga tidur dan makan.":"Kondisi pagimu baik. Selamat berlatih!"}
+  const K=kesiapan(TODAY,now?now.form:null);
+  let rc="#ff5b0a",txt;
+  if(!K)txt="Isi kondisi pagi dulu supaya skor kesiapanmu hari ini terlihat.";
+  else{rc=K.warna;txt=K.kat==="merah"?"Tubuhmu sedang sangat lelah atau ada keluhan. Sampaikan ke pelatih; latihan hari ini mungkin perlu diringankan.":K.kat==="kuning"?"Kondisimu sedikit di bawah biasanya. Perhatikan tidur, makan, dan minum, dan beri tahu pelatih bila terasa berat.":now&&now.form<-10?"Siap latihan. Kamu sedang di fase latihan padat; jaga tidur dan makan.":"Kondisimu baik. Selamat berlatih!"}
   $("#dReady").style.setProperty("--rc",rc);
-  $("#dReady").innerHTML=`<span class="note">Kesiapan hari ini · ${fmtD(TODAY)}</span><div class="big">${big}</div><p class="note" style="color:var(--ink)">${txt}</p>${wt!=null?`<p class="note">Wellness ${wt}/25${wl.length?" · rata-rata 4 minggu "+dec(avg(wl)):""}${+eT.nyeri?" · nyeri "+eT.nyeri+"/10":""}</p>`:'<button type="button" class="btn ghost" data-view="isi" style="align-self:flex-start">Isi kondisi pagi</button>'}`;
+  $("#dReady").innerHTML=`<span class="note">Kesiapan hari ini · ${fmtD(TODAY)}</span>`+(K?`<div class="score" style="--rc:${K.warna};--v:${K.skor}"><span class="ring"><b>${K.skor}</b></span><div><div class="big">${K.label}</div><p class="note" style="color:var(--ink);margin-top:4px">${txt}</p></div></div><div class="parts">${K.parts.map(x=>`<span>${x.nama} ${x.nilai}</span>`).join("")}${+eT.nyeri?`<span>nyeri ${eT.nyeri}/10</span>`:""}</div><p class="note">Skor 0–100 dari kondisi pagi dibanding kebiasaanmu, form latihan, HRV, dan nadi istirahat. ≥70 siap · 50–69 waspada · &lt;50 perlu pemulihan.</p>`
+    :`<div class="big">Belum mengisi kondisi pagi</div><p class="note" style="color:var(--ink)">${txt}</p><button type="button" class="btn ghost" data-view="isi" style="align-self:flex-start">Isi kondisi pagi</button>`);
   /* angka ringkas */
   const fz=now?formZone(now.form):null;const ramp=now&&ti>=7?now.ctl-P[ti-7].ctl:null;
   const tss7=ti>=0?P.slice(Math.max(0,ti-6),ti+1).reduce((x,d)=>x+d.tss,0):0;
@@ -448,6 +468,35 @@ function renderProf(){
 }
 function setView(v){VIEW.v=v;document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));$("#vIsi").hidden=v!=="isi";$("#vDash").hidden=v!=="dash";try{localStorage.setItem("atletView",v)}catch(_){}if(v==="dash")renderDash();window.scrollTo(0,0)}
 
+/* ---------- impor dari jam / Strava ---------- */
+const IM={list:[]};
+const hrmaxA=()=>{const d=A.data&&A.data.tgl_lahir;if(!d)return 200;const b=parse(d),n=new Date();const a=n.getFullYear()-b.getFullYear()-((n.getMonth()<b.getMonth()||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate()))?1:0);return Math.round(208-0.7*a)};
+const extA=a=>({id:"jam_"+a.mulai.getTime(),hr:a.hr||null,hrmax:a.hrmax||null,km:a.km||null,sumber:"jam"});
+const MIN7=()=>addDays(TODAY,-7);
+$("#fileImp").addEventListener("change",async ev=>{
+  const f=ev.target.files[0];ev.target.value="";if(!f)return;$("#mSesi").textContent="";
+  let acts;try{acts=await IMPOR.baca(f)}catch(err){$("#impBox").innerHTML=`<p class="msg err">${esc(err.message)}</p>`;return}
+  acts=acts.filter(a=>a.tanggal<=TODAY);const hm=hrmaxA();
+  const baru=acts.filter(a=>a.tanggal>=MIN7());
+  if(!baru.length){$("#impBox").innerHTML='<p class="msg err">Aktivitas di file ini lebih dari 7 hari yang lalu. Minta pelatih yang mengimpornya.</p>';return}
+  if(acts.length===1&&baru[0].tanggal>=addDays(TODAY,-2)){
+    const a=baru[0];A.day=a.tanggal;A.editWell=false;fillWell();render();
+    $("#dur").value=a.durasi;const r=IMPOR.saranRpe(a.hr,hm);if(r)setRpe(r);if(a.jenis)setJenis(a.jenis);A.ext=extA(a);
+    $("#impBox").innerHTML=`<p class="note" style="color:var(--ink)">Dari file: <b>${esc(a.nama||a.olahraga||"Aktivitas")}</b> · ${a.durasi} mnt${a.hr?" · ♥ "+a.hr+" bpm":""}${a.km?" · "+String(a.km).replace(".",",")+" km":""}.<br>${r?"RPE "+r+" disarankan dari denyut jantung. Sesuaikan dengan rasamu, lalu simpan.":"Pilih seberapa berat rasanya, lalu simpan."}</p>`;
+    return;
+  }
+  IM.list=baru.slice(0,20).map(a=>({...a,rpe:IMPOR.saranRpe(a.hr,hm)||5,pilih:true}));
+  $("#impBox").innerHTML=`<p class="note">Pilih aktivitas yang ingin disimpan (maks. 7 hari terakhir). RPE disarankan dari denyut jantung.</p>${IM.list.map((a,i)=>`<label><input type="checkbox" data-im="${i}" checked><span><b>${esc(a.nama||a.olahraga||"Aktivitas")}</b><small>${parse(a.tanggal).toLocaleDateString("id-ID",{weekday:"short",day:"numeric",month:"short"})} · ${a.durasi} mnt${a.hr?" · ♥ "+a.hr:""}${a.km?" · "+String(a.km).replace(".",",")+" km":""} · RPE ${a.rpe}</small></span></label>`).join("")}<button type="button" class="btn" id="impSave">Simpan aktivitas terpilih</button>`;
+});
+$("#impBox").addEventListener("change",e=>{const i=e.target.dataset.im;if(i!=null)IM.list[+i].pilih=e.target.checked});
+$("#impBox").addEventListener("click",async e=>{
+  if(!e.target.closest("#impSave"))return;
+  const pick=IM.list.filter(a=>a.pilih);if(!pick.length)return;let antri=0;
+  try{for(const a of pick){const r=await save(a.tanggal,{sesi:{...extA(a),jenis:a.jenis||null,rpe:a.rpe,durasi:a.durasi}});if(r!=="ok")antri++}}
+  catch(err){return msg("#mSesi",err.message||"Gagal menyimpan.")}
+  IM.list=[];$("#impBox").innerHTML="";msg("#mSesi",pick.length+" aktivitas tersimpan"+(antri?" (menunggu sinyal untuk dikirim)":"")+". Periksa RPE-nya di daftar sesi.",true);
+});
+
 /* ---------- interaksi ---------- */
 document.addEventListener("click",async ev=>{
   const b=ev.target.closest("button");if(!b)return;
@@ -479,7 +528,7 @@ $("#fSesi").addEventListener("submit",async ev=>{
   ev.preventDefault();
   const d=+$("#dur").value;if(!(d>=1&&d<=400))return msg("#mSesi","Isi durasi latihan (1–400 menit).");
   if(!A.rpe)return msg("#mSesi","Pilih seberapa berat latihannya (RPE).");
-  const s={id:uid(),jenis:A.jenis,rpe:A.rpe,durasi:Math.round(d)};
+  const s={id:uid(),...(A.ext||{}),jenis:A.jenis,rpe:A.rpe,durasi:Math.round(d)};
   try{const r=await save(A.day,{sesi:s});resetSesi();msg("#mSesi",r==="ok"?"Sesi tersimpan. Latihan lagi nanti? Tambahkan sesi berikutnya.":"Tersimpan di HP, akan dikirim saat online.",true)}
   catch(err){msg("#mSesi",err.message||"Gagal menyimpan.")}
 });
