@@ -138,6 +138,10 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
 .acnote{font-size:13px;margin:4px 0 0}.acnote span{color:var(--muted)}
 .acsrc{font-size:11.5px;color:var(--muted);margin:2px 0 0}
 .acwrcurve{display:block;max-width:100%;height:auto}
+.acinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:2px 0 6px}
+.acind{border:1px solid color-mix(in srgb,var(--zc) 45%,transparent);background:color-mix(in srgb,var(--zc) 12%,transparent);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column}
+.acind small{font-size:11px;color:var(--muted)}.acind b{font-family:var(--display);font-size:22px;color:var(--zc);line-height:1.1}
+.acsaran{margin:0 0 4px;font-size:13.5px;border-left:3px solid var(--zc);padding:4px 0 4px 10px;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -213,7 +217,7 @@ body{background:radial-gradient(700px 420px at 100% -10%,rgba(255,106,26,.16),tr
       </div>
       <div class="card"><h2>Fitness &amp; kelelahan</h2><div class="cv"><canvas id="cPmc" aria-label="Fitness, fatigue dan TSS harian"></canvas></div>
         <p class="note"><b style="color:#ffd400">Fitness</b> naik pelan bila kamu rutin berlatih. <b style="color:#ff4b42">Fatigue</b> naik cepat setelah latihan berat. Garis putus-putus = perkiraan dari rencana pelatih.</p></div>
-      <div class="card"><h2>Form (kesegaran)</h2><div class="cv"><canvas id="cForm" aria-label="Form dan zonanya"></canvas></div><div class="legend" id="formLeg"></div></div>
+      <div class="card"><h2>Form % (kesegaran)</h2><div class="cv"><canvas id="cForm" aria-label="Form dan zonanya"></canvas></div><div class="legend" id="formLeg"></div></div>
       <div class="card"><h2>Beban mingguan</h2><div class="cv"><canvas id="cWeek" aria-label="TSS mingguan per jenis latihan"></canvas></div><p class="note">Warna = jenis latihan. Batang transparan = rencana minggu depan.</p></div>
       <div class="card"><h2>Kondisi pagi · 28 hari</h2><div class="cv"><canvas id="cWell" aria-label="Wellness, nadi istirahat dan HRV"></canvas></div><p class="note">Nadi istirahat naik dan HRV turun beberapa hari berturut-turut bisa tanda kelelahan atau mulai sakit.</p></div>
       <div class="card"><h2>Tes fisik</h2><div id="dTes" style="display:flex;flex-direction:column;gap:10px"></div></div>
@@ -347,7 +351,7 @@ const entri=t=>A.data&&A.data.entri.find(e=>e.tanggal===t);
 function kesiapan(t,form){
   const e=entri(t);if(!hasW(e)||!window.KESIAPAN)return null;
   const riw=A.data.entri.filter(x=>x.tanggal<t&&x.tanggal>=addDays(t,-28)).map(x=>({w:hasW(x)?wTot(x):null,hr:x.hr_istirahat,hrv:x.hrv}));
-  if(form===undefined){const P=pmc();const d=P.find(x=>x.t===t);form=d?d.form:null}
+  if(form===undefined){const P=pmc();const d=P.find(x=>x.t===t);form=d?d.formPct:null}
   return KESIAPAN.hitung({w:wTot(e),hr:e.hr_istirahat,hrv:e.hrv,nyeri:e.nyeri},riw,form);
 }
 function render(){
@@ -395,8 +399,9 @@ const setRpe=r=>{A.rpe=r;document.querySelectorAll("#rpe button").forEach(b=>b.s
 const VIEW={v:"isi"};
 const NORMA=window.NORMA||{TESTS:[],SKALA:[],skalaOf:()=>null};
 const KC=["","#e5393a","#ffb020","#8a8a8a","#7cc94f","#2fa84f"];
-const FORMZ=[[-60,-30,"Sangat lelah","#e0252b"],[-30,-10,"Berlatih optimal","#1fa34a"],[-10,5,"Seimbang","#a8a8a8"],[5,40,"Segar","#1592d0"]];
-const formZone=f=>FORMZ.find(z=>f>=z[0]&&f<z[1])||(f<-30?FORMZ[0]:FORMZ[3]);
+/* Form % = (fitness − fatigue) ÷ fitness — zona dari acwr.js */
+const formZone=f=>window.ACWR?ACWR.formZona(f):null;
+const fmtPct=v=>v==null?"–":(v>0?"+":"")+v+"%";
 const dec=(v,d=1)=>v==null||!isFinite(v)?"–":(+v).toFixed(d).replace(".",",");
 const sgn=v=>v==null?"–":(v>0?"+":"")+Math.round(v);
 const monday=t=>addDays(t,-((parse(t).getDay()+6)%7));
@@ -410,8 +415,8 @@ function pmc(){
   const fut=(A.data.rencana||[]).filter(p=>p.tanggal>TODAY);fut.forEach(p=>pl[p.tanggal]=(pl[p.tanggal]||0)+planTss(p));
   const ds=Object.keys(by).sort();if(!ds.length)return[];
   const lastPl=fut.map(p=>p.tanggal).sort().pop();const end=lastPl?[addDays(lastPl,7),addDays(TODAY,28)].sort()[0]:TODAY;
-  const lc=Math.exp(-1/42),la=Math.exp(-1/7);let c=0,a=0;const out=[];
-  for(let t=ds[0];t<=end;t=addDays(t,1)){const proj=t>TODAY;const x=proj?(pl[t]||0):(by[t]||0);c=lc*c+(1-lc)*x;a=la*a+(1-la)*x;out.push({t,tss:Math.round(x),ctl:+c.toFixed(1),atl:+a.toFixed(1),form:+(c-a).toFixed(1),proj})}
+  const lc=Math.exp(-1/42),la=Math.exp(-1/7);let c=window.ACWR?ACWR.benih(by,ds[0]):0,a=c;const out=[];
+  for(let t=ds[0],i=0;t<=end;t=addDays(t,1),i++){const proj=t>TODAY;const x=proj?(pl[t]||0):(by[t]||0);c=lc*c+(1-lc)*x;a=la*a+(1-la)*x;out.push({t,tss:Math.round(x),ctl:+c.toFixed(1),atl:+a.toFixed(1),form:+(c-a).toFixed(1),formPct:window.ACWR?ACWR.formPct(c,a,i):null,proj})}
   return out;
 }
 const CH={};
@@ -435,27 +440,27 @@ function renderDash(){
   const eT=entri(TODAY);const wl=D.entri.filter(e=>hasW(e)&&e.tanggal<TODAY&&e.tanggal>=addDays(TODAY,-28)).map(wTot);
   const wt=hasW(eT)?wTot(eT):null;const z=wt!=null&&wl.length>=7?(wt-avg(wl))/Math.max(1,sd(wl)):null;
   /* kesiapan hari ini */
-  const K=kesiapan(TODAY,now?now.form:null);
+  const K=kesiapan(TODAY,now?now.formPct:null);
   let rc="#ff5b0a",txt;
   if(!K)txt="Isi kondisi pagi dulu supaya skor kesiapanmu hari ini terlihat.";
-  else{rc=K.warna;txt=K.kat==="merah"?"Tubuhmu sedang sangat lelah atau ada keluhan. Sampaikan ke pelatih; latihan hari ini mungkin perlu diringankan.":K.kat==="kuning"?"Kondisimu sedikit di bawah biasanya. Perhatikan tidur, makan, dan minum, dan beri tahu pelatih bila terasa berat.":now&&now.form<-10?"Siap latihan. Kamu sedang di fase latihan padat; jaga tidur dan makan.":"Kondisimu baik. Selamat berlatih!"}
+  else{rc=K.warna;txt=K.kat==="merah"?"Tubuhmu sedang sangat lelah atau ada keluhan. Sampaikan ke pelatih; latihan hari ini mungkin perlu diringankan.":K.kat==="kuning"?"Kondisimu sedikit di bawah biasanya. Perhatikan tidur, makan, dan minum, dan beri tahu pelatih bila terasa berat.":now&&now.formPct!=null&&now.formPct<-10?"Siap latihan. Kamu sedang di fase latihan padat; jaga tidur dan makan.":"Kondisimu baik. Selamat berlatih!"}
   $("#dReady").style.setProperty("--rc",rc);
   $("#dReady").innerHTML=`<span class="note">Kesiapan hari ini · ${fmtD(TODAY)}</span>`+(K?`<div class="score" style="--rc:${K.warna};--v:${K.skor}"><span class="ring"><b>${K.skor}</b></span><div><div class="big">${K.label}</div><p class="note" style="color:var(--ink);margin-top:4px">${txt}</p></div></div><div class="parts">${K.parts.map(x=>`<span>${x.nama} ${x.nilai}</span>`).join("")}${+eT.nyeri?`<span>nyeri ${eT.nyeri}/10</span>`:""}</div><p class="note">Skor 0–100 dari kondisi pagi dibanding kebiasaanmu, form latihan, HRV, dan nadi istirahat. ≥70 siap · 50–69 waspada · &lt;50 perlu pemulihan.</p>`
     :`<div class="big">Belum mengisi kondisi pagi</div><p class="note" style="color:var(--ink)">${txt}</p><button type="button" class="btn ghost" data-view="isi" style="align-self:flex-start">Isi kondisi pagi</button>`);
   /* angka ringkas */
-  const fz=now?formZone(now.form):null;const ramp=now&&ti>=7?now.ctl-P[ti-7].ctl:null;
+  const fz=now?formZone(now.formPct):null;const ramp=now&&ti>=7?now.ctl-P[ti-7].ctl:null;
   const tss7=ti>=0?P.slice(Math.max(0,ti-6),ti+1).reduce((x,d)=>x+d.tss,0):0;
   let cpN=0,cpOk=0;for(let k=1;k<=28;k++){const t=addDays(TODAY,-k);const pt=(D.rencana||[]).filter(p=>p.tanggal===t).reduce((x,p)=>x+planTss(p),0);if(!pt)continue;cpN++;const r=dayTss(entri(t))/pt;if(r>=.8&&r<=1.2)cpOk++}
   const tile=(l,v,s,c)=>`<div class="tile" style="--tc:${c}"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
-  $("#dTiles").innerHTML=tile("Fitness",now?Math.round(now.ctl):"–","kebugaran 6 minggu","#ffd400")+tile("Fatigue",now?Math.round(now.atl):"–","kelelahan 1 minggu","#ff4b42")+tile("Form",now?sgn(now.form):"–",fz?fz[2]:"–",fz?fz[3]:"#a8a8a8")+tile("Ramp rate",ramp!=null?(ramp>0?"+":"")+dec(ramp):"–","naik fitness / minggu",ramp==null?"#a8a8a8":ramp>7?"#ff4b42":ramp>5?"#ffc000":"#5cc23a")+tile("Beban 7 hari",tss7,"TSS","#5aa9ff")+tile("Sesuai rencana",cpN?Math.round(cpOk/cpN*100)+"%":"–",cpN?cpOk+" dari "+cpN+" hari (4 minggu)":"belum ada rencana","#3fb950");
+  $("#dTiles").innerHTML=tile("Fitness",now?Math.round(now.ctl):"–","kebugaran 6 minggu","#38bdf8")+tile("Fatigue",now?Math.round(now.atl):"–","kelelahan 1 minggu","#a78bfa")+tile("Form %",now?fmtPct(now.formPct):"–",fz?fz.id:"data belum cukup",fz?fz.warna:"#a8a8a8")+tile("Ramp rate",ramp!=null?(ramp>0?"+":"")+dec(ramp):"–","naik fitness / minggu",ramp==null?"#a8a8a8":ramp>7?"#ff4b42":ramp>5?"#ffc000":"#5cc23a")+tile("Beban 7 hari",tss7,"TSS","#5aa9ff")+tile("Sesuai rencana",cpN?Math.round(cpOk/cpN*100)+"%":"–",cpN?cpOk+" dari "+cpN+" hari (4 minggu)":"belum ada rencana","#3fb950");
   /* ACWR */
   const lBy={};D.entri.forEach(e=>{if(e.tanggal<=TODAY)lBy[e.tanggal]=(lBy[e.tanggal]||0)+dayTss(e)});
   const dser=window.ACWR?ACWR.seri(lBy,addDays(TODAY,-59),TODAY):[];const acNow=dser.length?dser[dser.length-1].acwr:null;
-  if(window.ACWR){$("#dAcwr").innerHTML=ACWR.kartu(acNow,ACWR.naikMingguan(lBy,TODAY));$("#dCurve").innerHTML=acNow!=null?ACWR.kurva([{v:acNow,label:"Kamu"}]):""}
+  if(window.ACWR){$("#dAcwr").innerHTML=ACWR.kartu(acNow,ACWR.naikMingguan(lBy,TODAY),{acwrE:dser.length?dser[dser.length-1].acwrE:null,formPct:dser.length?dser[dser.length-1].formPct:null});$("#dCurve").innerHTML=acNow!=null?ACWR.kurva([{v:acNow,label:"Kamu"}]):""}
   if(VIEW.v!=="dash")return;
-  if(dser.length)chart("cDaily",{type:"bar",data:{labels:dser.map(d=>fD(d.t)),datasets:[{type:"bar",label:"TSS",data:dser.map(d=>d.load),backgroundColor:"rgba(20,184,166,.85)",yAxisID:"y",order:2},{type:"line",label:"ACWR",data:dser.map(d=>d.acwr),borderColor:"#60a5fa",borderWidth:2.2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:1}]},
-    options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({beginAtZero:true,ticks:{maxTicksLimit:5,color:"#a8a8a8"}}),y1:ax({position:"right",min:0.2,max:Math.max(1.8,Math.ceil(Math.max(0,...dser.map(d=>d.acwr||0))*5)/5),grid:{display:false},ticks:{stepSize:0.4,color:"#a8a8a8",callback:v=>dec(v,1)}})},
-      plugins:{legend:{display:true,labels:{boxWidth:12,boxHeight:8,color:"#f4f4f4"}},hlines:[{axis:"y1",v:0.8,c:"#ef4444"},{axis:"y1",v:1.0,c:"rgba(232,237,247,.6)",w:1.2},{axis:"y1",v:1.3,c:"#ef4444"},{axis:"y1",v:1.5,c:"#ef4444",dash:[6,4]}],tooltip:{callbacks:{label:it=>it.dataset.label==="ACWR"?(it.raw==null?"ACWR: data belum cukup":"ACWR "+dec(it.raw,2)+" · "+ACWR.zona(it.raw).label):"TSS "+it.raw}}}}});
+  if(dser.length)chart("cDaily",{type:"bar",data:{labels:dser.map(d=>fD(d.t)),datasets:[{type:"bar",label:"TSS",data:dser.map(d=>d.load),backgroundColor:"rgba(20,184,166,.85)",yAxisID:"y",order:2},{type:"line",label:"ACWR",data:dser.map(d=>d.acwr),borderColor:"#60a5fa",borderWidth:2.2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:1},{type:"line",label:"ACWR EWMA",data:dser.map(d=>d.acwrE),borderColor:"#c084fc",borderDash:[5,4],borderWidth:2,pointRadius:0,tension:.2,spanGaps:true,yAxisID:"y1",order:0}]},
+    options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({beginAtZero:true,ticks:{maxTicksLimit:5,color:"#a8a8a8"}}),y1:ax({position:"right",min:0.2,max:Math.max(1.8,Math.ceil(Math.max(0,...dser.map(d=>Math.max(d.acwr||0,d.acwrE||0)))*5)/5),grid:{display:false},ticks:{stepSize:0.4,color:"#a8a8a8",callback:v=>dec(v,1)}})},
+      plugins:{legend:{display:true,labels:{boxWidth:12,boxHeight:8,color:"#f4f4f4"}},hlines:[{axis:"y1",v:0.8,c:"#ef4444"},{axis:"y1",v:1.0,c:"rgba(232,237,247,.6)",w:1.2},{axis:"y1",v:1.3,c:"#ef4444"},{axis:"y1",v:1.5,c:"#ef4444",dash:[6,4]}],tooltip:{callbacks:{label:it=>it.dataset.label.startsWith("ACWR")?(it.raw==null?it.dataset.label+": data belum cukup":it.dataset.label+" "+dec(it.raw,2)+" · "+ACWR.zona(it.raw).label):"TSS "+it.raw}}}}});
   else{const c=$("#cDaily");if(c)c.parentElement.innerHTML='<p class="note">Grafik muncul setelah kamu mencatat sesi latihan.</p>'}
   /* grafik fitness & form */
   const w0=Math.max(0,ti-83);const win=P.slice(w0);const lab=win.map(d=>fD(d.t));
@@ -463,12 +468,13 @@ function renderDash(){
   const today=ti>=0?{value:ti-w0,label:"Hari ini"}:null;
   if(!win.length){$("#cPmc").parentElement.innerHTML='<p class="note">Grafik muncul setelah kamu mencatat sesi latihan.</p>'}
   else{
-    chart("cPmc",{type:"bar",data:{labels:lab,datasets:[{type:"bar",label:"TSS harian",data:win.map(d=>d.tss),backgroundColor:win.map(d=>d.proj?"rgba(190,225,255,.3)":"rgba(190,225,255,.8)"),order:3},{type:"line",label:"Fitness",data:win.map(d=>d.ctl),borderColor:"#ffd400",borderWidth:2,pointRadius:0,tension:.25,segment:dash,order:1},{type:"line",label:"Fatigue",data:win.map(d=>d.atl),borderColor:"#ff4b42",borderWidth:2,pointRadius:0,tension:.25,segment:dash,order:2}]},
+    chart("cPmc",{type:"bar",data:{labels:lab,datasets:[{type:"bar",label:"TSS harian",data:win.map(d=>d.tss),backgroundColor:win.map(d=>d.proj?"rgba(148,163,184,.18)":"rgba(148,163,184,.42)"),order:3},{type:"line",label:"Fitness",data:win.map(d=>d.ctl),borderColor:"#38bdf8",backgroundColor:"rgba(56,189,248,.12)",fill:"origin",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash,order:1},{type:"line",label:"Fatigue",data:win.map(d=>d.atl),borderColor:"#a78bfa",borderWidth:2,pointRadius:0,tension:.25,segment:dash,order:2}]},
       options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({beginAtZero:true,ticks:{maxTicksLimit:5,color:"#a8a8a8"}})},plugins:{vline:today,legend:{display:true,labels:{boxWidth:12,boxHeight:3,color:"#f4f4f4"}}}}});
-    chart("cForm",{type:"line",data:{labels:lab,datasets:[{label:"Form",data:win.map(d=>d.form),borderColor:"#f8fafc",borderWidth:2.5,pointRadius:0,tension:.25,segment:dash}]},
-      options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({min:-50,max:30,grid:{display:false},ticks:{stepSize:10,color:"#a8a8a8"}})},plugins:{vline:today?{...today,color:"#cbd5e1"}:null,zones:FORMZ.map(z=>({y:[Math.max(-50,z[0]),Math.min(30,z[1])],c:z[3]+"40"})),tooltip:{callbacks:{label:it=>"Form "+sgn(it.raw)+" · "+formZone(it.raw)[2]}}}}});
+    const fcol=v=>{const z=formZone(v);return z?z.warna:"#9ca3af"};
+    chart("cForm",{type:"line",data:{labels:lab,datasets:[{label:"Form %",data:win.map(d=>d.formPct),borderWidth:3,pointRadius:0,tension:.3,segment:{borderColor:c=>fcol(c.p1.parsed.y),borderDash:c=>win[c.p1DataIndex]&&win[c.p1DataIndex].proj?[5,4]:undefined}}]},
+      options:{scales:{x:ax({grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0,color:"#a8a8a8"}}),y:ax({min:-60,max:40,grid:{display:false},ticks:{stepSize:20,color:"#a8a8a8",callback:v=>v+"%"}})},plugins:{vline:today?{...today,color:"#cbd5e1"}:null,zones:ACWR.FZ.map(z=>({y:[Math.max(-60,z.a),Math.min(40,z.b)],c:z.warna+"22"})),tooltip:{callbacks:{label:it=>it.raw==null?"Form: data belum cukup":"Form "+fmtPct(it.raw)+" · "+formZone(it.raw).id}}}}});
   }
-  $("#formLeg").innerHTML=FORMZ.map(z=>`<span><i style="background:${z[3]}"></i>${z[2]}</span>`).join("");
+  $("#formLeg").innerHTML=window.ACWR?ACWR.FZ.map(z=>`<span><i style="background:${z.warna}"></i>${z.id}</span>`).join(""):"";
   /* beban mingguan per jenis */
   const wk0=addDays(monday(TODAY),-49),NW=12;const weeks=[...Array(NW)].map((_,i)=>addDays(wk0,i*7));
   const gA={},gP={};const put=(g,j,i,v)=>{(g[j]=g[j]||weeks.map(()=>0))[i]+=Math.round(v)};

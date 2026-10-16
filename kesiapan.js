@@ -2,7 +2,7 @@
    Skor kesiapan harian 0–100 — dipakai index.html (pelatih) dan atlet.html (atlet).
    Gabungan berbobot dari komponen yang tersedia:
      kondisi pagi (wellness)  40%  dibanding baseline 28 hari atlet sendiri (z-score)
-     form (fitness − fatigue) 25%  terlalu lelah menurunkan skor
+     form % (fitness−fatigue)÷fitness 25%  < −10% mulai menurunkan skor
      HRV pagi                 20%  dibanding rata-rata 28 hari (turun = kurang siap)
      nadi istirahat           15%  dibanding rata-rata 28 hari (naik = kurang siap)
    Hari yang biasa-biasa saja (sama dengan baseline) bernilai ±75.
@@ -16,7 +16,7 @@
   const num=v=>v==null||v===""||!isFinite(+v)?null:+v;
   /* hari: {w, hr, hrv, nyeri} hari yang dinilai (w = total wellness 5–25)
      riwayat: [{w, hr, hrv}] hari-hari sebelumnya (maks. 28 hari)
-     form: TSB hari itu atau null */
+     form: Form % hari itu (lihat acwr.js) atau null bila data belum cukup */
   function hitung(hari,riwayat,form){
     if(!hari||num(hari.w)==null)return null;
     const parts=[];const R=riwayat||[];
