@@ -201,6 +201,40 @@ Klik chip untuk menyaring, klik nama untuk membuka profil, tombol **WA** untuk m
 - Monotony > 2 **bersamaan** dengan strain ≥ 1,25× biasanya membuat status atlet **merah**, karena kombinasi ini paling sering mendahului sakit dan overtraining.
 - Grafik dan kartunya ada di tab **Dashboard atlet** dan di dashboard aplikasi atlet (*Variasi latihan*).
 
+## 14. Sinkron otomatis Strava (dan Garmin, Coros, Polar, Suunto, Apple Watch)
+
+Atlet cukup **sekali** menekan **Hubungkan dengan Strava** di halaman pribadinya. Setelah itu setiap latihan yang terekam di Strava masuk sendiri ke aplikasi dalam hitungan detik, tanpa unggah file. Jam **Garmin, Coros, Polar, Suunto, Wahoo, Amazfit, dan Apple Watch** ikut masuk, asalkan jamnya sudah tersambung ke Strava. Contoh untuk Garmin: aplikasi Garmin Connect → Lainnya → Pengaturan → Aplikasi Terhubung → Strava. Sambungan langsung ke Garmin tanpa Strava memerlukan izin bisnis dari Garmin, jadi jalurnya lewat Strava.
+
+**Persiapan pelatih (sekali saja, lebih mudah di laptop):**
+
+1. **Perbarui database.** Jalankan ulang `setup.sql` di Supabase → SQL Editor (aman untuk data yang sudah ada).
+2. **Daftarkan aplikasi di Strava.** Masuk ke https://www.strava.com/settings/api dengan akun Strava Anda, lalu isi:
+   - *Application Name*: `Monitoring Latihan Atlet`
+   - *Category*: `Training`
+   - *Website*: `https://monitoring-latihan-atlet.github.io`
+   - *Authorization Callback Domain*: `monitoring-latihan-atlet.github.io` (tanpa `https://`)
+   - Unggah logo (boleh `icon-512.png` dari repositori ini), centang persetujuan, lalu **Create**. Catat **Client ID** dan **Client Secret**.
+3. **Pasang fungsi server di Supabase.** Buka **Edge Functions → Deploy a new function → Via Editor**. Beri nama persis `strava`. Hapus contoh kodenya, lalu tempel seluruh isi file
+   https://raw.githubusercontent.com/Monitoring-Latihan-Atlet/monitoring-latihan-atlet.github.io/main/supabase/functions/strava/index.ts
+   dan klik **Deploy**.
+4. **Matikan pemeriksaan JWT** untuk fungsi itu: buka fungsi `strava` → **Details/Settings**, matikan **Enforce JWT Verification** (Verify JWT), lalu **Save**. Ini diperlukan karena Strava mengirim data ke fungsi ini tanpa login Supabase. Keamanan tetap terjaga: fungsi hanya menerima kode atlet yang sah, dan token Strava disimpan di tabel yang tidak bisa dibaca dari aplikasi.
+5. **Isi rahasia.** Buka **Edge Functions → Secrets** dan tambahkan:
+   - `STRAVA_CLIENT_ID` = Client ID dari langkah 2
+   - `STRAVA_CLIENT_SECRET` = Client Secret dari langkah 2
+   - `STRAVA_VERIFY_TOKEN` = kata acak bebas, misalnya `mla-webhook-` diikuti 8 huruf/angka acak
+
+   **Client Secret jangan pernah ditaruh di `config.js` atau dikirim lewat chat.**
+6. Selesai. Tombol **Hubungkan dengan Strava** otomatis muncul di halaman pribadi atlet (tab *Isi hari ini*, bagian *Sesi latihan*).
+
+**Yang terjadi setelah atlet terhubung:**
+- Latihan 7 hari terakhir langsung diambil. Latihan baru masuk otomatis lewat *webhook* Strava, yang didaftarkan sendiri oleh fungsi saat atlet pertama terhubung. Saat atlet membuka aplikasinya, sinkron juga dicek ulang.
+- **RPE**: bila atlet mengisi *Perceived Exertion* di Strava, nilai itu yang dipakai. Bila tidak, RPE ditebak dari denyut jantung rata-rata (% HRmax) dan ditandai **(tebakan)**. Atlet bisa mengubah RPE langsung dari daftar sesi.
+- Aktivitas yang sudah diimpor manual dari file jam tidak dobel. Aktivitas yang dihapus di Strava ikut terhapus.
+- Pelatih melihat tanda **Strava ✓** di tab **Data atlet**. Sesi dari Strava diberi label "Strava".
+- Atlet bisa **Putuskan** kapan saja. Latihan yang sudah masuk tetap tersimpan.
+
+**Batas dari Strava:** aplikasi Strava yang baru dibuat biasanya hanya boleh dihubungkan oleh **1 atlet** (pemilik aplikasi). Untuk banyak atlet, ajukan penambahan kuota lewat formulir *Developer Program* di halaman https://www.strava.com/settings/api. Sambil menunggu, atlet lain tetap bisa memakai **Impor dari file jam**. Patuhi juga ketentuan API Strava, termasuk meminta persetujuan atlet sebelum datanya dilihat pelatih.
+
 ## Hal penting lain
 
 - **Proyek gratis bisa dijeda.** Di paket gratis Supabase, proyek yang tidak dipakai beberapa hari bisa dijeda otomatis. Cukup buka dashboard Supabase dan klik *Restore*. Kalau web dipakai setiap hari, ini jarang terjadi.
